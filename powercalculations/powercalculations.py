@@ -28,7 +28,12 @@ class PowerCalculations():
         assert not missing_columns, f"The following columns are missing: {', '.join(missing_columns)}"
 
         # Read the dataset from the Excel file and concatenate with the existing DataFrame
-        self.pd = pd.merge(self.pd, pd.read_excel(file_path_load), on='DateTime', how='outer')        
+        self.pd = pd.merge(self.pd, pd.read_excel(file_path_load), on='DateTime', how='outer') 
+
+        # Initialize the columns that will be used for the calculations
+        self.pd['DirectIrradiance'] = None       
+        self.pd['PV_generated_power'] = None
+        self.pd.set_index('DateTime', inplace=True)
 
 
     # Imported methods
@@ -39,8 +44,10 @@ class PowerCalculations():
     
     from ._visualisations import plot
     
-    from ._directirradiance import calculate_direct_irradiance_specific
+    from ._directirradiance import calculate_direct_irradiance
     
     from ._getters import get_dataset
     from ._getters import get_irradiance
     from ._getters import get_load
+    from ._getters import get_direct_irradiance
+    from ._getters import get_PV_generated_power
