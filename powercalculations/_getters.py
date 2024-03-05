@@ -28,3 +28,39 @@ def get_PV_generated_power(self):
     Returns the PV generated power data
     """
     return self.pd['PV_generated_power']
+
+def get_loadTOT_day(self):
+    """
+    Calculates the sum of 'Load_kW' values between 8h and 18h for the entire year in the DataFrame.
+
+    Returns:
+        float: The total 'Load_kW' between 8h and 18h.
+    """
+    # Select only load data
+    df_load=self.pd['Load_kW']
+
+    # Select data between 8:00 and 18:00 for the entire year
+    df_filtered = df_load[(df_load.index.hour >= 8) & (df_load.index.hour < 18)]
+
+    # Sum the 'Load_kW' values in the filtered DataFrame
+    load_tot_day = df_filtered['Load_kW'].sum()
+
+    return load_tot_day
+
+def get_loadTOT_day(self):
+    """
+    Calculates the sum of 'Load_kW' values outside 8h and 18h for the entire year in the DataFrame.
+
+    Returns:
+        float: The total 'Load_kW' outside 8h and 18h.
+    """
+    # Select only load data
+    df_load=self.pd['Load_kW']
+
+    # Select data between 8:00 and 18:00 for the entire year
+    df_filtered = df_load[(df_load.index.hour <= 8) & (df_load.index.hour > 18)]
+
+    # Sum the 'Load_kW' values in the filtered DataFrame
+    load_tot_day = df_filtered['Load_kW'].sum()
+
+    return load_tot_day
