@@ -12,9 +12,9 @@ def PV_generated_power(self,cell_area:int=1, panel_count:int=1, T_STC:int=25, V_
         
 
         # Check if the 'beamirradiance' column is empty
-        if 'directIrradiance' in self.pd.columns and not self.pd['directIrradiance'].empty:
+        if 'DirectIrradiance' in self.pd.columns and not self.pd['DirectIrradiance'].empty:
             # Calculate the PV generated power
-            self.pd['PV_generated_power'] = FF*cell_area*I_sc_a*irradiance_a/irradiance_STC*(V_OC_STC+delta_V_OC*(T_cell-T_STC))*panel_count
+            self.pd['PV_generated_power'] = FF*cell_area*I_sc_a*self.pd['DirectIrradiance']/irradiance_STC*(V_OC_STC+delta_V_OC*(T_cell-T_STC))*panel_count
         else:
             raise ValueError("The 'directIrradiance' column is empty or not present in the DataFrame")
         return None

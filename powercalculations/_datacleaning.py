@@ -32,6 +32,8 @@ def fill_load_with_weighted_values(self):
     """
     Fills the NaN values in the load column with weighted values
     """
+    self.pd['Load_kW']=self.pd['Load_kW']/15
+
     # Interpolate the NaN values in the load column using linear interpolation
     self.pd['Load_kW']= self.pd['Load_kW'].interpolate(method='linear')
 

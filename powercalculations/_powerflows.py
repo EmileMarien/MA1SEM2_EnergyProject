@@ -1,3 +1,4 @@
+
 def battery_charge(self, efficiency, area):
     """
     Converts the irradiance data to power data using the specified column name
@@ -11,3 +12,5 @@ def battery_charge(self, efficiency, area):
     """
     # Convert irradiance to power using the formula: Power = Irradiance * Area
     area = 1
+    print('Emile')
+    return None

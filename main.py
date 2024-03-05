@@ -1,7 +1,14 @@
-from powercalculations import PowerCalculations
+import os
+import sys
+
+
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+
+import powercalculations.powercalculations as pc
+
 file_path_irradiance = 'data/Irradiance_data_v2.xlsx'
 file_path_load = 'data/Load_profile_6.xlsx'
-irradiance=PowerCalculations(file_path_irradiance=file_path_irradiance,file_path_load=file_path_load)
+irradiance=pc.PowerCalculations(file_path_irradiance=file_path_irradiance,file_path_load=file_path_load)
 
 # GENK data
 latitude=50.99461 # [degrees]
