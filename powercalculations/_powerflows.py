@@ -1,4 +1,9 @@
 def battery_charge(self, efficiency, area):
+    def battery_charge(row, efficiency, area):
+        
+        battery_charge = 1.0
+        return battery_charge
+
     """
     Converts the irradiance data to power data using the specified column name
     https://www.researchgate.net/post/How_can_I_calculate_the_power_output_of_a_PV_system_in_one_day_using_a_function_of_the_temperature_of_the_cell_and_the_reference_temperature
@@ -11,3 +16,4 @@ def battery_charge(self, efficiency, area):
     """
     # Convert irradiance to power using the formula: Power = Irradiance * Area
     area = 1
+return None

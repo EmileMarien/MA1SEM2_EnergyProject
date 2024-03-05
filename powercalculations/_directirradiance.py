@@ -1,7 +1,5 @@
 import math
-import pandas as pd
 import pvlib
-
 
 def calculate_direct_irradiance(self, latitude:int=0, tilt_angle:int=0,longitude:int=0,temperature:int=0): 
     """
@@ -34,11 +32,12 @@ def calculate_direct_irradiance(self, latitude:int=0, tilt_angle:int=0,longitude
         DNI = (GHI - GDI) / math.cos(solar_zenith_angle)
         
         # Calculate Incidence Angle
-        slope_angle = 0
-        incidence_angle = math.acos(math.cos(slope_angle)*math.cos(solar_zenith_angle + math.sin(slope_angle)*math.sin()))
+        slope_angle = 0 #gamma_s
+        incidence_angle = math.acos(math.cos(slope_angle)*math.cos(solar_zenith_angle) + math.sin(slope_angle)*math.sin(solar_zenith_angle)*math.cos(solar_azimuth_angle-surface_azimuth_angle))
+
 
         # TODO: finish the calculation of the beam irradiance
-        direct_irradiance = 1.0
+        direct_irradiance = DNI*math.cos(incidence_angle) + GDI
         return direct_irradiance
 
     # Convert the string to a pandas Timestamp

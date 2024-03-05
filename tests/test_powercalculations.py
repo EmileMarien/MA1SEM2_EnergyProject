@@ -1,5 +1,4 @@
 import unittest
-import pandas as pd
 from context import pc
 
 class TestDirectIrradiance(unittest.TestCase):
