@@ -12,5 +12,4 @@ def battery_charge(self, efficiency, area):
     """
     # Convert irradiance to power using the formula: Power = Irradiance * Area
     area = 1
-    print('Emile')
     return None
