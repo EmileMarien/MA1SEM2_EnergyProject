@@ -1,8 +1,23 @@
-def battery_charge(self, efficiency, area):
-    def battery_charge(row, efficiency, area):
-        
-        battery_charge = 1.0
-        return battery_charge
+def power_flow(self, cumulative_charge):
+    def power_flow_row(row, cumulative_charge):
+        PV_power = row['PV_generated_power']
+        load = row['Load_kW']
+        max_battery_charge = 1.0
+        excess_power = PV_power - load
+        new_charge = cumulative_charge + excess_power
+        if new_charge > 0 and new_charge < max_battery_charge
+            return new_charge
+    
+    max_battery_charge = 1.0
+    if new_charge > 0 and new_charge < max_battery_charge: 
+        self.pd['battery_charge'] = new_charge
+    else:
+        self.pd['battery_charge'] = 0
+        self.pd['grid_tap'] = -new_charge
+            # Calculate the PV generated power
+    self.pd['Battery_charge'] = self.pd.apply(
+        lambda row: power_flow_row(row=row, cumulative_charge=cumulative_charge)
+    )
 
     """
     Converts the irradiance data to power data using the specified column name
@@ -14,6 +29,4 @@ def battery_charge(self, efficiency, area):
     Returns:
     DataFrame: The DataFrame containing the converted power data
     """
-    # Convert irradiance to power using the formula: Power = Irradiance * Area
-    area = 1
-return None
+    return None
