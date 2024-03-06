@@ -10,19 +10,28 @@ from torch import sgn
 import pvlib
 
 class FinancialAnalysis():
-    def __init__(self, dataframe:pd.DataFrame):
-
+    def __init__(self, data):
+        # Convert Series to DataFrame if data is a Series
+        if isinstance(data, pd.Series):
+            dataframe = pd.DataFrame({'PowerGrid': data})
+            dataframe.index = pd.to_datetime(dataframe.index)
+        # Use DataFrame directly if data is a DataFrame
+        elif isinstance(data, pd.DataFrame):
+            dataframe = pd.DataFrame(data['PowerGrid'])
+        else:
+            raise ValueError("Input data must be either a Series or a DataFrame")
 
         # Check if all required columns are present
-        required_columns = ['DateTime', 'GlobRad', 'DiffRad', 'T_RV_degC', 'T_CommRoof_degC']
-        missing_columns = [col for col in required_columns if col not in self.pd.columns]
+        required_columns = ['PowerGrid']
+        missing_columns = [col for col in required_columns if col not in dataframe.columns]
         assert not missing_columns, f"The following columns are missing: {', '.join(missing_columns)}"
 
-        #Assign 
+        # Assign the DataFrame to self.pd
         self.pd = dataframe
-        self.
+
         # Initialize the columns that will be used for the calculations
-        self.pd[''] = None
+        self.pd['DualTariffCost'] = None
+        self.pd['DynamicTariffCost'] = None
 
 
 
