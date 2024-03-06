@@ -92,6 +92,16 @@ class test_Getters(unittest.TestCase):
         self.assertIsNotNone(result)
         self.assertIsInstance(result, pd.Series)
 
+    def test_get_loadTOT_day(self):
+        result = self.powercalculations_test.get_loadTOT_day()
+        self.assertIsNotNone(result)
+        self.assertIsInstance(result, float)
+    
+    def test_get_loadTOT_night(self):
+        result = self.powercalculations_test.get_loadTOT_night()
+        self.assertIsNotNone(result)
+        self.assertIsInstance(result, float)
+
 class test_Powerflows(unittest.TestCase):
     def setUp(self):
         self.powercalculations_test = pc.PowerCalculations(file_path_irradiance='data/Irradiance_data_vtest.xlsx',file_path_load='data/Load_profile_6_vtest.xlsx') 

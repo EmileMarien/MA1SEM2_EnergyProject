@@ -47,7 +47,7 @@ def get_loadTOT_day(self):
 
     return load_tot_day
 
-def get_loadTOT_day(self):
+def get_loadTOT_night(self):
     """
     Calculates the sum of 'Load_kW' values outside 8h and 18h for the entire year in the DataFrame.
 

@@ -24,3 +24,4 @@ print(irradiance.get_dataset())
 
 #irradiance.plot(['DiffRad'])
 irradiance.calculate_direct_irradiance_specific(latitude=latitude, tilt_angle=0, day='2018-03-10 00:00',longitude=0,temperature=20)
+print(irradiance.get_loadTOT_day())

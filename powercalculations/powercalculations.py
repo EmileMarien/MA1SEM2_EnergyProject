@@ -51,5 +51,7 @@ class PowerCalculations():
     from ._getters import get_load
     from ._getters import get_direct_irradiance
     from ._getters import get_PV_generated_power
+    from ._getters import get_loadTOT_day
+    from ._getters import get_loadTOT_night
 
     from ._export import export_dataframe_to_excel

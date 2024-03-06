@@ -28,3 +28,9 @@ def get_PV_generated_power(self):
     Returns the PV generated power data
     """
     return self.pd['PV_generated_power']
+
+def get_grid_cost(self):
+    """
+    Returns the grid cost data
+    """
+    return self.pd['Grid_cost']

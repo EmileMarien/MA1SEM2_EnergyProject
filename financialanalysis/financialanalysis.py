@@ -18,6 +18,12 @@ class FinancialAnalysis():
         missing_columns = [col for col in required_columns if col not in self.pd.columns]
         assert not missing_columns, f"The following columns are missing: {', '.join(missing_columns)}"
 
+        #Assign 
+        self.pd = dataframe
+        self.
+        # Initialize the columns that will be used for the calculations
+        self.pd[''] = None
+
 
 
 
