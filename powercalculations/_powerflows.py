@@ -5,7 +5,7 @@ def power_flow(self, cumulative_charge):
         max_battery_charge = 1.0
         excess_power = PV_power - load
         new_charge = cumulative_charge + excess_power
-        if new_charge > 0 and new_charge < max_battery_charge
+        if new_charge > 0 and new_charge < max_battery_charge:
             return new_charge
     
     max_battery_charge = 1.0
