@@ -64,3 +64,17 @@ def get_loadTOT_night(self):
     load_tot_day = df_filtered['Load_kW'].sum()
 
     return load_tot_day
+
+def get_average_per_hour(self,column_name:str='Load_kW'):
+    """
+    Calculates the average load per hour for each hour in the day based on the entire year in the DataFrame.
+
+    Returns:
+        pandas.Series: A Series containing the average 'Load_kW' for each hour of the day.
+        The index of the Series is the hour (0-23).
+    """
+
+    # Resample the DataFrame by hour ('H') and calculate the mean
+    df_hourly_avg = self.pd[column_name].resample('H').mean()
+
+    return df_hourly_avg

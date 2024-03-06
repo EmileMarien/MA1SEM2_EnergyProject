@@ -1,6 +1,7 @@
 import os
 import unittest
 import pandas as pd
+import pytest
 from context import pc
 
 class test_DirectIrradiance(unittest.TestCase):
@@ -101,6 +102,15 @@ class test_Getters(unittest.TestCase):
         result = self.powercalculations_test.get_loadTOT_night()
         self.assertIsNotNone(result)
         self.assertIsInstance(result, float)
+
+    def test_get_average_per_hour(self):
+
+        # Assert returned Series has expected index and average values
+        result = self.powercalculations_test.get_average_per_hour('GlobRad')
+        self.assertIsInstance(result, pd.Series)
+        self.assertEqual(len(result) == 24)  # 24 hours in a day
+        self.assertEqual(list(result.index) == [i for i in range(24)])  # Assuming hour index starts from 0
+        self.assertAlmostEqual(result.tolist()[23] == 0)  # Assuming no irradiance at 23:00
 
 class test_Powerflows(unittest.TestCase):
     def setUp(self):
