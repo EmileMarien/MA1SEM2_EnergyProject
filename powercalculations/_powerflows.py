@@ -35,7 +35,7 @@ def power_flow(self, cumulative_charge, max_charge):
     )
     
     self.pd['Battery_charge'] = cumulative_charge + [val[0] for val in result]
-    self.pd['grid_flow'] = [val[1] for val in result]
+    self.pd['Grid_flow'] = [val[1] for val in result]
     
     """
     Converts the irradiance data to power data using the specified column name
