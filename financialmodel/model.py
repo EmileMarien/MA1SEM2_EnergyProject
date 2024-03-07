@@ -1,27 +1,19 @@
-<<<<<<< HEAD
-
-def financialmodel(self):
 
 
-    cost_grid=gridcost()
-    batterycost=500
-
-    NPV=
-    
-    return NPV
+from gridcost import grid_cost
 
 
+#solarcount: aantal zonnepanelen 
+
+
+cost_grid=grid_cost(solar_count:int=1, panel_surface:int= 1 ,annual_degredation:int=0.02, tilt_angle:int=0, Orientation:str=N, temperature_dependency: int=0.02, battery_capacity: int= 1000, battery_count: int=1)   
+
+batterycost=500
+
+print(cost_grid)
 
 
 
 
-=======
-
-def financialmodel():
 
 
-    cost_grid=GridCost()
-    
-    NPV=
-    return NPV
->>>>>>> 6ec806cca287b0040c176a0ecc4c69ed03b8c993
