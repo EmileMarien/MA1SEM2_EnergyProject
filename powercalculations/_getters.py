@@ -78,3 +78,6 @@ def get_average_per_hour(self,column_name:str='Load_kW'):
     df_hourly_avg = self.pd[column_name].resample('H').mean()
 
     return df_hourly_avg
+
+def get_grid_power(self):
+    return self.pd['grid_flow']

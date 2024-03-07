@@ -7,7 +7,6 @@ import matplotlib.pyplot as plt
 from datetime import datetime, timedelta
 
 from torch import sgn
-import pvlib
 
 class FinancialAnalysis():
     def __init__(self, data):
@@ -30,8 +29,8 @@ class FinancialAnalysis():
         self.pd = dataframe
 
         # Initialize the columns that will be used for the calculations
-        self.pd['DualTariffCost'] = None
-        self.pd['DynamicTariffCost'] = None
+        self.pd['DualTariff'] = None
+        self.pd['DynamicTariff'] = None
 
 
 
@@ -44,5 +43,11 @@ class FinancialAnalysis():
     from ._getters import get_load
     from ._getters import get_direct_irradiance
     from ._getters import get_PV_generated_power
+    from ._getters import get_grid_cost_perhour
+    from ._getters import get_grid_cost_total
+
 
     from ._export import export_dataframe_to_excel
+
+    from ._dualtariff import dual_tariff
+    from ._dynamictariff import dynamic_tariff
