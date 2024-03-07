@@ -1,4 +1,5 @@
 import math
+import pvlib
 
 def calculate_direct_irradiance(self, latitude:int=0, tilt_angle:int=0,longitude:int=0,temperature:int=0): 
     """
