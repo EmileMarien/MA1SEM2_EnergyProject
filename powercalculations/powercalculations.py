@@ -48,6 +48,8 @@ class PowerCalculations():
     from ._visualisations import plot
     
     from ._directirradiance import calculate_direct_irradiance
+
+    from ._powerflows import power_flow
     
     from ._getters import get_dataset
     from ._getters import get_irradiance
@@ -57,5 +59,6 @@ class PowerCalculations():
     from ._getters import get_loadTOT_day
     from ._getters import get_loadTOT_night
     from ._getters import get_average_per_hour
+    from ._getters import get_grid_power
 
     from ._export import export_dataframe_to_excel
