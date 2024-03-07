@@ -30,10 +30,13 @@ class PowerCalculations():
         # Read the dataset from the Excel file and concatenate with the existing DataFrame
         self.pd = pd.merge(self.pd, pd.read_excel(file_path_load), on='DateTime', how='outer') 
 
+        #Set a datetime index
+        self.pd.set_index('DateTime', inplace=True)
+
         # Initialize the columns that will be used for the calculations
         self.pd['DirectIrradiance'] = None       
         self.pd['PV_generated_power'] = None
-        self.pd.set_index('DateTime', inplace=True)
+        self.pd['PowerGrid'] = None
 
 
     # Imported methods
@@ -51,3 +54,8 @@ class PowerCalculations():
     from ._getters import get_load
     from ._getters import get_direct_irradiance
     from ._getters import get_PV_generated_power
+    from ._getters import get_loadTOT_day
+    from ._getters import get_loadTOT_night
+    from ._getters import get_average_per_hour
+
+    from ._export import export_dataframe_to_excel

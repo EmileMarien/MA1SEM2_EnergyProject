@@ -4,18 +4,31 @@ from typing import List
 from matplotlib import pyplot as plt
 
 
-def plot(self, column_name: List[str]):
+def plot(self, column_names: List[str]):
     """
-    Plots the given dataset using the specified column name
+    Plots multiple columns from the DataFrame with a datetime index.
 
     Args:
-    df (DataFrame): The DataFrame containing the dataset
-    column_name (str[]): The name of the column(s) to be plotted. Choose between: GlobRad, DiffRad, T_CommRoof_degC, T_RV_degC 
+        column_names (list): A list of column names to plot.
     """
-    for col in column_name:
-        plt.plot(self.pd['DateTime'], self.pd[col])
-    plt.xlabel('Date Time')
-    plt.ylabel(column_name)
-    plt.title(f'Plot of {column_name}')
-    plt.legend(column_name)
-    plt.show()   
+
+    # Assert column names are valid
+    assert all(col in self.pd.columns for col in column_names), f"Invalid column names: {', '.join(set(column_names) - set(self.pd.columns))}"
+
+    # Create the plot
+    fig, ax = plt.subplots()
+
+    # Iterate through columns and plot them
+    for col in column_names:
+        ax.plot(self.pd.index, self.pd[col], label=col)
+
+    # Add labels and title
+    ax.set_xlabel("Datetime")
+    ax.set_ylabel(column_names)
+    ax.set_title(f'Plot of {column_names}')
+
+    # Add legend
+    ax.legend()
+
+    # Show the plot
+    plt.show()
