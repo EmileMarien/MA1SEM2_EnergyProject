@@ -10,7 +10,7 @@ import financialanalysis.financialanalysis as fa
 
 
 
-def grid_cost(solar_count: int=1, panel_surface:int= 1 ,annual_degredation: int=0.02, panel_efficiency: int= 0.55, temperature_Coefficient: int=0.02,  tilt_angle:int=0, Orientation:str=N, battery_capacity: int= 1000, battery_count: int=1):
+def grid_cost(solar_count: int=1, panel_surface:int= 1 ,annual_degredation: int=0.02, panel_efficiency: int= 0.55, temperature_Coefficient: int=0.02,  tilt_angle:int=0, Orientation:str="N", battery_capacity: int= 1000, battery_count: int=1):
     #solar_count: aantal zonnepanelen 
     #panel_surface: oppervlakte van 1 zonnepaneel [m^2]
     #annual_degredation: efficientieverlies per jaar in [%]

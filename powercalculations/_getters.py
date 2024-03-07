@@ -1,4 +1,7 @@
 
+from typing import List
+
+
 def get_irradiance(self):
     """
     Returns the irradiance data
@@ -43,9 +46,19 @@ def get_loadTOT_day(self):
     df_filtered = df_load[(df_load.index.hour >= 8) & (df_load.index.hour < 18)]
 
     # Sum the 'Load_kW' values in the filtered DataFrame
-    load_tot_day = df_filtered['Load_kW'].sum()
+    load_tot_day = df_filtered.sum()
 
     return load_tot_day
+
+def get_columns(self,columns:List[str]):
+    """
+    Returns the dataset with the specific columns
+    """
+
+    assert all(col in self.pd.columns for col in columns), 'The columns must be present in the DataFrame'
+
+    return self.pd[columns]
+   
 
 def get_loadTOT_night(self):
     """
@@ -61,7 +74,7 @@ def get_loadTOT_night(self):
     df_filtered = df_load[(df_load.index.hour <= 8) & (df_load.index.hour > 18)]
 
     # Sum the 'Load_kW' values in the filtered DataFrame
-    load_tot_day = df_filtered['Load_kW'].sum()
+    load_tot_day = df_filtered.sum()
 
     return load_tot_day
 
@@ -75,7 +88,7 @@ def get_average_per_hour(self,column_name:str='Load_kW'):
     """
 
     # Resample the DataFrame by hour ('H') and calculate the mean
-    df_hourly_avg = self.pd[column_name].resample('H').mean()
+    df_hourly_avg = self.pd[column_name].resample('h').mean()
 
     return df_hourly_avg
 
