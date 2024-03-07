@@ -7,7 +7,6 @@ import matplotlib.pyplot as plt
 from datetime import datetime, timedelta
 
 from torch import sgn
-import pvlib
 
 class FinancialAnalysis():
     def __init__(self, data):

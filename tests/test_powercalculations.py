@@ -28,7 +28,7 @@ class test_PVGeneratedPower(unittest.TestCase):
         self.powercalculations_test.calculate_direct_irradiance()
 
     def test_PV_generated_power(self):
-        self.powercalculations_test.PV_generated_power(cell_area=1, panel_count=1, T_STC=25, V_OC_STC=0.6, delta_V_OC=-2.5, I_sc_a=300, FF=0.8, T_cell=30, irradiance_STC=100, irradiance_a=120)
+        self.powercalculations_test.PV_generated_power(cell_area=1, panel_count=1, T_STC=25, efficiency_max= 0.02, Temp_coeff= -0.026)
         result=self.powercalculations_test.get_PV_generated_power()
         self.assertIsNotNone(result)
         self.assertIsInstance(result, pd.Series)

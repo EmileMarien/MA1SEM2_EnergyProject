@@ -7,7 +7,6 @@ import matplotlib.pyplot as plt
 from datetime import datetime, timedelta
 
 from torch import sgn
-import pvlib
 
 class PowerCalculations():
     def __init__(self, file_path_irradiance: str,file_path_load: str):
