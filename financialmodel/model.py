@@ -13,7 +13,7 @@ from gridcost import grid_cost
 #battery_capacity: capaciteit van de batterij 
 #battery_count: hoeveel batterijen aanwezig, enkel relevant voor stacked batteries
 
-cost_grid=grid_cost(solar_count: int=1, panel_surface:int= 1 ,annual_degredation: int=0.02, panel_efficiency: int= 0.55, temperature_Coefficient: int=0.02,  tilt_angle:int=0, Orientation:str=N, battery_capacity: int= 1000, battery_count: int=1)   
+cost_grid=grid_cost(solar_count=1, panel_surface= 1 ,annual_degredation=0.02, panel_efficiency= 0.55, temperature_Coefficient=0.02,  tilt_angle=0, Orientation="N", battery_capacity= 1000, battery_count=1)   
 
 Profit = grid_cost(solar_count=0, battery_count=0) - cost_grid    #Besparing van kosten door zonnepanelen, kan men zien als de profit
 
@@ -27,13 +27,13 @@ battery_cost = 500
 Convertor_cost=500
 Installation_cost= 1000
 
-Capex = Solarpanel_costs + battery_cost + Installation_cost + 
+Capex = Solarpanel_costs + battery_cost + Installation_cost + 1
 
 
 # 
-profit
-for i
-NPV = Profit/(1 + i)t
+#profit
+#for i
+#NPV = Profit/(1 + i)t
 
 
 print(cost_grid)
