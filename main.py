@@ -22,7 +22,7 @@ longitude=5.53972 # [degrees]
 start_date = '2018-03-1 00:00'
 end_date = '2018-12-1 00:10'
 interval = '1h'  # Interval of 1 hour
-#irradiance.filter_data_by_date_interval(start_date, end_date, interval)
+irradiance.filter_data_by_date_interval(start_date, end_date, interval)
 
 #irradiance.calculate_beam_irradiance()
 #irradiance.PV_generated_power(0.15, 1)

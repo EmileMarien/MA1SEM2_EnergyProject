@@ -1,5 +1,5 @@
 
-def dual_tariff(self, day_tariff:int=0, night_tariff:int=0,fixed_tariff:int=0):
+def dual_tariff(self, day_tariff:int=0, night_tariff:int=0,fixed_tariff:int=1):
     """
     Calculates the dual tariff for a specific time, day and colation
     """ 
@@ -17,7 +17,7 @@ def dual_tariff(self, day_tariff:int=0, night_tariff:int=0,fixed_tariff:int=0):
         return cost
     
     # Apply the calculation function to each row with vectorized operations
-    self.pd['DirectIrradiance'] = self.pd.apply(
+    self.pd['DualTariffCost'] = self.pd.apply(
         lambda row: calculate_tariff_row(row=row, day_tariff=day_tariff,night_tariff=night_tariff, fixed_tariff=fixed_tariff), axis=1
     )
 
