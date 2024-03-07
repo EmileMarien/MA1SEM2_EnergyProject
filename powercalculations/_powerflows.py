@@ -1,4 +1,5 @@
-def power_flow(self, cumulative_charge, max_charge):
+def power_flow(self, max_charge):
+    cumulative_charge=0
     def power_flow_row(row, cumulative_charge, max_charge):
         PV_power = row['PV_generated_power']
         load = row['Load_kW']
