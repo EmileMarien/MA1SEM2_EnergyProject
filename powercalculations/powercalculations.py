@@ -20,16 +20,24 @@ class PowerCalculations():
         assert file_path_load.endswith('.xlsx'), 'The file must be an Excel file'
         
         # Read the dataset from the Excel file
-        self.pd = pd.read_excel(file_path_irradiance)
+        irradiance_df = pd.read_excel(file_path_irradiance)
         # Check if all required columns are present
         required_columns = ['DateTime', 'GlobRad', 'DiffRad', 'T_RV_degC', 'T_CommRoof_degC']
-        missing_columns = [col for col in required_columns if col not in self.pd.columns]
+        missing_columns = [col for col in required_columns if col not in irradiance_df.columns]
         assert not missing_columns, f"The following columns are missing: {', '.join(missing_columns)}"
 
-        # Read the dataset from the Excel file and concatenate with the existing DataFrame
-        self.pd = pd.merge(self.pd, pd.read_excel(file_path_load), on='DateTime', how='outer') 
+        # Read the Excel file into a DataFrame
+        load_df = pd.read_excel(file_path_load)
 
+        # Assert that 'Load_kW' and 'DateTime' columns are present in the Excel file
+        assert 'Load_kW' in load_df.columns, "'Load_kW' column not found in the Load Excel file"
+        assert 'DateTime' in load_df.columns, "'DateTime' column not found in the Load Excel file"
+
+        # Merge the DataFrame with the one read from excel
+        merged_df = pd.merge(irradiance_df, load_df, on='DateTime', how='outer') 
         #Set a datetime index
+        expected_columns = ['DateTime', 'Load_kW', 'GlobRad', 'DiffRad', 'T_RV_degC', 'T_CommRoof_degC']
+        self.pd=merged_df[expected_columns]
         self.pd.set_index('DateTime', inplace=True)
 
         # Initialize the columns that will be used for the calculations
@@ -40,11 +48,12 @@ class PowerCalculations():
 
     # Imported methods
     from ._datacleaning import filter_data_by_date_interval
-    from ._datacleaning import fill_load_with_weighted_values
+    from ._datacleaning import interpolate_columns
     
     from ._pvpower import PV_generated_power
     
-    from ._visualisations import plot
+    from ._visualisations import plot_columns
+    from ._visualisations import plot_dataframe
     
     from ._directirradiance import calculate_direct_irradiance
 

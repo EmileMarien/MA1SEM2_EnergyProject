@@ -4,10 +4,10 @@ import pandas as pd
 
 def filter_data_by_date_interval(self, start_date: str, end_date: str, interval='1h'):
     """
-    Filters the given DataFrame to include only the rows with DateTime values within the specified date interval
+    Filters the given DataFrame to include only the rows with DateTime values within the specified start and end dates, with an interval specified by 'interval'
 
     Args:
-    df (DataFrame): The DataFrame containing the dataset
+    self.df (DataFrame): The DataFrame containing the dataset
     start_date (str): The start date of the interval
     end_date (str): The end date of the interval
     interval (str): The interval for filtering the data. Options: '1M' (monthly), '1W' (weekly), '1D' (daily), '1h' (hourly, default), '1T' (minutely)
@@ -28,13 +28,12 @@ def filter_data_by_date_interval(self, start_date: str, end_date: str, interval=
     #self.irradiance = self.irradiance[self.irradiance['DateTime'].isin(date_range)]
     #self.load = self.load[self.load['DateTime'].isin(date_range)]
 
-def fill_load_with_weighted_values(self):
+def interpolate_columns(self, interval:int='1h'):
     """
-    Fills the NaN values in the load column with weighted values
+    Fills the NaN values in each column with weighted values
     """
-    self.pd['Load_kW']=self.pd['Load_kW']/15
-
-    # Interpolate the NaN values in the load column using linear interpolation
-    self.pd['Load_kW']= self.pd['Load_kW'].interpolate(method='linear')
+    
+    # Resample the dataframe to the specified interval and interpolate missing values
+    self.pd = self.pd.resample(interval).interpolate(method='linear')
 
     return None

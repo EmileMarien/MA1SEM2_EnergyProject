@@ -1,12 +1,4 @@
-
-from math import acos, asin, cos, pi, sin, tan
-import math
-from typing import List
 import pandas as pd
-import matplotlib.pyplot as plt
-from datetime import datetime, timedelta
-
-from torch import sgn
 
 class FinancialAnalysis():
     def __init__(self, data):
@@ -26,7 +18,7 @@ class FinancialAnalysis():
         assert not missing_columns, f"The following columns are missing: {', '.join(missing_columns)}"
 
         # Assign the DataFrame to self.pd
-        self.pd = dataframe
+        self.pd = dataframe['DateTime', 'PowerGrid']
 
         # Initialize the columns that will be used for the calculations
         self.pd['DualTariff'] = None
@@ -36,8 +28,6 @@ class FinancialAnalysis():
 
 
     # Imported methods
-
-    
     from ._getters import get_dataset
     from ._getters import get_irradiance
     from ._getters import get_load
