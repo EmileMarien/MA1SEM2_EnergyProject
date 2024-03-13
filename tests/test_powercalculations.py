@@ -74,7 +74,7 @@ class test_DataCleaning(unittest.TestCase):
 class test_Getters(unittest.TestCase):
     def setUp(self):
         self.powercalculations_test = pc.PowerCalculations(file_path_irradiance='data/Irradiance_data_vtest.xlsx',file_path_load='data/Load_profile_6_vtest.xlsx') 
-
+        self.powercalculations_test.interpolate_columns(interval='1h')
     def test_get_dataset(self):
         result = self.powercalculations_test.get_dataset()
         self.assertIsNotNone(result)
@@ -100,15 +100,11 @@ class test_Getters(unittest.TestCase):
         self.assertIsNotNone(result)
         self.assertIsInstance(result, pd.Series)
 
-    def test_get_loadTOT_day(self):
-        result = self.powercalculations_test.get_loadTOT_day()
+    def test_get_energy_TOT(self):
+        result = self.powercalculations_test.get_energy_TOT(column_name='Load_kW', peak='peak')
+        print(result)
         self.assertIsNotNone(result)
-        self.assertIsInstance(result, float)
-    
-    def test_get_loadTOT_night(self):
-        result = self.powercalculations_test.get_loadTOT_night()
-        self.assertIsNotNone(result)
-        self.assertIsInstance(result, float)
+
 
     def test_get_average_per_hour(self):
 
