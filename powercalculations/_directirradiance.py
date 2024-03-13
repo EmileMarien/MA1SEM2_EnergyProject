@@ -30,8 +30,7 @@ def calculate_direct_irradiance(self, latitude:int=0, tilt_angle:int=0,longitude
         slope_angle = 0 #gamma_s
         incidence_angle = math.acos(math.cos(slope_angle)*math.cos(solar_zenith_angle) + math.sin(slope_angle)*math.sin(solar_zenith_angle)*math.cos(solar_azimuth_angle-surface_azimuth_angle))
 
-
-        # TODO: finish the calculation of the beam irradiance
+        # calculate direct irradiance
         direct_irradiance = DNI*math.cos(incidence_angle) + GDI
         return direct_irradiance
 

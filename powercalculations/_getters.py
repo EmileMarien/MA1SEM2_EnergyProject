@@ -74,7 +74,12 @@ def get_loadTOT_night(self):
     df_filtered = df_load[(df_load.index.hour <= 8) & (df_load.index.hour > 18)]
 
     # Sum the 'Load_kW' values in the filtered DataFrame
-    load_tot_day = df_filtered.sum()
+    load_tot_day = df_filtered.sum() # [kW]
+
+    #Integrate the power over time to get the energy in [kWh]
+    interval=df_load.index.freq.delta.total_seconds() / 3600  # Convert seconds to hours
+    energy_day=load_tot_day*df_load # [kWh]
+
 
     return load_tot_day
 

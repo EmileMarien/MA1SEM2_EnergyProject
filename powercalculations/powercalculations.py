@@ -9,35 +9,44 @@ from datetime import datetime, timedelta
 from torch import sgn
 
 class PowerCalculations():
-    def __init__(self, file_path_irradiance: str,file_path_load: str):
+    def __init__(self, file_path_irradiance: str,file_path_load: str, dataset: pd.DataFrame = None):
         """
         Initializes the PowerCalculations class with the given dataset
         
         Args:
-        file_path (str): The file path to the Excel file containing the dataset        
+        file_path (str): The file path to the Excel file containing the dataset 
+        dataset (DataFrame): The dataset to be used for the calculations if file_path is not provided       
         """
-        assert file_path_irradiance.endswith('.xlsx'), 'The file must be an Excel file'
-        assert file_path_load.endswith('.xlsx'), 'The file must be an Excel file'
+        if dataset is not None:
+            # Use the dataset directly if provided
+            merged_df = dataset
+        else:
+            assert file_path_irradiance.endswith('.xlsx'), 'The file must be an Excel file'
+            assert file_path_load.endswith('.xlsx'), 'The file must be an Excel file'
+            
+            # Read the dataset from the Excel file
+            irradiance_df = pd.read_excel(file_path_irradiance)
+            
+            # Read the Excel file into a DataFrame
+            load_df = pd.read_excel(file_path_load)
+
+            # Assert that 'Load_kW' and 'DateTime' columns are present in the Excel file
+            assert 'DateTime' in irradiance_df.columns, "'DateTime' column not found in the Irradiance Excel file"
+            assert 'DateTime' in load_df.columns, "'DateTime' column not found in the Load Excel file"
+            
+            # Merge the DataFrame with the one read from excel
+            merged_df = pd.merge(irradiance_df, load_df, on='DateTime', how='outer') 
         
-        # Read the dataset from the Excel file
-        irradiance_df = pd.read_excel(file_path_irradiance)
         # Check if all required columns are present
-        required_columns = ['DateTime', 'GlobRad', 'DiffRad', 'T_RV_degC', 'T_CommRoof_degC']
-        missing_columns = [col for col in required_columns if col not in irradiance_df.columns]
+        required_columns = ['DateTime', 'GlobRad', 'DiffRad', 'T_RV_degC', 'T_CommRoof_degC','Load_kW']
+        missing_columns = [col for col in required_columns if col not in merged_df.columns]
         assert not missing_columns, f"The following columns are missing: {', '.join(missing_columns)}"
 
-        # Read the Excel file into a DataFrame
-        load_df = pd.read_excel(file_path_load)
 
-        # Assert that 'Load_kW' and 'DateTime' columns are present in the Excel file
-        assert 'Load_kW' in load_df.columns, "'Load_kW' column not found in the Load Excel file"
-        assert 'DateTime' in load_df.columns, "'DateTime' column not found in the Load Excel file"
-
-        # Merge the DataFrame with the one read from excel
-        merged_df = pd.merge(irradiance_df, load_df, on='DateTime', how='outer') 
-        #Set a datetime index
         expected_columns = ['DateTime', 'Load_kW', 'GlobRad', 'DiffRad', 'T_RV_degC', 'T_CommRoof_degC']
         self.pd=merged_df[expected_columns]
+        
+        #Set a datetime index
         self.pd.set_index('DateTime', inplace=True)
 
         # Initialize the columns that will be used for the calculations

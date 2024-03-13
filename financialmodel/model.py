@@ -9,11 +9,7 @@ def calculate_npv(battery_cost, solar_panel_cost, battery_lifetime, solar_panel_
         from math import gcd
         return x * y // gcd(x, y)
 
-<<<<<<< HEAD
     lcm_lifetime = lcm(battery_lifetime, solar_panel_lifetime)
-=======
-cost_grid=grid_cost(solar_count=1, panel_surface= 1 ,annual_degredation=0.02, panel_efficiency= 0.55, temperature_Coefficient=0.02,  tilt_angle=0, Orientation="N", battery_capacity= 1000, battery_count=1)   
->>>>>>> ef99567543715d63c6e1536509773e79307a40f9
 
     # Calculate cash flows for total project
 
@@ -34,7 +30,7 @@ Orientation = ...#Orientation: richting naar waar de zonnepanelen staan N, E, S,
 
 # Components Changeable  
 # Solar panel Type 
-solar_panel_cost =                                           #cost of 1 solar panel
+solar_panel_cost = ...                                          #cost of 1 solar panel
 solar_count = ...                                            #solar_count: aantal zonnepanelen
 total_solar_panel_cost = solar_panel_cost*solar_count
 solar_panel_lifetime = 10 
@@ -54,25 +50,13 @@ convertor_cost= 500
 installation_cost= 1000
 maintenance_cost = 0
 
-<<<<<<< HEAD
 #Economics
 discount_rate = 0.1                                          #Discount rate
 capex = total_solar_panel_cost + total_battery_cost + installation_cost + convertor_cost + maintenance_cost
-=======
-Capex = Solarpanel_costs + battery_cost + Installation_cost + 1
->>>>>>> ef99567543715d63c6e1536509773e79307a40f9
 
 #Calculations 
-
-<<<<<<< HEAD
-cost_grid=grid_cost(solar_count: int=1, panel_surface:int= 1 ,annual_degredation: int=0.02, panel_efficiency: int= 0.55, temperature_Coefficient: int=0.02,  tilt_angle:int=0, Orientation:str=N, battery_capacity: int= 1000, battery_count: int=1)   
+cost_grid = grid_cost(solar_count=solar_count, panel_surface=panel_surface, annual_degredation=annual_degredation, panel_efficiency=panel_efficiency, temperature_Coefficient=temperature_coefficient,  tilt_angle=tilt_angle, Orientation=Orientation, battery_capacity=battery_capacity, battery_count=battery_count)
 constant_cash_flow = grid_cost(solar_count=0, battery_count=0) - cost_grid    #Besparing van kosten door zonnepanelen, kan men zien als de profit
-=======
-# 
-#profit
-#for i
-#NPV = Profit/(1 + i)t
->>>>>>> ef99567543715d63c6e1536509773e79307a40f9
 
 # Calculate NPV
 npv = calculate_npv(battery_cost, solar_panel_cost, battery_lifetime, solar_panel_lifetime, discount_rate, constant_cash_flow)

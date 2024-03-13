@@ -7,13 +7,13 @@ def PV_generated_power(self,cell_area:int=1, panel_count:int=1, T_STC:int=25, Te
         column_name (str): The name of the column to be converted. Choose between: GlobRad, DiffRad
 
         Returns:
-        DataFrame: The DataFrame containing the converted power data
+        None 
         """
         
         T_cell=self.pd['T_RV_degC']
         # Check if the 'beamirradiance' column is empty
         if 'DirectIrradiance' in self.pd.columns and not self.pd['DirectIrradiance'].empty:
-            # Calculate the PV generated power
+            # Calculate the PV generated power in [kW]
             self.pd['PV_generated_power'] = efficiency_max*cell_area*self.pd['DirectIrradiance']*(1+Temp_coeff)*(T_cell-T_STC)*panel_count
         else:
             raise ValueError("The 'directIrradiance' column is empty or not present in the DataFrame")

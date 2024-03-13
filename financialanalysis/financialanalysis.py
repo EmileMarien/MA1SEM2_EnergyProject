@@ -13,16 +13,17 @@ class FinancialAnalysis():
             raise ValueError("Input data must be either a Series or a DataFrame")
 
         # Check if all required columns are present
-        required_columns = ['PowerGrid']
+        required_columns = ['PowerGrid'] # [kW]
         missing_columns = [col for col in required_columns if col not in dataframe.columns]
         assert not missing_columns, f"The following columns are missing: {', '.join(missing_columns)}"
 
         # Assign the DataFrame to self.pd
-        self.pd = dataframe['DateTime', 'PowerGrid']
+        self.pd = dataframe
 
         # Initialize the columns that will be used for the calculations
         self.pd['DualTariff'] = None
         self.pd['DynamicTariff'] = None
+
 
 
 
