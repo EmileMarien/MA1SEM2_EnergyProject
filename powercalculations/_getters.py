@@ -1,5 +1,6 @@
 
 from typing import List
+import pandas as pd
 
 
 def get_irradiance(self):
@@ -52,7 +53,7 @@ def get_energy_TOT(self,column_name:str='Load_kW',peak:str='peak'):
         df_load=self.pd['PowerGrid']
     else:
         AssertionError('The column_name must be either Load_kW or PowerGrid')
-    print(df_load)
+
     if peak=='peak':
         # Select data between 8:00 and 18:00 for the entire year
         df_filtered = df_load[(df_load.index.hour >= 8) & (df_load.index.hour < 18)]
@@ -64,9 +65,11 @@ def get_energy_TOT(self,column_name:str='Load_kW',peak:str='peak'):
 
     # Sum the 'Load_kW' values in the filtered DataFrame
     load_tot_day = df_filtered.sum()
-    print(load_tot_day)
+    
+    # Check if the input data contains NA values
+    assert not df_load.isnull().values.any(), 'The input data contains NA values'
     #Integrate the power over time to get the energy in [kWh]
-    interval=df_load.index.freq.delta.total_seconds() / 3600  # Convert seconds to hours
+    interval = pd.Timedelta(df_load.index.freq).total_seconds() / 3600 # Convert seconds to hours
     energy_peak=load_tot_day*interval# [kWh]
 
     return energy_peak
