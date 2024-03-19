@@ -1,5 +1,3 @@
-
-
 from gridcost import grid_cost
 
 
@@ -59,6 +57,7 @@ class SolarPanelType:
 
 # Define different types of solar panels
 solar_panel_types = {
+<<<<<<< HEAD
     "Type A": SolarPanelType(
         solar_panel_cost=100,            #cost of 1 solar panel
         solar_panel_count=10,            #aantal zonnepanelen
@@ -76,6 +75,52 @@ solar_panel_types = {
         annual_degredation=0.6,         
         panel_efficiency=0.85,            
         temperature_coefficient=0.06   
+=======
+    "Canadian": SolarPanelType(
+        solar_panel_cost=93.3,            #cost of 1 solar panel
+        solar_panel_count=10,            #aantal zonnepanelen
+        solar_panel_lifetime=25,        
+        panel_surface=1.953,              #oppervlakte van 1 zonnepaneel [m^2]
+        annual_degredation=0.35,         #annual_degredation: efficientieverlies per jaar in [%]
+        panel_efficiency=22.5,          #panel_efficiency: efficientie van het zonnepaneel in [%]
+        temperature_coefficient=-0.26    #temperature_coefficient: temperatuurafhankelijkheid 
+    ),
+    "Jinko": SolarPanelType(
+        solar_panel_cost=107.69,           
+        solar_panel_count=10,           
+        solar_panel_lifetime=25,        
+        panel_surface=1.998,              
+        annual_degredation=0.4,         
+        panel_efficiency=22.53,            
+        temperature_coefficient=-0.30  
+    ),
+    "Longi": SolarPanelType(
+        solar_panel_cost=121,           
+        solar_panel_count=10,           
+        solar_panel_lifetime=25,        
+        panel_surface=1.953,              
+        annual_degredation=0.4,         
+        panel_efficiency=23.0,            
+        temperature_coefficient=-0.29  
+    ),
+    "REC": SolarPanelType(
+        solar_panel_cost=187.55,           
+        solar_panel_count=10,           
+        solar_panel_lifetime=25,        
+        panel_surface=1.934,              
+        annual_degredation=0.25,         
+        panel_efficiency=22.3,            
+        temperature_coefficient=-0.26 
+    ),
+    "Sunpower": SolarPanelType(
+        solar_panel_cost=435.6,           
+        solar_panel_count=10,           
+        solar_panel_lifetime=40,        
+        panel_surface=1.895,              
+        annual_degredation=0.25,         
+        panel_efficiency=21.9,            
+        temperature_coefficient=-0.27 
+>>>>>>> 1ecbe97e4142f9abccdf06081f2adf494724417b
     ),
     # Define more types as needed
 }
@@ -124,7 +169,11 @@ chosen_battery = battery_types[chosen_battery_type]
 print(f"Total cost for {chosen_battery_type}: {chosen_battery.total_battery_cost}")
 
 # non-changeable 
+<<<<<<< HEAD
 inverter_cost= 500
+=======
+invertor_cost= 500
+>>>>>>> 1ecbe97e4142f9abccdf06081f2adf494724417b
 installation_cost= 1000
 maintenance_cost = 0
 
@@ -133,11 +182,15 @@ discount_rate = 0.1                                          #Discount rate
 capex = total_solar_panel_cost + total_battery_cost + installation_cost + invertor_cost + maintenance_cost
 
 #Calculations of the cashflows 
+<<<<<<< HEAD
 
 
 
 
 cost_grid = grid_cost(total_panel_surface:int= 1 ,annual_degredation: int=0.02, panel_efficiency: int= 0.55, temperature_Coefficient: int=0.02,  tilt_angle:int=0, Orientation:str=N, battery_capacity: int= 1000, battery_count: int=1) 
+=======
+cost_grid = grid_cost(total_panel_surface= 1 ,annual_degredatio=0.02, panel_efficiency= 0.55, temperature_Coefficient=0.02,  tilt_angle=0, Orientation=N, battery_capacity= 1000, battery_count=1) 
+>>>>>>> 1ecbe97e4142f9abccdf06081f2adf494724417b
 constant_cash_flow = grid_cost(solar_count=0, battery_count=0) - cost_grid    #Besparing van kosten door zonnepanelen, kan men zien als de profit
 
 
@@ -148,8 +201,12 @@ print("Net Present Value (NPV):", npv)
 
 # bedenkingen 
 # panel_efficiency degradation into account nemen -> dus geen constanr cash flows 
+<<<<<<< HEAD
 # energieprijzen van energiecrisis in rekening gebracht? -> zoja factor reduceren 
 
 
 
 
+=======
+# energieprijzen van energiecrisis in rekening gebracht? -> zoja factor reduceren
+>>>>>>> 1ecbe97e4142f9abccdf06081f2adf494724417b
