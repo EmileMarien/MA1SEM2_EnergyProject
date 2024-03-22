@@ -35,7 +35,75 @@ def calculate_npv(capex, battery_lifetime, battery_cost, solar_panel_lifetime,to
 tilt_angle = ... #tilt_angle: angle of the solar panel, 
 Orientation = ...#Orientation: richting naar waar de zonnepanelen staan N, E, S, W 
 
+# Components Changeable  
+# Solar panel Type 
+class SolarPanelType:
+    def __init__(self, solar_panel_cost, solar_panel_count, solar_panel_lifetime, panel_surface, annual_degredation, panel_efficiency, temperature_coefficient):
+        self.solar_panel_cost = solar_panel_cost
+        self.solar_panel_count = solar_panel_count
+        self.solar_panel_lifetime = solar_panel_lifetime
+        self.panel_surface = panel_surface
+        self.annual_degredation = annual_degredation
+        self.panel_efficiency = panel_efficiency
+        self.temperature_coefficient = temperature_coefficient
+        self.calculate_total_cost()
+        self.calculate_total_surface()
 
+    def calculate_total_cost(self):
+        self.total_solar_panel_cost = self.solar_panel_cost * self.solar_panel_count
+
+    def calculate_total_surface(self):
+        self.total_panel_surface = self.panel_surface * self.solar_panel_count
+
+# Define different types of solar panels
+solar_panel_types = {
+    "Canadian": SolarPanelType(
+        solar_panel_cost=93.3,            #cost of 1 solar panel
+        solar_panel_count=10,            #aantal zonnepanelen
+        solar_panel_lifetime=25,        
+        panel_surface=1.953,              #oppervlakte van 1 zonnepaneel [m^2]
+        annual_degredation=0.35,         #annual_degredation: efficientieverlies per jaar in [%]
+        panel_efficiency=22.5,          #panel_efficiency: efficientie van het zonnepaneel in [%]
+        temperature_coefficient=-0.26    #temperature_coefficient: temperatuurafhankelijkheid 
+    ),
+    "Jinko": SolarPanelType(
+        solar_panel_cost=107.69,           
+        solar_panel_count=10,           
+        solar_panel_lifetime=25,        
+        panel_surface=1.998,              
+        annual_degredation=0.4,         
+        panel_efficiency=22.53,            
+        temperature_coefficient=-0.30  
+    ),
+    "Longi": SolarPanelType(
+        solar_panel_cost=121,           
+        solar_panel_count=10,           
+        solar_panel_lifetime=25,        
+        panel_surface=1.953,              
+        annual_degredation=0.4,         
+        panel_efficiency=23.0,            
+        temperature_coefficient=-0.29  
+    ),
+    "REC": SolarPanelType(
+        solar_panel_cost=187.55,           
+        solar_panel_count=10,           
+        solar_panel_lifetime=25,        
+        panel_surface=1.934,              
+        annual_degredation=0.25,         
+        panel_efficiency=22.3,            
+        temperature_coefficient=-0.26 
+    ),
+    "Sunpower": SolarPanelType(
+        solar_panel_cost=435.6,           
+        solar_panel_count=10,           
+        solar_panel_lifetime=40,        
+        panel_surface=1.895,              
+        annual_degredation=0.25,         
+        panel_efficiency=21.9,            
+        temperature_coefficient=-0.27 
+    ),
+    # Define more types as needed
+}
 
 
 
@@ -54,7 +122,7 @@ chosen_battery = battery_types[chosen_battery_type]
 print(f"Total cost for {chosen_battery_type}: {chosen_battery.total_battery_cost}")
 
 # non-changeable 
-inverter_cost= 500
+invertor_cost= 500
 installation_cost= 1000
 maintenance_cost = 0
 
