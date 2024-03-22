@@ -6,12 +6,13 @@ sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')
 
 import powercalculations.powercalculations as pc
 
-file_path_irradiance = 'data/Irradiance_data_v6.xlsx'
+file_path_irradiance = 'data/Irradiance_data_v7.xlsx'
 file_path_load = 'data/Load_profile_6_v2.xlsx'
-irradiance=pc.PowerCalculations(file_path_irradiance=file_path_irradiance,file_path_load=file_path_load)
-
+file_path_combined = 'data/combined_data_v3.xlsx'
+irradiance=pc.PowerCalculations(file_path_combined=file_path_combined)
+#irradiance.interpolate_columns(interval='1min')
+irradiance.export_dataframe_to_excel('test_output.xlsx')
 formatter = pd.option_context('display.max_rows', None, 'display.max_columns', None)
-
 print(irradiance.get_dataset())
 #irradiance.interpolate_columns(interval='1h')
 #irradiance.export_dataframe_to_excel('test_output.xlsx')

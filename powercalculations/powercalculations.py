@@ -9,7 +9,7 @@ from datetime import datetime, timedelta
 from torch import sgn
 
 class PowerCalculations():
-    def __init__(self, file_path_irradiance: str,file_path_load: str, dataset: pd.DataFrame = None):
+    def __init__(self, file_path_irradiance: str="",file_path_load: str="", file_path_combined:str=""):
         """
         Initializes the PowerCalculations class with the given dataset
         
@@ -17,9 +17,10 @@ class PowerCalculations():
         file_path (str): The file path to the Excel file containing the dataset 
         dataset (DataFrame): The dataset to be used for the calculations if file_path is not provided       
         """
-        if dataset is not None:
+        if file_path_combined is not "":
             # Use the dataset directly if provided
-            merged_df = dataset
+            merged_df = pd.read_excel(file_path_combined)
+            print(merged_df)
         else:
             assert file_path_irradiance.endswith('.xlsx'), 'The file must be an Excel file'
             assert file_path_load.endswith('.xlsx'), 'The file must be an Excel file'
