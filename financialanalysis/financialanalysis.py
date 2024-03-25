@@ -1,12 +1,4 @@
-
-from math import acos, asin, cos, pi, sin, tan
-import math
-from typing import List
 import pandas as pd
-import matplotlib.pyplot as plt
-from datetime import datetime, timedelta
-
-from torch import sgn
 
 class FinancialAnalysis():
     def __init__(self, data):
@@ -21,7 +13,7 @@ class FinancialAnalysis():
             raise ValueError("Input data must be either a Series or a DataFrame")
 
         # Check if all required columns are present
-        required_columns = ['PowerGrid']
+        required_columns = ['PowerGrid'] # [kW]
         missing_columns = [col for col in required_columns if col not in dataframe.columns]
         assert not missing_columns, f"The following columns are missing: {', '.join(missing_columns)}"
 
@@ -35,9 +27,8 @@ class FinancialAnalysis():
 
 
 
-    # Imported methods
 
-    
+    # Imported methods
     from ._getters import get_dataset
     from ._getters import get_irradiance
     from ._getters import get_load

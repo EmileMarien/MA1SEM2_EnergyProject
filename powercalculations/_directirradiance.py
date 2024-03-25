@@ -1,10 +1,6 @@
 import math
 import pvlib
 def calculate_direct_irradiance(self, latitude:int=0, tilt_angle:int=0,longitude:int=0,temperature:int=0): 
-    """
-    Calculates the direct irradiance on a solar panel for a specific time, day and colation
-    """ 
-    
 
     # Define a function to calculate the direct irradiance for a single row
     def calculate_irradiance_row(row, latitude, tilt_angle, longitude, temperature):
@@ -34,22 +30,10 @@ def calculate_direct_irradiance(self, latitude:int=0, tilt_angle:int=0,longitude
         slope_angle = 0 #gamma_s
         incidence_angle = math.acos(math.cos(slope_angle)*math.cos(solar_zenith_angle) + math.sin(slope_angle)*math.sin(solar_zenith_angle)*math.cos(solar_azimuth_angle-surface_azimuth_angle))
 
-
-        # TODO: finish the calculation of the beam irradiance
+        # calculate direct irradiance
         direct_irradiance = DNI*math.cos(incidence_angle) + GDI
         return direct_irradiance
 
-    # Convert the string to a pandas Timestamp
-    #day_datetime = pd.to_datetime(day)
-
-    # Convert the Timestamp to a pandas DatetimeIndex
-    #day_datetime_index = pd.DatetimeIndex([day_datetime])
-    #day_datetime_index = entry.index
-    # Irradiances at specific day
-    #GHI=entry['GlobRad'] #Global Horizontal Irradiance
-    #GDI=entry['DiffRad'] #Diffuse Horizontal Irradiance
-    #GHI=self.pd.loc[self.pd['DateTime'] == day_datetime, 'GlobRad'] #Global Horizontal Irradiance
-    #GDI=self.pd.loc[self.pd['DateTime'] == day_datetime, 'DiffRad'] #Diffuse Horizontal Irradiance
 
     # Apply the calculation function to each row with vectorized operations
     self.pd['DirectIrradiance'] = self.pd.apply(
@@ -57,12 +41,4 @@ def calculate_direct_irradiance(self, latitude:int=0, tilt_angle:int=0,longitude
     )
 
     return None
-"""
-def direct_irradiance(self):
-    
-    Calculates the direct irradiance on a solar panel of all the data in the dataset
-    
-    #TODO:check if this works
-    self.pd['DirectIrradiance'] = self.pd.apply(calculate_direct_irradiance_specific,args=())
-    return None
-"""
+

@@ -37,6 +37,8 @@ class test_DataCleaning(unittest.TestCase):
     def setUp(self):
         self.powercalculations_test = pc.PowerCalculations(file_path_irradiance='data/Irradiance_data_vtest.xlsx',file_path_load='data/Load_profile_6_vtest.xlsx') 
 
+
+
     def test_filter_data_by_date_interval(self):
         # Test with some specific values
         #print(self.powercalculations_test.get_dataset())
@@ -54,20 +56,25 @@ class test_DataCleaning(unittest.TestCase):
         else:
             # Handle non-DatetimeIndex scenarios (if applicable)
             raise ValueError("Unexpected index type: {}".format(type(result.index)))
+    
+    def test_interpolate_column(self):
+        # Interpolate the Load_kW column with minute interval
+        interval = 'T'  # T represents minute interval
+        self.powercalculations_test.interpolate_column(interval)
 
-    def test_fill_load_with_weighted_values(self):
-        # Test with some specific values
-        #print(self.powercalculations_test.get_load())
-        self.powercalculations_test.fill_load_with_weighted_values()
-        result=self.powercalculations_test.get_load()
-        #print(result)
-        self.assertIsNotNone(result)
-        self.assertIsInstance(result, pd.Series)
+        # Check if there are no NaN values after interpolation
+        self.assertFalse(self.powercalculations_test.pd['Load_kW'].isnull().any())
+        self.assertFalse(self.powercalculations_test.pd['DiffRad'].isnull().any())
+
+
+        # Check if the data is correctly interpolated
+        self.assertEqual(self.powercalculations_test.pd.loc['2018-02-28 04:30:00', 'DiffRad'], 15)
+
 
 class test_Getters(unittest.TestCase):
     def setUp(self):
         self.powercalculations_test = pc.PowerCalculations(file_path_irradiance='data/Irradiance_data_vtest.xlsx',file_path_load='data/Load_profile_6_vtest.xlsx') 
-
+        self.powercalculations_test.interpolate_columns(interval='1h')
     def test_get_dataset(self):
         result = self.powercalculations_test.get_dataset()
         self.assertIsNotNone(result)
@@ -93,22 +100,18 @@ class test_Getters(unittest.TestCase):
         self.assertIsNotNone(result)
         self.assertIsInstance(result, pd.Series)
 
-    def test_get_loadTOT_day(self):
-        result = self.powercalculations_test.get_loadTOT_day()
+    def test_get_energy_TOT(self):
+        result = self.powercalculations_test.get_energy_TOT(column_name='Load_kW', peak='peak')
+        print(result)
         self.assertIsNotNone(result)
-        self.assertIsInstance(result, float)
-    
-    def test_get_loadTOT_night(self):
-        result = self.powercalculations_test.get_loadTOT_night()
-        self.assertIsNotNone(result)
-        self.assertIsInstance(result, float)
+
 
     def test_get_average_per_hour(self):
 
         # Assert returned Series has expected index and average values
         result = self.powercalculations_test.get_average_per_hour('GlobRad')
         self.assertIsInstance(result, pd.Series)
-        self.assertEqual(len(result) == 24)  # 24 hours in a day
+        self.assertEqual(len(result),24)  # 24 hours in a day
         self.assertEqual(list(result.index) == [i for i in range(24)])  # Assuming hour index starts from 0
         self.assertAlmostEqual(result.tolist()[23] == 0)  # Assuming no irradiance at 23:00
 

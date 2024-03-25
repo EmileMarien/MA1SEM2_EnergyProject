@@ -1,4 +1,8 @@
 
+from typing import List
+import pandas as pd
+
+
 def get_irradiance(self):
     """
     Returns the irradiance data
@@ -29,41 +33,56 @@ def get_PV_generated_power(self):
     """
     return self.pd['PV_generated_power']
 
-def get_loadTOT_day(self):
-    """
-    Calculates the sum of 'Load_kW' values between 8h and 18h for the entire year in the DataFrame.
 
+def get_energy_TOT(self,column_name:str='Load_kW',peak:str='peak'):
+    """
+    Calculates the total energy in kWh for the entire year in the DataFrame. The energy is calculated for the specified power values and peak or offpeak period.
+
+    Args:
+    column_name (str): The name of the column to be used for the calculation. Choose between: 'Load_kW', 'GridPower'. Default: 'Load_kW'
+    peak (str): The period to calculate the energy. Choose between: 'peak', 'offpeak', 'weekend'. Default: 'peak'
+    
     Returns:
         float: The total 'Load_kW' between 8h and 18h.
     """
-    # Select only load data
-    df_load=self.pd['Load_kW']
 
-    # Select data between 8:00 and 18:00 for the entire year
-    df_filtered = df_load[(df_load.index.hour >= 8) & (df_load.index.hour < 18)]
+    # Select only load data
+    if column_name=='Load_kW':
+        df_load=self.pd['Load_kW']
+    elif column_name=='PowerGrid':
+        df_load=self.pd['PowerGrid']
+    else:
+        AssertionError('The column_name must be either Load_kW or PowerGrid')
+
+    if peak=='peak':
+        # Select data between 8:00 and 18:00 for the entire year
+        df_filtered = df_load[(df_load.index.hour >= 8) & (df_load.index.hour < 18)]
+    elif peak=='offpeak':
+        # Select data outside 8:00 and 18:00 for the entire year
+        df_filtered = df_load[(df_load.index.hour <= 8) & (df_load.index.hour > 18)]
+    else:
+        AssertionError('The peak must be either peak or offpeak')
 
     # Sum the 'Load_kW' values in the filtered DataFrame
-    load_tot_day = df_filtered['Load_kW'].sum()
+    load_tot_day = df_filtered.sum()
+    
+    # Check if the input data contains NA values
+    assert not df_load.isnull().values.any(), 'The input data contains NA values'
+    #Integrate the power over time to get the energy in [kWh]
+    interval = pd.Timedelta(df_load.index.freq).total_seconds() / 3600 # Convert seconds to hours
+    energy_peak=load_tot_day*interval# [kWh]
 
-    return load_tot_day
+    return energy_peak
 
-def get_loadTOT_night(self):
+def get_columns(self,columns:List[str]):
     """
-    Calculates the sum of 'Load_kW' values outside 8h and 18h for the entire year in the DataFrame.
-
-    Returns:
-        float: The total 'Load_kW' outside 8h and 18h.
+    Returns the dataset with the specific columns
     """
-    # Select only load data
-    df_load=self.pd['Load_kW']
 
-    # Select data between 8:00 and 18:00 for the entire year
-    df_filtered = df_load[(df_load.index.hour <= 8) & (df_load.index.hour > 18)]
+    assert all(col in self.pd.columns for col in columns), 'The columns must be present in the DataFrame'
 
-    # Sum the 'Load_kW' values in the filtered DataFrame
-    load_tot_day = df_filtered['Load_kW'].sum()
-
-    return load_tot_day
+    return self.pd[columns]
+   
 
 def get_average_per_hour(self,column_name:str='Load_kW'):
     """
@@ -75,7 +94,7 @@ def get_average_per_hour(self,column_name:str='Load_kW'):
     """
 
     # Resample the DataFrame by hour ('H') and calculate the mean
-    df_hourly_avg = self.pd[column_name].resample('H').mean()
+    df_hourly_avg = self.pd[column_name].resample('h').mean()
 
     return df_hourly_avg
 
