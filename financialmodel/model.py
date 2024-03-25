@@ -143,3 +143,11 @@ print("Net Present Value (NPV):", npv)
 # bedenkingen 
 # panel_efficiency degradation into account nemen -> dus geen constanr cash flows 
 # energieprijzen van energiecrisis in rekening gebracht? -> zoja factor reduceren
+class InverterType:
+    def __init__(self, inverter_cost, inverter_lifetime, inverter_efficiency, DC_battery, DC_solar_panels, AC_output):
+        self.inverter_cost = inverter_cost
+        self.inverter_lifetime = inverter_lifetime
+        self.inverter_efficiency = inverter_efficiency
+        self.DC_battery = DC_battery
+        self.DC_solar_panels = DC_solar_panels
+        self.AC_output = AC_output
