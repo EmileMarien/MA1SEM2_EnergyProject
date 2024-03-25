@@ -30,7 +30,7 @@ def grid_cost(solar_count: int=1, panel_surface:int= 1 ,annual_degredation: int=
     irradiance=pc.PowerCalculations(file_path_irradiance=file_path_irradiance,file_path_load=file_path_load)
     irradiance.fill_load_with_weighted_values()
     irradiance.calculate_direct_irradiance(tilt_angle=tilt_angle,latitude=latitude,longitude=longitude)
-    irradiance.PV_generated_power(N=solar_count, cell_area=panel_surface, efficiency_max=panel_efficiency,Temp_coeff=temperature_Coefficient)
+    irradiance.PV_generated_power(N=solar_count, cell_area=panel_surface, efficiency_max=panel_efficiency*(1-annual_degredation),Temp_coeff=temperature_Coefficient)
     irradiance.power_flow(max_charge=battery_capacity*battery_count)
     
     financials=fa.FinancialAnalysis(irradiance.get_grid_power())
