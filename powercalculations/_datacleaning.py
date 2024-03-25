@@ -28,6 +28,8 @@ def filter_data_by_date_interval(self, start_date: str, end_date: str, interval_
     # Interpolate the columns to the specified interval if needed
     #self.interpolate_columns(interval=interval_str)
 
+    # Convert index to datetime
+    self.pd.index = pd.to_datetime(self.pd.index)
     # Convert start_date and end_date to datetime objects
     start_date = pd.to_datetime(start_date)
     end_date = pd.to_datetime(end_date)
@@ -46,11 +48,24 @@ def interpolate_columns(self, interval:int='1h'):
     """
     # Convert object types to appropriate types before resampling
     self.pd = self.pd.infer_objects()
-
+    self.pd.index = pd.to_datetime(self.pd.index)
     # Resample the DataFrame
     self.pd = self.pd.resample(interval)
-    print(self.pd)
+
     # Interpolate the missing values
     self.pd = self.pd.interpolate(method='linear')
 
     return None
+
+def find_duplicate_indices(self):
+    """
+    Find and return duplicate indices from a DataFrame.
+
+    Parameters:
+    - df: DataFrame object.
+
+    Returns:
+    - List of duplicate indices.
+    """
+    duplicate_indices = self.pd[self.pd.index.duplicated(keep=False)].index.unique()
+    return duplicate_indices
