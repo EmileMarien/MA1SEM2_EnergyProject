@@ -19,6 +19,7 @@ def get_dataset(self):
     """
     Returns the dataset
     """
+    #print(self.pd.index.dtype)
     return self.pd
 
 def get_direct_irradiance(self):
@@ -74,6 +75,8 @@ def get_energy_TOT(self,column_name:str='Load_kW',peak:str='peak'):
 
     return energy_peak
 
+
+
 def get_columns(self,columns:List[str]):
     """
     Returns the dataset with the specific columns
@@ -83,20 +86,54 @@ def get_columns(self,columns:List[str]):
 
     return self.pd[columns]
    
+def get_PV_energy_per_hour(self):
+    power=get_average_per_hour(self,"PV_generated_power")
+    
 
-def get_average_per_hour(self,column_name:str='Load_kW'):
+def get_average_per_hour(self, column_name: str = 'Load_kW'):
     """
-    Calculates the average load per hour for each hour in the day based on the entire year in the DataFrame.
+    Calculates the average load per hour for each hour of the day based on the entire year in the DataFrame. in kW
 
     Returns:
         pandas.Series: A Series containing the average 'Load_kW' for each hour of the day.
         The index of the Series is the hour (0-23).
     """
 
-    # Resample the DataFrame by hour ('H') and calculate the mean
-    df_hourly_avg = self.pd[column_name].resample('h').mean()
+    # Extract the hour component from the index
+    hour_component = self.pd.index.hour
+
+    # Group the data by the hour component and calculate the mean
+    df_hourly_avg = self.pd.groupby(hour_component)[column_name].mean()
 
     return df_hourly_avg
+
+def get_average_per_day(self,column_name:str='Load_kW'):
+    """
+    Calculates the average load per day for each day of the year based on the entire year in the DataFrame. in kW
+
+    Returns:
+        pandas.Series: A Series containing the average 'Load_kW' for each day of the year.
+        The index of the Series is the day of the year (1-365).
+    """
+
+    # Resample the DataFrame by day ('D') and calculate the mean
+    df_daily_avg = self.pd[column_name].resample('D').mean()
+
+    return df_daily_avg
+
+def get_max_per_hour(self,column_name:str='Load_kW'):
+    """
+    Calculates the maximum load per hour for each hour in the day based on the entire year in the DataFrame. in kW
+
+    Returns:
+        pandas.Series: A Series containing the maximum 'Load_kW' for each hour of the day.
+        The index of the Series is the hour (0-23).
+    """
+
+    # Resample the DataFrame by hour ('H') and calculate the mean
+    df_hourly_max = self.pd[column_name].resample('h').max()
+
+    return df_hourly_max
 
 def get_grid_power(self):
     return self.pd['grid_flow']
