@@ -1,5 +1,6 @@
 from gridcost import grid_cost
-from components import SolarPanelType, BatteryType
+from components import SolarPanel, Battery, Inverter, solar_panel_types, battery_types, inverter_types
+
 
 def calculate_npv(capex, battery_lifetime, battery_cost, solar_panel_lifetime,total_solar_panel_cost, discount_rate, constant_cash_flow):
     # Calculate the least common multiple (LCM) of battery and solar panel lifetimes
@@ -143,14 +144,3 @@ print("Net Present Value (NPV):", npv)
 # bedenkingen 
 # panel_efficiency degradation into account nemen -> dus geen constanr cash flows 
 # energieprijzen van energiecrisis in rekening gebracht? -> zoja factor reduceren
-class InverterType:
-    def __init__(self, inverter_cost, inverter_lifetime, inverter_efficiency, DC_battery, DC_solar_panels, AC_output):
-        self.inverter_cost = inverter_cost
-        self.inverter_lifetime = inverter_lifetime
-        self.inverter_efficiency = inverter_efficiency
-        self.DC_battery = DC_battery
-        self.DC_solar_panels = DC_solar_panels
-        self.AC_output = AC_output
-inverter_types = {
-    
-}
