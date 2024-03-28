@@ -32,7 +32,6 @@ import powercalculations.powercalculations as pc
 file=open('data/combined_dataframe_test','rb')
 powercalculations_test=pickle.load(file)
 file.close()
-print(powercalculations_test.get_dataset())
 powercalculations_test.filter_data_by_date_interval(start_date="2018-1-24 08:30",end_date="2018-1-25 08:30",interval_str="1h")
 powercalculations_test.calculate_direct_irradiance()
 powercalculations_test.PV_generated_power()
