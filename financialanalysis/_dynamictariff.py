@@ -5,8 +5,8 @@ def dynamic_tariff(self):
     """ 
     # Define a function to calculate the dynamic tariff for a single row
     def calculate_tariff_row(row):
-        grid_flow = row['Grid_flow']
-        dynamic_cost = row['Dynamic_cost']
+        grid_flow = row['GridFlow']
+        dynamic_cost = row['DynamicCost']
         if grid_flow < 0:
             cost = (0.1*dynamic_cost+1.1)*1.06 # Depends on energy supplier (now for Engie)
         elif grid_flow > 0:

@@ -36,7 +36,7 @@ powercalculations_test.filter_data_by_date_interval(start_date="2018-1-24 08:30"
 powercalculations_test.calculate_direct_irradiance()
 powercalculations_test.PV_generated_power()
 powercalculations_test.power_flow()
-powercalculations_test.nettoProduction()
+# powercalculations_test.nettoProduction()
 formatter = pd.option_context('display.max_rows', None, 'display.max_columns', None)
 #print(irradiance.get_dataset())
 #print("test")
