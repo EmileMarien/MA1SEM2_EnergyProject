@@ -49,3 +49,12 @@ def power_flow(self, max_charge):
     DataFrame: The DataFrame containing the converted power data
     """
     return None
+
+def nettoProduction(self):
+    """
+    Calculates the netto production by subtracting the load from the PV generated power
+    """
+    assert 'PV_generated_power' in self.pd.columns, 'The column PV_generated_power is missing'
+    assert 'Load_kW' in self.pd.columns, 'The column Load_kW is missing'
+    self.pd['NettoProduction'] = self.pd['PV_generated_power'] - self.pd['Load_kW']
+    return None

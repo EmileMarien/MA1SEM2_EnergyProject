@@ -9,7 +9,7 @@ from datetime import datetime, timedelta
 from torch import sgn
 
 class PowerCalculations():
-    def __init__(self, file_path_irradiance: str,file_path_load: str, dataset: pd.DataFrame = None):
+    def __init__(self, file_path_irradiance: str="",file_path_load: str="", file_path_combined:str=""):
         """
         Initializes the PowerCalculations class with the given dataset
         
@@ -17,9 +17,10 @@ class PowerCalculations():
         file_path (str): The file path to the Excel file containing the dataset 
         dataset (DataFrame): The dataset to be used for the calculations if file_path is not provided       
         """
-        if dataset is not None:
+        if file_path_combined is not "":
             # Use the dataset directly if provided
-            merged_df = dataset
+            merged_df = pd.read_excel(file_path_combined)
+            print(merged_df)
         else:
             assert file_path_irradiance.endswith('.xlsx'), 'The file must be an Excel file'
             assert file_path_load.endswith('.xlsx'), 'The file must be an Excel file'
@@ -48,21 +49,25 @@ class PowerCalculations():
         
         #Set a datetime index
         self.pd.set_index('DateTime', inplace=True)
+        self.pd.index = pd.to_datetime(self.pd.index)
 
         # Initialize the columns that will be used for the calculations
         self.pd['DirectIrradiance'] = None       
         self.pd['PV_generated_power'] = None
         self.pd['PowerGrid'] = None
+        self.pd['NettoProduction'] = None # Netto production is the difference between the PV generated power and the load
 
 
     # Imported methods
     from ._datacleaning import filter_data_by_date_interval
     from ._datacleaning import interpolate_columns
-    
+    from ._datacleaning import find_duplicate_indices
+
     from ._pvpower import PV_generated_power
     
     from ._visualisations import plot_columns
     from ._visualisations import plot_dataframe
+    from ._visualisations import plot_series
     
     from ._directirradiance import calculate_direct_irradiance
 
@@ -76,5 +81,8 @@ class PowerCalculations():
     from ._getters import get_energy_TOT
     from ._getters import get_average_per_hour
     from ._getters import get_grid_power
+    from ._getters import get_columns
+   
+
 
     from ._export import export_dataframe_to_excel

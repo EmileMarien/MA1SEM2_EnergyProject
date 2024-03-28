@@ -59,3 +59,25 @@ def plot_dataframe(self, df:pd.DataFrame=pd.DataFrame):
 
     # Show the plot
     plt.show()
+
+def plot_series(self, series:pd.Series=pd.Series):
+    """
+    Plots a given Series with a datetime index.
+
+    Args:
+        series (Series): The Series to plot.
+    """
+
+    # Create the plot
+    fig, ax = plt.subplots()
+
+    # Plot the Series
+    ax.plot(series.index, series)
+
+    # Add labels and title
+    ax.set_xlabel("Datetime")
+    ax.set_ylabel(series.name)
+    ax.set_title(f'Plot of {series.name}')
+
+    # Show the plot
+    plt.show()
