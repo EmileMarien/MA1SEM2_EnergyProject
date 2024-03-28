@@ -50,8 +50,8 @@ def get_energy_TOT(self,column_name:str='Load_kW',peak:str='peak'):
     # Select only load data
     if column_name=='Load_kW':
         df_load=self.pd['Load_kW']
-    elif column_name=='PowerGrid':
-        df_load=self.pd['PowerGrid']
+    elif column_name=='GridFlow':
+        df_load=self.pd['GridFlow']
     else:
         AssertionError('The column_name must be either Load_kW or PowerGrid')
 
@@ -136,4 +136,4 @@ def get_max_per_hour(self,column_name:str='Load_kW'):
     return df_hourly_max
 
 def get_grid_power(self):
-    return [self.pd['PowerGrid'], self.pd['BatteryCharge']]
+    return [self.pd['GridFlow'], self.pd['BatteryCharge']]
