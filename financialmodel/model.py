@@ -59,27 +59,61 @@ class SolarPanelType:
         self.total_panel_surface = self.panel_surface * self.solar_panel_count
 
 # Define different types of solar panels
-solar_panel_types = {
-    "Type A": SolarPanelType(
-        solar_panel_cost=100,            #cost of 1 solar panel
+  "Canadian": SolarPanelType(
+        solar_panel_cost=110.4,            #cost of 1 solar panel
         solar_panel_count=10,            #aantal zonnepanelen
-        solar_panel_lifetime=10,        
-        panel_surface=1.5,              #oppervlakte van 1 zonnepaneel [m^2]
-        annual_degredation=0.5,         #annual_degredation: efficientieverlies per jaar in [%]
-        panel_efficiency=0.90,          #panel_efficiency: efficientie van het zonnepaneel in [%]
-        temperature_coefficient=0.05    #temperature_coefficient: temperatuurafhankelijkheid 
+        solar_panel_lifetime=25,        
+        panel_surface=1.953,              #oppervlakte van 1 zonnepaneel [m^2]
+        annual_degredation=0.35,         #annual_degredation: efficientieverlies per jaar in [%]
+        panel_efficiency=22.5,          #panel_efficiency: efficientie van het zonnepaneel in [%]
+        temperature_coefficient=-0.26    #temperature_coefficient: temperatuurafhankelijkheid 
     ),
-    "Type B": SolarPanelType(
-        solar_panel_cost=120,           
-        solar_panel_count=12,           
-        solar_panel_lifetime=12,        
-        panel_surface=1.8,              
-        annual_degredation=0.6,         
-        panel_efficiency=0.85,            
-        temperature_coefficient=0.06   
+    "Jinko": SolarPanelType(
+        solar_panel_cost=105.6,           
+        solar_panel_count=10,           
+        solar_panel_lifetime=25,        
+        panel_surface=1.998,              
+        annual_degredation=0.4,         
+        panel_efficiency=22.53,            
+        temperature_coefficient=-0.30  
     ),
-    # Define more types as needed
-}
+    "Longi": SolarPanelType(
+        solar_panel_cost=121.2,           
+        solar_panel_count=10,           
+        solar_panel_lifetime=25,        
+        panel_surface=1.953,              
+        annual_degredation=0.4,         
+        panel_efficiency=23.0,            
+        temperature_coefficient=-0.29  
+    ),
+    "REC": SolarPanelType(
+        solar_panel_cost=181.8,           
+        solar_panel_count=10,           
+        solar_panel_lifetime=25,        
+        panel_surface=1.934,              
+        annual_degredation=0.25,         
+        panel_efficiency=22.3,            
+        temperature_coefficient=-0.26 
+    ),
+    "Sunpower": SolarPanelType(
+        solar_panel_cost=294,           
+        solar_panel_count=10,           
+        solar_panel_lifetime=40,        
+        panel_surface=1.895,              
+        annual_degredation=0.25,         
+        panel_efficiency=21.9,            
+        temperature_coefficient=-0.27 
+    ),
+        "Poly": SolarPanelType(
+        solar_panel_cost=104.63,           
+        solar_panel_count=10,           
+        solar_panel_lifetime=25,        
+        panel_surface=2.174,              
+        annual_degredation=0.55,         
+        panel_efficiency=20.7,            
+        temperature_coefficient=-0.34 
+    ),
+    
 
 
 
