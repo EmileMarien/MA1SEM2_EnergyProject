@@ -136,4 +136,4 @@ def get_max_per_hour(self,column_name:str='Load_kW'):
     return df_hourly_max
 
 def get_grid_power(self):
-    return [self.pd['Grid_flow'], self.pd['Battery_charge']]
+    return [self.pd['PowerGrid'], self.pd['BatteryCharge']]

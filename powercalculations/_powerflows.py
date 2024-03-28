@@ -1,5 +1,4 @@
-def power_flow(self, max_charge: int = 100):
-    cumulative_charge = 0
+def power_flow(self, max_charge: int = 500):
     previous_charge = 0  # Variable to store the previous cumulative charge
     
     def power_flow_row(row, previous_charge, max_charge):
@@ -18,7 +17,8 @@ def power_flow(self, max_charge: int = 100):
                     grid_draw = excess_power - available_space
                     return [new_charge, grid_draw]
             else:  # Battery full, send excess power to the grid
-                return [0, excess_power]
+                new_charge = max_charge
+                return [max_charge, excess_power]
         elif excess_power < 0:  # Insufficient PV power, need to draw from battery or grid
             if previous_charge > 0:  # Battery has some energy
                 if -excess_power <= previous_charge:  # Battery has enough power to cover load
@@ -35,8 +35,8 @@ def power_flow(self, max_charge: int = 100):
 
     for index, row in self.pd.iterrows():
         result = power_flow_row(row, previous_charge, max_charge)
-        self.pd.at[index, 'Battery_charge'] = result[0]
-        self.pd.at[index, 'Grid_flow'] = result[1]
+        self.pd.at[index, 'BatteryCharge'] = result[0]
+        self.pd.at[index, 'GridFlow'] = result[1]
         previous_charge = result[0]
     
     """

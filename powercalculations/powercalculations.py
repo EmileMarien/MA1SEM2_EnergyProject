@@ -55,6 +55,7 @@ class PowerCalculations():
         self.pd['DirectIrradiance'] = None       
         self.pd['PV_generated_power'] = None
         self.pd['PowerGrid'] = None
+        self.pd['BatteryCharge'] = None
         self.pd['NettoProduction'] = None # Netto production is the difference between the PV generated power and the load
 
 
@@ -72,6 +73,7 @@ class PowerCalculations():
     from ._directirradiance import calculate_direct_irradiance
 
     from ._powerflows import power_flow
+    from ._powerflows import nettoProduction
     
     from ._getters import get_dataset
     from ._getters import get_irradiance
