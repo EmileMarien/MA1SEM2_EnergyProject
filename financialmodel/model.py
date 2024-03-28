@@ -136,8 +136,6 @@ capex = total_solar_panel_cost + total_battery_cost + installation_cost + invert
 #Calculations of the cashflows 
 
 
-
-
 cost_grid = grid_cost(total_panel_surface:int= 1 ,annual_degredation: int=0.02, panel_efficiency: int= 0.55, temperature_Coefficient: int=0.02,  tilt_angle:int=0, Orientation:str=N, battery_capacity: int= 1000, battery_count: int=1) 
 constant_cash_flow = grid_cost(solar_count=0, battery_count=0) - cost_grid    #Besparing van kosten door zonnepanelen, kan men zien als de profit
 
@@ -149,13 +147,6 @@ print("Net Present Value (NPV):", npv)
 
 # bedenkingen 
 # panel_efficiency degradation into account nemen -> dus geen constanr cash flows 
-<<<<<<< HEAD
-# energieprijzen van energiecrisis in rekening gebracht? -> zoja factor reduceren 
-
-
-
-
-=======
 # energieprijzen van energiecrisis in rekening gebracht? -> zoja factor reduceren
 class InverterType:
     def __init__(self, inverter_cost, inverter_lifetime, inverter_efficiency, DC_battery, DC_solar_panels, AC_output_power):
@@ -192,4 +183,3 @@ inverter_types = {
             AC_output_power = 3000  
     ),
 }
->>>>>>> 0c974f0708e204093033f5792c597b2a3225ebdf

@@ -1,4 +1,4 @@
-def power_flow(self, max_charge: int = 500, eff_solar_to_battery_to_home: int = 0.89, eff_solar_to_home: int = 0.97):
+def power_flow(self, max_charge: int = 500):
     previous_charge = 0  # Variable to store the previous cumulative charge
     
     def power_flow_row(row, previous_charge, max_charge):
