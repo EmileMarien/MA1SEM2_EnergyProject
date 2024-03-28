@@ -1,10 +1,11 @@
 
+#dit model gebaseerd op gewoon een constant cash flow waarbij jaarlijks linear een een degradatie wordt afgenomen but dus cash flow voor 1 jaar berekend 
+
 
 from gridcost import grid_cost
-from components import SolarPanel, Battery, Inverter, solar_panel_types, battery_types, inverter_types
 
 
-def calculate_npv(capex, battery_lifetime, battery_cost, solar_panel_lifetime,total_solar_panel_cost, discount_rate, constant_cash_flow):
+def calculate_npv(capex, battery_lifetime, battery_cost, solar_panel_lifetime, total_solar_panel_cost, discount_rate, constant_cash_flow, annual_degredation):
     # Calculate the least common multiple (LCM) of battery and solar panel lifetimes
     def lcm(x, y):
         from math import gcd
@@ -12,23 +13,29 @@ def calculate_npv(capex, battery_lifetime, battery_cost, solar_panel_lifetime,to
 
     lcm_lifetime = lcm(battery_lifetime, solar_panel_lifetime)
 
-    # Calculate cash flows for total project
-
+    # Calculate cash flows for total project-
     total_cash_flows = [-capex]
+    current_cash_flow = constant_cash_flow
+  
 
     for i in range(1, lcm_lifetime + 1):
+        # Adjust cash flow due to degradation
+        if i % solar_panel_lifetime != 0:
+            current_cash_flow *= (1 - annual_degredation)
+            
         # Check if it's time for reinvestment
         if i % battery_lifetime == 0:
-            total_cash_flows.append(constant_cash_flow - battery_cost)
+            total_cash_flows.append(current_cash_flow - battery_cost)
         elif i % solar_panel_lifetime == 0:
-            total_cash_flows.append(constant_cash_flow - total_solar_panel_cost)
+            total_cash_flows.append(current_cash_flow - total_solar_panel_cost)
+            current_cash_flow = constant_cash_flow  # Reset cash flow cycle after solar panel replacement
         else:
-            total_cash_flows.append(constant_cash_flow)
+            total_cash_flows.append(current_cash_flow)
 
     # Calculate NPV
     npv = 0
     for i, cash_flow in enumerate(total_cash_flows):
-        npv += cash_flow / (1 + discount_rate) ** (i)
+        npv += cash_flow / (1 + discount_rate) ** i
 
     return npv
 
@@ -147,49 +154,3 @@ npv = calculate_npv(battery_cost, solar_panel_cost, battery_lifetime, solar_pane
 print("Net Present Value (NPV):", npv)
 
 
-# bedenkingen 
-# panel_efficiency degradation into account nemen -> dus geen constanr cash flows 
-<<<<<<< HEAD
-# energieprijzen van energiecrisis in rekening gebracht? -> zoja factor reduceren 
-
-
-
-
-=======
-# energieprijzen van energiecrisis in rekening gebracht? -> zoja factor reduceren
-class InverterType:
-    def __init__(self, inverter_cost, inverter_lifetime, inverter_efficiency, DC_battery, DC_solar_panels, AC_output_power):
-        self.inverter_cost = inverter_cost
-        self.inverter_lifetime = inverter_lifetime
-        self.inverter_efficiency = inverter_efficiency
-        self.DC_battery = DC_battery
-        self.DC_solar_panels = DC_solar_panels
-        self.AC_output_power = AC_output_power
-
-inverter_types = {
-    "Sungrow_SH_RS": InverterType(
-            inverter_cost = 1000 # find
-            inverter_lifetime = 10 # find
-            inverter_efficiency = 0.97
-            DC_solar_panels = 600
-            DC_battery = 460
-            AC_output_power = 3000 # size can be chosen
-    ),
-    "FroniusGEN24": InverterType( # enter correct data here
-            inverter_cost = 1000 
-            inverter_lifetime = 10 
-            inverter_efficiency = 0.97
-            DC_solar_panels = 600
-            DC_battery = 460
-            AC_output_power = 3000  
-    ),
-    "TeslaPowerwall3": InverterType( # enter correct data here
-            inverter_cost = 1000 
-            inverter_lifetime = 10 
-            inverter_efficiency = 0.97
-            DC_solar_panels = 600
-            DC_battery = 460
-            AC_output_power = 3000  
-    ),
-}
->>>>>>> 0c974f0708e204093033f5792c597b2a3225ebdf
