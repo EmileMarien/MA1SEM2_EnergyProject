@@ -24,11 +24,11 @@ def grid_cost(solar_count: int=1, panel_surface:int= 1 ,annual_degredation: int=
     # GENK data
     latitude=50.99461 # [degrees]
     longitude=5.53972 # [degrees]
-    file = open('data/combined_dataframe','rb')
+    file = open('data/combined_dataframe_test','rb')
     irradiance=pickle.load(file)
     file.close()
     print("a")
-    irradiance.filter_data_by_date_interval('2018-03-12 00:00', '2018-03-16 18:00', '1h')
+    irradiance.filter_data_by_date_interval(start_date="2018-1-24 08:30",end_date="2018-1-25 08:30",interval_str="1h")
     irradiance.calculate_direct_irradiance(tilt_angle=tilt_angle,latitude=latitude,longitude=longitude)
     irradiance.PV_generated_power(panel_count=solar_count, cell_area=panel_surface, efficiency_max=panel_efficiency*(1-annual_degredation),Temp_coeff=temperature_Coefficient)
     irradiance.power_flow(max_charge=battery_capacity*battery_count)

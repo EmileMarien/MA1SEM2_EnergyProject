@@ -4,11 +4,11 @@ class FinancialAnalysis():
     def __init__(self, data):
         # Convert Series to DataFrame if data is a Series
         if isinstance(data, pd.Series):
-            dataframe = pd.DataFrame({'PowerGrid': data})
+            dataframe = pd.DataFrame({'GridFlow': data})
             dataframe.index = pd.to_datetime(dataframe.index)
         # Use DataFrame directly if data is a DataFrame
         elif isinstance(data, pd.DataFrame):
-            dataframe = pd.DataFrame(data['PowerGrid'])
+            dataframe = pd.DataFrame(data['GridFlow'])
         else:
             raise ValueError("Input data must be either a Series or a DataFrame")
 
