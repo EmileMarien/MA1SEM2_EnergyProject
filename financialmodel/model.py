@@ -148,8 +148,47 @@ print("Net Present Value (NPV):", npv)
 
 # bedenkingen 
 # panel_efficiency degradation into account nemen -> dus geen constanr cash flows 
+<<<<<<< HEAD
 # energieprijzen van energiecrisis in rekening gebracht? -> zoja factor reduceren 
 
 
 
 
+=======
+# energieprijzen van energiecrisis in rekening gebracht? -> zoja factor reduceren
+class InverterType:
+    def __init__(self, inverter_cost, inverter_lifetime, inverter_efficiency, DC_battery, DC_solar_panels, AC_output_power):
+        self.inverter_cost = inverter_cost
+        self.inverter_lifetime = inverter_lifetime
+        self.inverter_efficiency = inverter_efficiency
+        self.DC_battery = DC_battery
+        self.DC_solar_panels = DC_solar_panels
+        self.AC_output_power = AC_output_power
+
+inverter_types = {
+    "Sungrow_SH_RS": InverterType(
+            inverter_cost = 1000 # find
+            inverter_lifetime = 10 # find
+            inverter_efficiency = 0.97
+            DC_solar_panels = 600
+            DC_battery = 460
+            AC_output_power = 3000 # size can be chosen
+    ),
+    "FroniusGEN24": InverterType( # enter correct data here
+            inverter_cost = 1000 
+            inverter_lifetime = 10 
+            inverter_efficiency = 0.97
+            DC_solar_panels = 600
+            DC_battery = 460
+            AC_output_power = 3000  
+    ),
+    "TeslaPowerwall3": InverterType( # enter correct data here
+            inverter_cost = 1000 
+            inverter_lifetime = 10 
+            inverter_efficiency = 0.97
+            DC_solar_panels = 600
+            DC_battery = 460
+            AC_output_power = 3000  
+    ),
+}
+>>>>>>> 0c974f0708e204093033f5792c597b2a3225ebdf
