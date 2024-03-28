@@ -1,42 +1,43 @@
-def power_flow(self, max_charge):
-    cumulative_charge=0
-    def power_flow_row(row, cumulative_charge, max_charge):
+def power_flow(self, max_charge: int = 100):
+    cumulative_charge = 0
+    previous_charge = 0  # Variable to store the previous cumulative charge
+    
+    def power_flow_row(row, previous_charge, max_charge):
         PV_power = row['PV_generated_power']
         load = row['Load_kW']
         excess_power = PV_power - load
+
         if excess_power > 0:  # Excess power from PV
-            available_space = max_charge - cumulative_charge
+            available_space = max_charge - previous_charge
             if available_space > 0:  # Battery has room for excess power
                 if excess_power <= available_space:  # Excess power fills battery partially
-                    new_charge = cumulative_charge + excess_power
-                    return new_charge, 0  # No grid draw
+                    new_charge = previous_charge + excess_power
+                    return [new_charge, 0]  # No grid draw
                 else:  # Battery almost full, partially fill it and send excess to grid
                     new_charge = max_charge
                     grid_draw = excess_power - available_space
-                    return new_charge, grid_draw
+                    return [new_charge, grid_draw]
             else:  # Battery full, send excess power to the grid
-                return 0, excess_power
+                return [0, excess_power]
         elif excess_power < 0:  # Insufficient PV power, need to draw from battery or grid
-            if cumulative_charge > 0:  # Battery has some energy
-                if -excess_power <= cumulative_charge:  # Battery has enough power to cover load
-                    new_charge = cumulative_charge + excess_power
-                    return max(new_charge, 0), 0  # No grid tap
+            if previous_charge > 0:  # Battery has some energy
+                if -excess_power <= previous_charge:  # Battery has enough power to cover load
+                    new_charge = previous_charge + excess_power
+                    return [max(new_charge, 0), 0]  # No grid tap
                 else:  # Battery does not have enough power, draw from battery and grid
-                    grid_tap = min(-excess_power, cumulative_charge)
+                    grid_tap = min(-excess_power, previous_charge)
                     grid_draw = -excess_power - grid_tap
-                    return 0, -grid_tap if grid_tap > 0 else 0
+                    return [0, -grid_tap if grid_tap > 0 else 0]
             else:  # Battery is empty, draw from the grid
-                return 0, excess_power
+                return [0, excess_power]
         else:  # No excess power or deficit
-            return 0, 0
+            return [0, 0]
 
-    result = self.pd.apply(
-        lambda row: power_flow_row(row=row, cumulative_charge=cumulative_charge, max_charge=max_charge),
-        axis=1
-    )
-    
-    self.pd['Battery_charge'] = cumulative_charge + [val[0] for val in result]
-    self.pd['Grid_flow'] = [val[1] for val in result]
+    for index, row in self.pd.iterrows():
+        result = power_flow_row(row, previous_charge, max_charge)
+        self.pd.at[index, 'Battery_charge'] = result[0]
+        self.pd.at[index, 'Grid_flow'] = result[1]
+        previous_charge = result[0]
     
     """
     Converts the irradiance data to power data using the specified column name

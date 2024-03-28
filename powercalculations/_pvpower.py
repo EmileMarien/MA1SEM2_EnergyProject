@@ -16,5 +16,5 @@ def PV_generated_power(self,cell_area:int=1, panel_count:int=1, T_STC:int=25, Te
             # Calculate the PV generated power in [kW]
             self.pd['PV_generated_power'] = efficiency_max*cell_area*self.pd['DirectIrradiance']*(1+Temp_coeff)*(T_cell-T_STC)*panel_count
         else:
-            raise ValueError("The 'directIrradiance' column is empty or not present in the DataFrame")
+            raise ValueError("The 'DirectIrradiance' column is empty or not present in the DataFrame")
         return None

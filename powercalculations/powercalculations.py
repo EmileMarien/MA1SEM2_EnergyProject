@@ -17,7 +17,7 @@ class PowerCalculations():
         file_path (str): The file path to the Excel file containing the dataset 
         dataset (DataFrame): The dataset to be used for the calculations if file_path is not provided       
         """
-        if file_path_combined is not "":
+        if file_path_combined != "":
             # Use the dataset directly if provided
             merged_df = pd.read_excel(file_path_combined)
             print(merged_df)
