@@ -18,4 +18,3 @@ def dynamic_tariff(self):
         lambda row: calculate_tariff_row(row=row)
     )
     return None
-    
