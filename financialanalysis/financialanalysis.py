@@ -1,7 +1,7 @@
 import pandas as pd
 
 class FinancialAnalysis():
-    def __init__(self, data):
+    def __init__(self, data,file_path_BelpexFilter:str=""):
         # Convert Series to DataFrame if data is a Series
         if isinstance(data, pd.Series):
             dataframe = pd.DataFrame({'GridFlow': data})
@@ -13,13 +13,40 @@ class FinancialAnalysis():
             raise ValueError("Input data must be either a Series or a DataFrame")
 
         # Check if all required columns are present
-        required_columns = ['PowerGrid'] # [kW]
+        required_columns = ['GridFlow'] # [kW]
         missing_columns = [col for col in required_columns if col not in dataframe.columns]
         assert not missing_columns, f"The following columns are missing: {', '.join(missing_columns)}"
 
-        # Assign the DataFrame to self.pd
-        self.pd = dataframe
+        if file_path_BelpexFilter != "":
+            # Use the dataset directly if provided
+            belpex_df = pd.read_excel(file_path_BelpexFilter)
+    
+            assert file_path_BelpexFilter.endswith('.xlsx'), 'The file must be an Excel file'
+            
 
+            # Assert that 'Load_kW' and 'DateTime' columns are present in the Excel file
+            assert 'DateTime' in belpex_df.columns, "'DateTime' column not found in the Irradiance Excel file"
+            
+            # Merge the DataFrame with the one read from excel
+            merged_df = pd.merge(belpex_df, dataframe, on='DateTime', how='right') 
+
+        else:
+            merged_df = dataframe
+            merged_df['BelpexFilter'] = None
+        
+        # Assign the DataFrame to self.pd
+        self.pd=merged_df
+
+        #Set a datetime index
+        self.pd.set_index('DateTime', inplace=True)
+        self.pd.index = pd.to_datetime(self.pd.index)
+        self.pd = self.pd.infer_objects()
+
+        # Resample the DataFrame
+        self.pd = self.pd.resample("1h") #TODO: change to freq of above index
+
+        # Interpolate the missing values
+        self.pd = self.pd.interpolate(method='linear')
         # Initialize the columns that will be used for the calculations
         self.pd['DualTariff'] = None
         self.pd['DynamicTariff'] = None

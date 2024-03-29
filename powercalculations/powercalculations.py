@@ -52,10 +52,10 @@ class PowerCalculations():
         self.pd.index = pd.to_datetime(self.pd.index)
 
         # Initialize the columns that will be used for the calculations
-        self.pd['DirectIrradiance'] = None       
-        self.pd['PV_generated_power'] = None
-        self.pd['PowerGrid'] = None
-        self.pd['BatteryCharge'] = None
+        self.pd['DirectIrradiance'] = None    # [W]  
+        self.pd['PV_generated_power'] = None  # [kW]
+        self.pd['PowerGrid'] = None           # [kW], if neg, then subtracted from grid, if pos the added to the grid
+        self.pd['BatteryCharge'] = None       # [kW]
         self.pd['NettoProduction'] = None # Netto production is the difference between the PV generated power and the load
 
 

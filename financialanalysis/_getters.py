@@ -29,13 +29,13 @@ def get_PV_generated_power(self):
     """
     return self.pd['PV_generated_power']
 
-def get_grid_cost_perhour(self,calculationtype:int="DualTariff"):
+def get_grid_cost_perhour(self,calculationtype:str="DualTariff"):
     """
     Returns the grid cost data based on the specified type of cost calculation
     """
     return self.pd[calculationtype]
 
-def get_grid_cost_total(self,calculationtype:int="DualTariff"):
+def get_grid_cost_total(self,calculationtype:str="DualTariff"):
     cost_perhour=get_grid_cost_perhour(calculationtype)
     cost_total=sum(cost_perhour)
     return cost_total

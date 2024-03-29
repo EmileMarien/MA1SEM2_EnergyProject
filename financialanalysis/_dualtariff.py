@@ -1,8 +1,8 @@
 
-def dual_tariff(self, day_tariff:int=0, night_tariff:int=0,fixed_tariff:int=1):
-    """
-    Calculates the dual tariff for a specific time, day and colation
-    """ 
+def dual_tariff(self, peak_tariff:int=2, offpeak_tariff:int=1,fixed_tariff:int=1):
+    
+    #Calculates the dual tariff for a specific time, day and colation
+    
     assert self.pd['GridFlow'].dtype == 'float64', "GridPower should be a float64"
 
     # Define a function to calculate the dual tariff for a single row
@@ -23,9 +23,9 @@ def dual_tariff(self, day_tariff:int=0, night_tariff:int=0,fixed_tariff:int=1):
     
     # Apply the calculation function to each row with vectorized operations
     self.pd['DualTariffCost'] = self.pd.apply(
-        lambda row: calculate_tariff_row(row=row, day_tariff=day_tariff,night_tariff=night_tariff, fixed_tariff=fixed_tariff), axis=1
+        lambda row: calculate_tariff_row(row=row, peak_tariff=peak_tariff,offpeak_tariff=offpeak_tariff, fixed_tariff=fixed_tariff), axis=1
         )
-
+    
     return None
 
 

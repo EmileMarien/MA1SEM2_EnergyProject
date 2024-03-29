@@ -17,4 +17,5 @@ def dynamic_tariff(self):
     self.pd['DynamicTariffCost'] = self.pd.apply(
         lambda row: calculate_tariff_row(row=row)
     )
+
     return None
