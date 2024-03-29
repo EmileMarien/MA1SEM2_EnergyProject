@@ -11,15 +11,7 @@ import financialanalysis.financialanalysis as fa
 
 
 def grid_cost(solar_count: int=1, panel_surface:int= 1 ,annual_degredation: int=0.02, panel_efficiency: int= 0.55, temperature_Coefficient: int=0.02,  tilt_angle:int=0, Orientation:str="N", battery_capacity: int= 1000, battery_count: int=1):
-    #solar_count: aantal zonnepanelen 
-    #panel_surface: oppervlakte van 1 zonnepaneel [m^2]
-    #annual_degredation: efficientieverlies per jaar in [%]
-    #panel_efficiency: efficientie van het zonnepaneel in [%]
-    #tilt_angle: angle of the solar panel, 
-    #Orientation: richting naar waar de zonnepanelen staan N, E, S, W 
-    #temperature_coefficient: temperatuurafhankelijkheid van P_max in [%/degrees] 
-    #battery_capacity: capaciteit van de batterij 
-    #battery_count: hoeveel batterijen aanwezig, enkel relevant voor stacked batteries
+        
 
     # GENK data
     latitude=50.99461 # [degrees]
@@ -43,9 +35,7 @@ def grid_cost(solar_count: int=1, panel_surface:int= 1 ,annual_degredation: int=
     #print(financials.get_dataset())
     financials.dual_tariff()    #TODO: make dynamic tariff work again
     #financials.dynamic_tariff()
-    #cost=financials.get_grid_cost_total(calculationtype="dual_tariff")
-    cost=financials.get_grid_cost_perhour()
-    print(cost)
+    cost=financials.get_grid_cost_total(calculationtype='DualTariff')
     print("financial grid calculations finished")
 
     return cost

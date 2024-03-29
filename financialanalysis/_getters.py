@@ -36,6 +36,6 @@ def get_grid_cost_perhour(self,calculationtype:str="DualTariff"):
     return self.pd[calculationtype]
 
 def get_grid_cost_total(self,calculationtype:str="DualTariff"):
-    cost_perhour=get_grid_cost_perhour(calculationtype)
+    cost_perhour=self.pd[calculationtype]
     cost_total=sum(cost_perhour)
     return cost_total

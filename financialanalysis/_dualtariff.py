@@ -22,7 +22,7 @@ def dual_tariff(self, peak_tariff:int=2, offpeak_tariff:int=1,fixed_tariff:int=1
         return cost
     
     # Apply the calculation function to each row with vectorized operations
-    self.pd['DualTariffCost'] = self.pd.apply(
+    self.pd['DualTariff'] = self.pd.apply(
         lambda row: calculate_tariff_row(row=row, peak_tariff=peak_tariff,offpeak_tariff=offpeak_tariff, fixed_tariff=fixed_tariff), axis=1
         )
     
