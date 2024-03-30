@@ -11,15 +11,7 @@ import financialanalysis.financialanalysis as fa
 
 
 def grid_cost(solar_count: int=1, panel_surface:int= 1 ,annual_degredation: int=0.02, panel_efficiency: int= 0.55, temperature_Coefficient: int=0.02,  tilt_angle:int=0, Orientation:str="N", battery_capacity: int= 1000, battery_count: int=1):
-    #solar_count: aantal zonnepanelen 
-    #panel_surface: oppervlakte van 1 zonnepaneel [m^2]
-    #annual_degredation: efficientieverlies per jaar in [%]
-    #panel_efficiency: efficientie van het zonnepaneel in [%]
-    #tilt_angle: angle of the solar panel, 
-    #Orientation: richting naar waar de zonnepanelen staan N, E, S, W 
-    #temperature_coefficient: temperatuurafhankelijkheid van P_max in [%/degrees] 
-    #battery_capacity: capaciteit van de batterij 
-    #battery_count: hoeveel batterijen aanwezig, enkel relevant voor stacked batteries
+        
 
     # GENK data
     latitude=50.99461 # [degrees]
@@ -27,18 +19,27 @@ def grid_cost(solar_count: int=1, panel_surface:int= 1 ,annual_degredation: int=
     file = open('data/combined_dataframe_test','rb')
     irradiance=pickle.load(file)
     file.close()
-    print("a")
-    irradiance.filter_data_by_date_interval(start_date="2018-1-24 08:30",end_date="2018-1-25 08:30",interval_str="1h")
-    irradiance.calculate_direct_irradiance(tilt_angle=tilt_angle,latitude=latitude,longitude=longitude)
+    print("file opened")
+    irradiance.filter_data_by_date_interval(start_date="2018-1-24 08:00",end_date="2018-1-25 08:00",interval_str="1h")
+    irradiance.calculate_direct_irradiance(tilt_angle=tilt_angle,latitude=latitude,longitude=longitude,orientation=Orientation)
     irradiance.PV_generated_power(panel_count=solar_count, cell_area=panel_surface, efficiency_max=panel_efficiency*(1-annual_degredation),Temp_coeff=temperature_Coefficient)
     irradiance.power_flow(max_charge=battery_capacity*battery_count)
-    print("b")
-    financials=fa.FinancialAnalysis(irradiance.get_grid_power())
-    financials.dual_tariff()
-    print("c")
-    financials.dynamic_tariff()
-    cost=financials.get_grid_cost_total()
+    irradiance.nettoProduction()
+    formatter = pd.option_context('display.max_rows', None, 'display.max_columns', None)
+
+    #with formatter:
+    # print(powercalculations_test.get_grid_power())s
+    #    print(irradiance.get_columns(["BatteryCharge", "GridFlow", "NettoProduction",'PV_generated_power',"Load_kW"]))
+
+    financials=fa.FinancialAnalysis(irradiance.get_grid_power()[0],file_path_BelpexFilter="data/BelpexFilter.xlsx")
+    #print(financials.get_dataset())
+    financials.dual_tariff()    #TODO: make dynamic tariff work again
+    #financials.dynamic_tariff()
+    cost=financials.get_grid_cost_total(calculationtype='DualTariff')
+    print("financial grid calculations finished")
 
     return cost
 
 grid_cost()
+
+    
