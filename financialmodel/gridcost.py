@@ -29,9 +29,11 @@ def grid_cost(solar_count: int=1, panel_surface:int= 1 ,annual_degredation: int=
     #    print(irradiance.get_columns(["BatteryCharge", "GridFlow", "NettoProduction",'PV_generated_power',"Load_kW"]))
 
     financials=fa.FinancialAnalysis(irradiance.get_grid_power()[0],file_path_BelpexFilter="data/BelpexFilter.xlsx")
-    print(financials.get_dataset())
+    # print(financials.get_dataset())
     financials.dual_tariff()    #TODO: make dynamic tariff work again
     financials.dynamic_tariff()
+    # print(financials.get_grid_cost_perhour(calculationtype='DynamicTariff'))
+    print(financials.get_dataset())
     cost=financials.get_grid_cost_total(calculationtype='DualTariff')
     print("financial grid calculations finished")
 
