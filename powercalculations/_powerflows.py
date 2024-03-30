@@ -22,18 +22,14 @@ def power_flow(self, max_charge: int = 500):
             else:  # Battery full, send excess power to the grid
                 new_charge = max_charge
                 return [max_charge, excess_power]
-            
         elif excess_power < 0:  # Insufficient PV power, need to draw from battery or grid
-            if previous_charge > 0:  # Battery has some energy
-                if -excess_power <= previous_charge:  # Battery has enough power to cover load
-                    new_charge = previous_charge + excess_power
-                    return [max(new_charge, 0), 0]  # No grid tap
-                else:  # Battery does not have enough power, draw from battery and grid
-                    grid_tap = min(-excess_power, previous_charge)
-                    grid_draw = -excess_power - grid_tap
-                    return [0, -grid_tap if grid_tap > 0 else 0]
-            else:  # Battery is empty, draw from the grid
-                return [0, excess_power]
+            # Updated logic: Utilize battery charge to cover the deficit before drawing from the grid
+            if previous_charge >= -excess_power:  # Battery has enough power to cover load deficit
+                new_charge = previous_charge + excess_power
+                return [max(new_charge, 0), 0]  # No grid tap
+            else:  # Battery does not have enough power, draw from battery and grid
+                grid_draw = -excess_power - previous_charge
+                return [0, -grid_draw]
         else:  # No excess power or deficit
             return [0, 0]
 
