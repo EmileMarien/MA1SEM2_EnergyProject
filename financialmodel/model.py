@@ -59,6 +59,7 @@ class SolarPanelType:
         self.total_panel_surface = self.panel_surface * self.solar_panel_count
 
 # Define different types of solar panels
+solar_panel_types{
 "Canadian": SolarPanelType(
     solar_panel_cost=110.4,            #cost of 1 solar panel
     solar_panel_count=10,            #aantal zonnepanelen
@@ -114,7 +115,7 @@ class SolarPanelType:
         panel_efficiency=20.7,            
         temperature_coefficient=-0.34 
     ),
-    
+}
 
 
 
