@@ -7,9 +7,6 @@ sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')
 import powercalculations.powercalculations as pc
 import financialanalysis.financialanalysis as fa
 
-
-
-
 def grid_cost(solar_count: int=1, panel_surface:int= 1 ,annual_degredation: int=0.02, panel_efficiency: int= 0.55, temperature_Coefficient: int=0.02,  tilt_angle:int=0, Orientation:str="N", battery_capacity: int= 1000, battery_count: int=1):
         
 
@@ -32,9 +29,9 @@ def grid_cost(solar_count: int=1, panel_surface:int= 1 ,annual_degredation: int=
     #    print(irradiance.get_columns(["BatteryCharge", "GridFlow", "NettoProduction",'PV_generated_power',"Load_kW"]))
 
     financials=fa.FinancialAnalysis(irradiance.get_grid_power()[0],file_path_BelpexFilter="data/BelpexFilter.xlsx")
-    #print(financials.get_dataset())
+    print(financials.get_dataset())
     financials.dual_tariff()    #TODO: make dynamic tariff work again
-    #financials.dynamic_tariff()
+    financials.dynamic_tariff()
     cost=financials.get_grid_cost_total(calculationtype='DualTariff')
     print("financial grid calculations finished")
 

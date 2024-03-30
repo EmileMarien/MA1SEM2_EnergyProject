@@ -1,6 +1,8 @@
 def power_flow(self, max_charge: int = 500):
     #TODO: add units, PV_generated_power and Load_kW are both in kW. Depending on the frequency of this data, a different amount is subtracted from the battery charge (in kWh?) (e.g. if 1h freq, the load of each line can be subtracted directly since 1kW*1h=1kWh. If in minutes, then 1kW*1min=1/60kWh) 
-    #TODO: add documentation on top (look at other functions for inspiration)
+    """
+    Calculates power flows, how much is going to and from the battery and how much is being tapped from the grid
+    """ 
 
     previous_charge = 0  # Variable to store the previous cumulative charge
     
