@@ -40,11 +40,15 @@ class FinancialAnalysis():
         #Set a datetime index
         self.pd.set_index('DateTime', inplace=True)
         self.pd.index = pd.to_datetime(self.pd.index)
+        
+        print(duplicate_indices = self.pd[self.pd.index.duplicated(keep=False)].index.unique())
+
         self.pd = self.pd.infer_objects()
 
         # Resample the DataFrame
         self.pd = self.pd.resample("1h") #TODO: change to freq of above index
 
+        
         # Interpolate the missing values
         self.pd = self.pd.interpolate(method='linear')
         # Initialize the columns that will be used for the calculations

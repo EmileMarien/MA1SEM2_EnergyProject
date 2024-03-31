@@ -29,7 +29,7 @@ import powercalculations.powercalculations as pc
 #irradiance.filter_data_by_date_interval(start_date, end_date, interval)
 #with formatter:
 #print(irradiance.get_dataset())
-file=open('data/combined_dataframe_test','rb')
+file=open('data/combined_dataframe','rb')
 powercalculations_test=pickle.load(file)
 file.close()
 print("0")
