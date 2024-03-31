@@ -1,6 +1,8 @@
 def power_flow(self, max_charge: int = 500):
     #TODO: add units, PV_generated_power and Load_kW are both in kW. Depending on the frequency of this data, a different amount is subtracted from the battery charge (in kWh?) (e.g. if 1h freq, the load of each line can be subtracted directly since 1kW*1h=1kWh. If in minutes, then 1kW*1min=1/60kWh) 
-    #TODO: add documentation on top (look at other functions for inspiration)
+    """
+    Calculates power flows, how much is going to and from the battery and how much is being tapped from the grid
+    """ 
 
     previous_charge = 0  # Variable to store the previous cumulative charge
     
@@ -22,18 +24,14 @@ def power_flow(self, max_charge: int = 500):
             else:  # Battery full, send excess power to the grid
                 new_charge = max_charge
                 return [max_charge, excess_power]
-            
         elif excess_power < 0:  # Insufficient PV power, need to draw from battery or grid
-            if previous_charge > 0:  # Battery has some energy
-                if -excess_power <= previous_charge:  # Battery has enough power to cover load
-                    new_charge = previous_charge + excess_power
-                    return [max(new_charge, 0), 0]  # No grid tap
-                else:  # Battery does not have enough power, draw from battery and grid
-                    grid_tap = min(-excess_power, previous_charge)
-                    grid_draw = -excess_power - grid_tap
-                    return [0, -grid_tap if grid_tap > 0 else 0]
-            else:  # Battery is empty, draw from the grid
-                return [0, excess_power]
+            # Updated logic: Utilize battery charge to cover the deficit before drawing from the grid
+            if previous_charge >= -excess_power:  # Battery has enough power to cover load deficit
+                new_charge = previous_charge + excess_power
+                return [max(new_charge, 0), 0]  # No grid tap
+            else:  # Battery does not have enough power, draw from battery and grid
+                grid_draw = -excess_power - previous_charge
+                return [0, -grid_draw]
         else:  # No excess power or deficit
             return [0, 0]
 

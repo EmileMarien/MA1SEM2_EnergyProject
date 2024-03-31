@@ -1,4 +1,6 @@
 
+from typing import List
+
 def get_irradiance(self):
     """
     Returns the irradiance data
@@ -39,3 +41,12 @@ def get_grid_cost_total(self,calculationtype:str="DualTariff"):
     cost_perhour=self.pd[calculationtype]
     cost_total=sum(cost_perhour)
     return cost_total
+
+def get_columns(self,columns:List[str]):
+    """
+    Returns the dataset with the specific columns
+    """
+
+    assert all(col in self.pd.columns for col in columns), 'The columns must be present in the DataFrame'
+
+    return self.pd[columns]

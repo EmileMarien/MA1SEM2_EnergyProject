@@ -18,7 +18,7 @@ def dual_tariff(self, peak_tariff:int=2, offpeak_tariff:int=1,fixed_tariff:int=1
         else:  # Weekends
             variable_tariff = offpeak_tariff
 
-        cost = variable_tariff * row['GridFlow'] + fixed_tariff
+        cost = variable_tariff * (-row['GridFlow']) + fixed_tariff
         return cost
     
     # Apply the calculation function to each row with vectorized operations
