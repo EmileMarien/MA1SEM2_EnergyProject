@@ -41,7 +41,7 @@ class FinancialAnalysis():
         self.pd.set_index('DateTime', inplace=True)
         self.pd.index = pd.to_datetime(self.pd.index)
         
-        print(duplicate_indices = self.pd[self.pd.index.duplicated(keep=False)].index.unique())
+        print(self.pd[self.pd.index.duplicated(keep=False)].index.unique())
 
         self.pd = self.pd.infer_objects()
 
