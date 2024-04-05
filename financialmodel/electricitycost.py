@@ -16,15 +16,20 @@ def electricity_cost(solar_count: int=1, panel_surface:int= 1 ,annual_degredatio
 
     # Opens the file including the direct irradiance on the roof for the optimal tilt angle depending on the orientation provided
     notYetCalculated=False
-    if (Orientation =='N') & (tilt_angle==-1):
-        file = open('data/initialized_dataframes/pd_N_optimal','rb')
-    elif (Orientation =='O') & (tilt_angle==-1):
+    if (Orientation =='O') & (tilt_angle==-1):
         file = open('data/initialized_dataframes/pd_O_optimal','rb')
     elif (Orientation =='S') & (tilt_angle==-1):
         file = open('data/initialized_dataframes/pd_S_optimal','rb')
     elif (Orientation =='W') & (tilt_angle==-1):
         file = open('data/initialized_dataframes/pd_W_optimal','rb')
+    elif (Orientation =='E') & (tilt_angle==30):
+        file = open('data/initialized_dataframes/pd_E_30','rb')
+    elif (Orientation =='W') & (tilt_angle==30):
+        file = open('data/initialized_dataframes/pd_W_30','rb')
+    elif (Orientation =='S') & (tilt_angle==30):
+        file = open('data/initialized_dataframes/pd_S_30','rb')
     else:
+        print("situation not yet calculated, starting calculations from scratch ( this may take a while :( )")
         file = open('data/combined_dataframe')
         notYetCalculated=True
 
@@ -66,6 +71,6 @@ def electricity_cost(solar_count: int=1, panel_surface:int= 1 ,annual_degredatio
 
     return cost
 
-electricity_cost()
+electricity_cost(Orientation='W',tilt_angle=30)
 
     
