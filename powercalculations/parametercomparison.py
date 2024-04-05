@@ -1,5 +1,10 @@
-
+import os
+import sys
+import pandas as pd
 import pickle
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+
+import powercalculations.powercalculations as pc
 
 ### Initialisation
 # Load dataset
@@ -21,7 +26,7 @@ findAngle=True
 if findAngle:
     
     orientations=["N","O","W","S"]
-    tiltAngles=[i for i in range(90)]
+    tiltAngles=[i for i in range(0,90,10)]
 
     temperature = 10
     for orientation in orientations:
@@ -30,6 +35,7 @@ if findAngle:
         for tiltAngle in tiltAngles:
             data.calculate_direct_irradiance(latitude=latitude, tilt_angle=tiltAngle,longitude=longitude,temperature=temperature,orientation=orientation)
             totalIrradiance=data.get_direct_irradiance().sum()
+            print(tiltAngle)
             if totalIrradiance>optimalAngle[1]:
                 optimalAngle=(tiltAngle,totalIrradiance)
             else:
@@ -37,3 +43,11 @@ if findAngle:
         
         print("The optimal angle for the "+str(orientation)+ " Orientation is: "+ str(optimalAngle)+" degrees")
 
+
+"""
+To put in report:
+- the irradiance output of the solar panels for the different orientations with optimal angle throughout the year
+- waterfall chart 
+
+
+"""

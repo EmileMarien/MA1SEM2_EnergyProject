@@ -40,11 +40,11 @@ def get_energy_TOT(self,column_name:str='Load_kW',peak:str='peak'):
     Calculates the total energy in kWh for the entire year in the DataFrame. The energy is calculated for the specified power values and peak or offpeak period.
 
     Args:
-    column_name (str): The name of the column to be used for the calculation. Choose between: 'Load_kW', 'GridPower'. Default: 'Load_kW'
-    peak (str): The period to calculate the energy. Choose between: 'peak', 'offpeak', 'weekend'. Default: 'peak'
+    column_name (str): The name of the column to be used for the calculation. Choose between: 'Load_kW', 'GridPower', 'PV_generated_power'. Default: 'Load_kW'
+    peak (str): The period to calculate the energy. Choose between: 'peak', 'offpeak'. Default: 'peak'
     
     Returns:
-        float: The total 'Load_kW' between 8h and 18h.
+        float: The total energy in kWh in the period to the load, grid or from the PV between 8h and 18h during the week for 'peak' and outside those hours for 'offpeak'
     """
 
     # Select only load data
@@ -52,6 +52,9 @@ def get_energy_TOT(self,column_name:str='Load_kW',peak:str='peak'):
         df_load=self.pd['Load_kW']
     elif column_name=='GridFlow':
         df_load=self.pd['GridFlow']
+    elif column_name=='PV_generated_power':
+        df_load=self.pd['PV_generated_power']
+
     else:
         AssertionError('The column_name must be either Load_kW or PowerGrid')
 
@@ -85,14 +88,15 @@ def get_columns(self,columns:List[str]):
     assert all(col in self.pd.columns for col in columns), 'The columns must be present in the DataFrame'
 
     return self.pd[columns]
-   
+
+
 def get_PV_energy_per_hour(self):
     power=get_average_per_hour(self,"PV_generated_power")
     
 
 def get_average_per_hour(self, column_name: str = 'Load_kW'):
     """
-    Calculates the average load per hour for each hour of the day based on the entire year in the DataFrame. in kW
+    Calculates the average power per hour for each hour of the day based on the entire year in the DataFrame. in kW
 
     Returns:
         pandas.Series: A Series containing the average 'Load_kW' for each hour of the day.

@@ -13,6 +13,8 @@ loadfilepath='data/Load_profile_6_vtest.xlsx'
 irradiance=pc.PowerCalculations(file_path_irradiance=irradiancefilepath,file_path_load=loadfilepath)
 irradiance.interpolate_columns(interval='1min')
 file = open('data/combined_dataframe_test','wb')
+'data/initialized_dataframes/pd_N_optimal'
+
 pickle.dump(irradiance,file)
 file.close()
 print('upload finished')

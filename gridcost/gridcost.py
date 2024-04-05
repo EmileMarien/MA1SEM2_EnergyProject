@@ -1,6 +1,6 @@
 import pandas as pd
 
-class FinancialAnalysis():
+class GridCost():
     def __init__(self, data,file_path_BelpexFilter:str=""):
         # Convert Series to DataFrame if data is a Series
         if isinstance(data, pd.Series):
@@ -40,8 +40,8 @@ class FinancialAnalysis():
         #Set a datetime index
         self.pd.set_index('DateTime', inplace=True)
         self.pd.index = pd.to_datetime(self.pd.index)
-        
-        print(self.pd[self.pd.index.duplicated(keep=False)].index.unique())
+
+        #print(self.pd[self.pd.index.duplicated(keep=False)].index.unique())
 
         self.pd = self.pd.infer_objects()
 
