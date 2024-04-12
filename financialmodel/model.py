@@ -280,37 +280,54 @@ print("Net Present Value (NPV):", npv)
 # panel_efficiency degradation into account nemen -> dus geen constanr cash flows 
 # energieprijzen van energiecrisis in rekening gebracht? -> zoja factor reduceren
 class InverterType:
-    def __init__(self, inverter_cost, inverter_lifetime, inverter_efficiency, DC_battery, DC_solar_panels, AC_output_power):
+    def __init__(self, inverter_cost, inverter_size, inverter_lifetime, inverter_efficiency):
         self.inverter_cost = inverter_cost
+        self.inverter_size = inverter_size
         self.inverter_lifetime = inverter_lifetime
         self.inverter_efficiency = inverter_efficiency
-        self.DC_battery = DC_battery
-        self.DC_solar_panels = DC_solar_panels
-        self.AC_output_power = AC_output_power
-
-inverter_types = {
-    "Sungrow_SH_RS": InverterType(
-            inverter_cost = 1000 # find
-            inverter_lifetime = 10 # find
-            inverter_efficiency = 0.97
-            DC_solar_panels = 600
-            DC_battery = 460
-            AC_output_power = 3000 # size can be chosen
+# Define different types of batteries
+inverter_types_types = {
+    "Sungrow_3": BatteryType(
+        inverter_cost = 1,
+        inverter_size = 3,
+        inverter_lifetime = 10,
+        inverter_efficiency = 0.97,
     ),
-    "FroniusGEN24": InverterType( # enter correct data here
-            inverter_cost = 1000 
-            inverter_lifetime = 10 
-            inverter_efficiency = 0.97
-            DC_solar_panels = 600
-            DC_battery = 460
-            AC_output_power = 3000  
+    "Sungrow_3.6": BatteryType(
+        inverter_cost = 1,
+        inverter_size = 3.68,
+        inverter_lifetime = 10,
+        inverter_efficiency = 0.971,  
     ),
-    "TeslaPowerwall3": InverterType( # enter correct data here
-            inverter_cost = 1000 
-            inverter_lifetime = 10 
-            inverter_efficiency = 0.97
-            DC_solar_panels = 600
-            DC_battery = 460
-            AC_output_power = 3000  
+    "Sungrow_4": BatteryType(
+        inverter_cost = 1,
+        inverter_size = 4,
+        inverter_lifetime = 10,
+        inverter_efficiency = 0.972,
     ),
+    "Fronius_3": BatteryType(
+        inverter_cost = 1,
+        inverter_size = 3,
+        inverter_lifetime = 10,
+        inverter_efficiency = 0.968,
+    ),
+    "Fronius_3.6": BatteryType(
+        inverter_cost = 1,
+        inverter_size = 3.68,
+        inverter_lifetime = 10,
+        inverter_efficiency = 0.97,   
+    ),
+    "Fronius_4": BatteryType(
+        inverter_cost = 1,
+        inverter_size = 4,
+        inverter_lifetime = 10,
+        inverter_efficiency = 0.971,    
+    ),
+    "Fronius_4.6": BatteryType(
+        inverter_cost = 1,
+        inverter_size = 4.6,
+        inverter_lifetime = 10,
+        inverter_efficiency = 0.972,    
+    ),
+    # Define more types as needed
 }
