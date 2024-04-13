@@ -57,7 +57,7 @@ powercalculations_test.plot_columns(["BatteryCharge", "GridFlow", "DirectIrradia
 # print(irradiance.get_average_per_hour('Load_kW'))
 #with formatter:
     # print(powercalculations_test.get_grid_power())s
-#    print(powercalculations_test.get_columns(["BatteryCharge", "GridFlow", "NettoProduction"]))
+    print(powercalculations_test.get_columns(["BatteryCharge", "GridFlow", "NettoProduction"]))
 
 #irradiance.calculate_beam_irradiance()
 #irradiance.PV_generated_power(0.15, 1)
