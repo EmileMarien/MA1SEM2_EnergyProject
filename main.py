@@ -29,9 +29,7 @@ import powercalculations.powercalculations as pc
 #irradiance.filter_data_by_date_interval(start_date, end_date, interval)
 #with formatter:
 #print(irradiance.get_dataset())
-file=open('data/combined_dataframe','rb')
-powercalculations_test=pickle.load(file)
-file.close()
+"""
 print("0")
 powercalculations_test.filter_data_by_date_interval(start_date="2018-2-24 06:00",end_date="2018-2-26 08:00",interval_str="1h")
 print("1")
@@ -50,6 +48,11 @@ formatter = pd.option_context('display.max_rows', None, 'display.max_columns', N
 with formatter:
     # print(powercalculations_test.get_grid_power())s
     print(powercalculations_test.get_columns(["BatteryCharge", "GridFlow", "NettoProduction"]))
+"""
+file=open('data/initialized_dataframes/combined_dataframe_v2','rb')
+powercalculations_test=pickle.load(file)
+file.close()
+powercalculations_test.plot_columns(['GlobRad', 'DiffRad'])
 
 #irradiance.calculate_beam_irradiance()
 #irradiance.PV_generated_power(0.15, 1)
