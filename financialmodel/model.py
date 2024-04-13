@@ -1,7 +1,6 @@
 
 
 from gridcost import grid_cost
-from components import SolarPanel, Battery, Inverter, solar_panel_types, battery_types, inverter_types
 
 
 def calculate_npv(capex, battery_lifetime, battery_cost, solar_panel_lifetime,total_solar_panel_cost, discount_rate, constant_cash_flow):
@@ -36,7 +35,7 @@ def calculate_npv(capex, battery_lifetime, battery_cost, solar_panel_lifetime,to
   
 # Set-up
 tilt_angle = ... #tilt_angle: angle of the solar panel, 
-Orientation = ...#Orientation: richting naar waar de zonnepanelen staan N, E, S, W 
+Orientation = ...#Orientation: richting naar waar de zonnepanelen staan
 
 # Components Changeable  
 # Solar panel Type 
@@ -59,62 +58,27 @@ class SolarPanelType:
         self.total_panel_surface = self.panel_surface * self.solar_panel_count
 
 # Define different types of solar panels
-solar_panel_types = {        
-  "Canadian": SolarPanelType(
-        solar_panel_cost=110.4,            #cost of 1 solar panel
+solar_panel_types = {
+    "Type A": SolarPanelType(
+        solar_panel_cost=100,            #cost of 1 solar panel
         solar_panel_count=10,            #aantal zonnepanelen
-        solar_panel_lifetime=25,        
-        panel_surface=1.953,              #oppervlakte van 1 zonnepaneel [m^2]
-        annual_degredation=0.35,         #annual_degredation: efficientieverlies per jaar in [%]
-        panel_efficiency=22.5,          #panel_efficiency: efficientie van het zonnepaneel in [%]
-        temperature_coefficient=-0.26    #temperature_coefficient: temperatuurafhankelijkheid 
+        solar_panel_lifetime=10,        
+        panel_surface=1.5,              #oppervlakte van 1 zonnepaneel [m^2]
+        annual_degredation=0.5,         #annual_degredation: efficientieverlies per jaar in [%]
+        panel_efficiency=0.90,          #panel_efficiency: efficientie van het zonnepaneel in [%]
+        temperature_coefficient=0.05    #temperature_coefficient: temperatuurafhankelijkheid 
     ),
-    "Jinko": SolarPanelType(
-        solar_panel_cost=105.6,           
-        solar_panel_count=10,           
-        solar_panel_lifetime=25,        
-        panel_surface=1.998,              
-        annual_degredation=0.4,         
-        panel_efficiency=22.53,            
-        temperature_coefficient=-0.30  
+    "Type B": SolarPanelType(
+        solar_panel_cost=120,           
+        solar_panel_count=12,           
+        solar_panel_lifetime=12,        
+        panel_surface=1.8,              
+        annual_degredation=0.6,         
+        panel_efficiency=0.85,            
+        temperature_coefficient=0.06   
     ),
-    "Longi": SolarPanelType(
-        solar_panel_cost=121.2,           
-        solar_panel_count=10,           
-        solar_panel_lifetime=25,        
-        panel_surface=1.953,              
-        annual_degredation=0.4,         
-        panel_efficiency=23.0,            
-        temperature_coefficient=-0.29  
-    ),
-    "REC": SolarPanelType(
-        solar_panel_cost=181.8,           
-        solar_panel_count=10,           
-        solar_panel_lifetime=25,        
-        panel_surface=1.934,              
-        annual_degredation=0.25,         
-        panel_efficiency=22.3,            
-        temperature_coefficient=-0.26 
-    ),
-    "Sunpower": SolarPanelType(
-        solar_panel_cost=294,           
-        solar_panel_count=10,           
-        solar_panel_lifetime=40,        
-        panel_surface=1.895,              
-        annual_degredation=0.25,         
-        panel_efficiency=21.9,            
-        temperature_coefficient=-0.27 
-    ),
-        "Poly": SolarPanelType(
-        solar_panel_cost=104.63,           
-        solar_panel_count=10,           
-        solar_panel_lifetime=25,        
-        panel_surface=2.174,              
-        annual_degredation=0.55,         
-        panel_efficiency=20.7,            
-        temperature_coefficient=-0.34 
-    ),
-    }
+    # Define more types as needed
+}
 
 
 
@@ -139,113 +103,17 @@ class BatteryType:
 
 # Define different types of batteries
 battery_types = {
-    "Panasonic EverVolt S": BatteryType(
-        battery_inverter = 0,
-        battery_cost=10000,                
+    "Type X": BatteryType(
+        battery_cost=10000,         
+        battery_count=5,            
         battery_lifetime=5,         
-        battery_capacity=5000,
-        battery_Roundtrip_Efficiency=10000,  
-        battery_PeakPower=10000,  
-        battery_Degradation=10000,     
+        battery_capacity=5000       
     ),
-    "Panasonic EverVolt M": BatteryType(
-        battery_inverter = 0,
-        battery_cost=10000,                
-        battery_lifetime=5,         
-        battery_capacity=5000,
-        battery_Roundtrip_Efficiency=10000,  
-        battery_PeakPower=10000,  
-        battery_Degradation=10000,     
-    ),
-    "Panasonic EverVolt L": BatteryType(
-        battery_inverter = 0,
-        battery_cost=10000,                
-        battery_lifetime=5,         
-        battery_capacity=5000,
-        battery_Roundtrip_Efficiency=10000,  
-        battery_PeakPower=10000,  
-        battery_Degradation=10000,     
-    ),
-    "LG RESU Prime S": BatteryType(
-        battery_inverter = 1,
-        battery_cost=10000,                
-        battery_lifetime=5,         
-        battery_capacity=5000,
-        battery_Roundtrip_Efficiency=10000,  
-        battery_PeakPower=10000,  
-        battery_Degradation=10000,     
-    ),
-    "LG RESU Prime L": BatteryType(
-        battery_inverter = 1,
-        battery_cost=10000,                
-        battery_lifetime=5,         
-        battery_capacity=5000,
-        battery_Roundtrip_Efficiency=10000,  
-        battery_PeakPower=10000,  
-        battery_Degradation=10000,     
-    ),
-    "tesla Powerwall 3": BatteryType(
-        battery_inverter = 0,
-        battery_cost=10000,                
-        battery_lifetime=5,         
-        battery_capacity=5000,
-        battery_Roundtrip_Efficiency=10000,  
-        battery_PeakPower=10000,  
-        battery_Degradation=10000,     
-    ),
-    "Generac PWRcell 1": BatteryType(
-        battery_inverter = 1,
-        battery_cost=10000,                
-        battery_lifetime=5,         
-        battery_capacity=5000,
-        battery_Roundtrip_Efficiency=10000,  
-        battery_PeakPower=10000,  
-        battery_Degradation=10000,     
-    ),
-    "Generac PWRcell 2": BatteryType(
-        battery_inverter = 1,
-        battery_cost=10000,                
-        battery_lifetime=5,         
-        battery_capacity=5000,
-        battery_Roundtrip_Efficiency=10000,  
-        battery_PeakPower=10000,  
-        battery_Degradation=10000,     
-    ),
-    "Generac PWRcell 3": BatteryType(
-        battery_inverter = 1,
-        battery_cost=10000,                
-        battery_lifetime=5,         
-        battery_capacity=5000,
-        battery_Roundtrip_Efficiency=10000,  
-        battery_PeakPower=10000,  
-        battery_Degradation=10000,     
-    ),
-    "Generac PWRcell 4": BatteryType(
-        battery_inverter = 1,
-        battery_cost=10000,                
-        battery_lifetime=5,         
-        battery_capacity=5000,
-        battery_Roundtrip_Efficiency=10000,  
-        battery_PeakPower=10000,  
-        battery_Degradation=10000,     
-    ),
-    "Generac PWRcell 5": BatteryType(
-        battery_inverter = 1,
-        battery_cost=10000,                
-        battery_lifetime=5,         
-        battery_capacity=5000,
-        battery_Roundtrip_Efficiency=10000,  
-        battery_PeakPower=10000,  
-        battery_Degradation=10000,     
-    ),
-    "Generac PWRcell 6": BatteryType(
-        battery_inverter = 1,
-        battery_cost=10000,                
-        battery_lifetime=5,         
-        battery_capacity=5000,
-        battery_Roundtrip_Efficiency=10000,  
-        battery_PeakPower=10000,  
-        battery_Degradation=10000,     
+    "Type Y": BatteryType(
+        battery_cost=12000,         
+        battery_count=3,            
+        battery_lifetime=6,         
+        battery_capacity=8000       
     ),
     # Define more types as needed
 }
@@ -261,10 +129,13 @@ installation_cost= 1000
 maintenance_cost = 0
 
 #Economics
-discount_rate = 0.1                                          #Discount rate
+discount_rate = 0.1     
+total_solar_cost=chosen_battery.battery_cost                                     #Discount rate
 capex = total_solar_panel_cost + total_battery_cost + installation_cost + invertor_cost + maintenance_cost
 
 #Calculations of the cashflows 
+
+
 
 
 cost_grid = grid_cost(total_panel_surface:int= 1 ,annual_degredation: int=0.02, panel_efficiency: int= 0.55, temperature_Coefficient: int=0.02,  tilt_angle:int=0, Orientation:str=N, battery_capacity: int= 1000, battery_count: int=1) 
@@ -280,54 +151,37 @@ print("Net Present Value (NPV):", npv)
 # panel_efficiency degradation into account nemen -> dus geen constanr cash flows 
 # energieprijzen van energiecrisis in rekening gebracht? -> zoja factor reduceren
 class InverterType:
-    def __init__(self, inverter_cost, inverter_size, inverter_lifetime, inverter_efficiency):
+    def __init__(self, inverter_cost, inverter_lifetime, inverter_efficiency, DC_battery, DC_solar_panels, AC_output_power):
         self.inverter_cost = inverter_cost
-        self.inverter_size = inverter_size
         self.inverter_lifetime = inverter_lifetime
         self.inverter_efficiency = inverter_efficiency
-# Define different types of batteries
-inverter_types_types = {
-    "Sungrow_3": BatteryType(
-        inverter_cost = 1,
-        inverter_size = 3,
-        inverter_lifetime = 10,
-        inverter_efficiency = 0.97,
+        self.DC_battery = DC_battery
+        self.DC_solar_panels = DC_solar_panels
+        self.AC_output_power = AC_output_power
+
+inverter_types = {
+    "Sungrow_SH_RS": InverterType(
+            inverter_cost = 1000 # find
+            inverter_lifetime = 10 # find
+            inverter_efficiency = 0.97
+            DC_solar_panels = 600
+            DC_battery = 460
+            AC_output_power = 3000 # size can be chosen
     ),
-    "Sungrow_3.6": BatteryType(
-        inverter_cost = 1,
-        inverter_size = 3.68,
-        inverter_lifetime = 10,
-        inverter_efficiency = 0.971,  
+    "FroniusGEN24": InverterType( # enter correct data here
+            inverter_cost = 1000 
+            inverter_lifetime = 10 
+            inverter_efficiency = 0.97
+            DC_solar_panels = 600
+            DC_battery = 460
+            AC_output_power = 3000  
     ),
-    "Sungrow_4": BatteryType(
-        inverter_cost = 1,
-        inverter_size = 4,
-        inverter_lifetime = 10,
-        inverter_efficiency = 0.972,
+    "TeslaPowerwall3": InverterType( # enter correct data here
+            inverter_cost = 1000 
+            inverter_lifetime = 10 
+            inverter_efficiency = 0.97
+            DC_solar_panels = 600
+            DC_battery = 460
+            AC_output_power = 3000  
     ),
-    "Fronius_3": BatteryType(
-        inverter_cost = 1,
-        inverter_size = 3,
-        inverter_lifetime = 10,
-        inverter_efficiency = 0.968,
-    ),
-    "Fronius_3.6": BatteryType(
-        inverter_cost = 1,
-        inverter_size = 3.68,
-        inverter_lifetime = 10,
-        inverter_efficiency = 0.97,   
-    ),
-    "Fronius_4": BatteryType(
-        inverter_cost = 1,
-        inverter_size = 4,
-        inverter_lifetime = 10,
-        inverter_efficiency = 0.971,    
-    ),
-    "Fronius_4.6": BatteryType(
-        inverter_cost = 1,
-        inverter_size = 4.6,
-        inverter_lifetime = 10,
-        inverter_efficiency = 0.972,    
-    ),
-    # Define more types as needed
 }
