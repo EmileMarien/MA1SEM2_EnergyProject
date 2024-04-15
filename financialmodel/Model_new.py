@@ -1,11 +1,11 @@
 from electricitycost import electricity_cost
 from components import SolarPanel, Battery, Inverter, solar_panel_types, battery_types, inverter_types
 
-def calculate_npv(total_battery_cost, total_solar_panel_cost, inverter_cost, solar_panel_lifetime, discount_rate, constant_cash_flow):
+def calculate_npv(battery_cost, total_solar_panel_cost, inverter_cost, solar_panel_lifetime, discount_rate, constant_cash_flow):
     # Calculate the least common multiple (LCM) of battery and solar panel lifetimes
 
     capex = (total_solar_panel_cost + inverter_cost)*4  # multiplication for installation_cost + maintenance_cost
-    investment_cost = capex + total_battery_cost + \
+    investment_cost = capex + battery_cost + \
                       inverter_cost / pow(1 + discount_rate, 10) + \
                       inverter_cost / pow(1 + discount_rate, 20) - \
                       inverter_cost / pow(1 + discount_rate, 25) 
@@ -14,6 +14,7 @@ def calculate_npv(total_battery_cost, total_solar_panel_cost, inverter_cost, sol
     npv = -investment_cost + cost_savings
 
     return npv
+
 
 # Inputs
 # Components Changeable  
@@ -238,8 +239,8 @@ battery_types = {
 # Choose battery type:
 chosen_battery_type = "Panasonic EverVolt S" # Change this to switch between different types
 chosen_battery = battery_types[chosen_battery_type]
-print(f"Total cost for {chosen_battery_type}: {chosen_battery.total_battery_cost}")
-total_battery_cost = chosen_battery.battery_cost
+print(f"Total cost for {chosen_battery_type}: {chosen_battery.battery_cost}")
+battery_cost = chosen_battery.battery_cost
 battery_lifetime = chosen_battery.battery_lifetime
 battery_capacity = chosen_battery.battery_capacity
 
@@ -255,7 +256,7 @@ class InverterType:
         self.inverter_lifetime = inverter_lifetime
         self.inverter_efficiency = inverter_efficiency
 # Define different types of batteries
-inverter_types_types = {
+inverter_types = {
     "Sungrow_3": InverterType(
         inverter_cost = 1,
         inverter_size = 3,
@@ -300,7 +301,7 @@ inverter_types_types = {
     ),
     # Define more types as needed
 }
-chosen_inverter_type = "Panasonic EverVolt S" # Change this to switch between different types
+chosen_inverter_type = "Sungrow_3" # Change this to switch between different types
 chosen_inverter = inverter_types[chosen_inverter_type]
 inverter_cost = chosen_inverter.inverter_cost
 print(f"Total cost for {chosen_inverter_type}: {chosen_inverter.inverter_cost}")
@@ -325,7 +326,7 @@ cost_grid = electricity_cost(solar_panel_count = 1, panel_surface = 1 ,annual_de
 constant_cash_flow = electricity_cost(solar_panel_count = 0, panel_surface = 0, battery_count=0) - electricity_cost    #Besparing van kosten door zonnepanelen, kan men zien als de profit
 
 # Calculate NPV
-npv = calculate_npv(total_battery_cost, total_solar_panel_cost, inverter_cost, solar_panel_lifetime, discount_rate, constant_cash_flow)
+npv = calculate_npv(battery_cost, total_solar_panel_cost, inverter_cost, solar_panel_lifetime, discount_rate, constant_cash_flow)
 print("Net Present Value (NPV):", npv)
 
 
