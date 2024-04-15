@@ -1,4 +1,4 @@
-from gridcost import grid_cost
+from electricitycost import electricity_cost
 from components import SolarPanelType, BatteryType
 
 def calculate_npv(capex, battery_lifetime, battery_cost, solar_panel_lifetime,total_solar_panel_cost, discount_rate, constant_cash_flow):
