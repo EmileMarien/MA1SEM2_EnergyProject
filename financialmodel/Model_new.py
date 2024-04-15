@@ -1,40 +1,21 @@
 from electricitycost import electricity_cost
 from components import SolarPanel, Battery, Inverter, solar_panel_types, battery_types, inverter_types
 
-def calculate_npv(capex, battery_lifetime, battery_cost, solar_panel_lifetime,total_solar_panel_cost, discount_rate, constant_cash_flow):
+def calculate_npv(total_battery_cost, total_solar_panel_cost, inverter_cost, solar_panel_lifetime, discount_rate, constant_cash_flow):
     # Calculate the least common multiple (LCM) of battery and solar panel lifetimes
-    def lcm(x, y):
-        from math import gcd
-        return x * y // gcd(x, y)
 
-    lcm_lifetime = lcm(battery_lifetime, solar_panel_lifetime)
+    capex = (total_solar_panel_cost + inverter_cost)*4  # multiplication for installation_cost + maintenance_cost
+    investment_cost = capex + total_battery_cost + \
+                      inverter_cost / pow(1 + discount_rate, 10) + \
+                      inverter_cost / pow(1 + discount_rate, 20) - \
+                      inverter_cost / pow(1 + discount_rate, 25) 
 
-    # Calculate cash flows for total project
-
-    total_cash_flows = [-capex]
-
-    for i in range(1, lcm_lifetime + 1):
-        # Check if it's time for reinvestment
-        if i % battery_lifetime == 0:
-            total_cash_flows.append(constant_cash_flow - battery_cost)
-        elif i % solar_panel_lifetime == 0:
-            total_cash_flows.append(constant_cash_flow - total_solar_panel_cost)
-        else:
-            total_cash_flows.append(constant_cash_flow)
-
-    # Calculate NPV
-    npv = 0
-    for i, cash_flow in enumerate(total_cash_flows):
-        npv += cash_flow / (1 + discount_rate) ** (i)
+    cost_savings = sum(constant_cash_flow / pow(1 + discount_rate, t) for t in range(1, 26))
+    npv = -investment_cost + cost_savings
 
     return npv
 
 # Inputs
-  
-# Set-up
-tilt_angle = ... #tilt_angle: angle of the solar panel, 
-Orientation = ...#Orientation: richting naar waar de zonnepanelen staan N, E, S, W 
-
 # Components Changeable  
 # Solar panel Type 
 class SolarPanelType:
@@ -116,25 +97,30 @@ solar_panel_types = {
 
 
 # Choose solar panel type:
-chosen_panel_type = "Type A"  # Change this to switch between different types
+chosen_panel_type = "Canadian"  # Change this to switch between different types
 chosen_panel = solar_panel_types[chosen_panel_type]
+total_solar_panel_cost = chosen_panel.total_solar_panel_cost
+solar_panel_lifetime = chosen_panel.solar_panel_lifetime
+total_panel_surface = chosen_panel.total_panel_surface
+annual_degredation =  chosen_panel.annual_degredation
+panel_efficiency = chosen_panel.panel_efficiency
+temperature_Coefficient = chosen_panel.temperature_coefficient
+panel_surface = chosen_panel.panel_surface
+solar_panel_count = chosen_panel.solar_panel_count
+
 print(f"Total cost for {chosen_panel_type}: {chosen_panel.total_solar_panel_cost}")
 print(f"Total surface for {chosen_panel_type}: {chosen_panel.total_panel_surface}")
-solar_panel_cost = chosen_panel.total_solar_panel_cost
-solar_panel_lifetime = chosen_panel.solar_panel_lifetime
-
-
 # battery type 
 class BatteryType:
-    def __init__(self, battery_cost, battery_count, battery_lifetime, battery_capacity):
+    def __init__(self, battery_cost, battery_lifetime, battery_capacity, battery_inverter,
+                 battery_Roundtrip_Efficiency, battery_PeakPower, battery_Degradation):
         self.battery_cost = battery_cost
-        self.battery_count = battery_count
         self.battery_lifetime = battery_lifetime
         self.battery_capacity = battery_capacity
-        self.calculate_total_cost()
-
-    def calculate_total_cost(self):
-        self.total_battery_cost = self.battery_cost * self.battery_count
+        self.battery_inverter = battery_inverter
+        self.battery_Roundtrip_Efficiency = battery_Roundtrip_Efficiency
+        self.battery_PeakPower = battery_PeakPower
+        self.battery_Degradation = battery_Degradation
 
 # Define different types of batteries
 battery_types = {
@@ -250,11 +236,14 @@ battery_types = {
 }
 
 # Choose battery type:
-chosen_battery_type = "Type X"  # Change this to switch between different types
+chosen_battery_type = "Panasonic EverVolt S" # Change this to switch between different types
 chosen_battery = battery_types[chosen_battery_type]
 print(f"Total cost for {chosen_battery_type}: {chosen_battery.total_battery_cost}")
-battery_cost = chosen_battery.total_battery_cost
+total_battery_cost = chosen_battery.battery_cost
 battery_lifetime = chosen_battery.battery_lifetime
+battery_capacity = chosen_battery.battery_capacity
+
+
 
 # bedenkingen 
 # panel_efficiency degradation into account nemen -> dus geen constanr cash flows 
@@ -311,7 +300,15 @@ inverter_types_types = {
     ),
     # Define more types as needed
 }
+chosen_inverter_type = "Panasonic EverVolt S" # Change this to switch between different types
+chosen_inverter = inverter_types[chosen_inverter_type]
+inverter_cost = chosen_inverter.inverter_cost
+print(f"Total cost for {chosen_inverter_type}: {chosen_inverter.inverter_cost}")
 
+
+# Set-up
+tilt_angle = ... #tilt_angle: angle of the solar panel, 
+Orientation = ...#Orientation: richting naar waar de zonnepanelen staan N, E, S, W 
 	
 
 # non-changeable 
@@ -321,15 +318,14 @@ maintenance_cost = 0
 
 #Economics
 discount_rate = 0.1                                          #Discount rate
-capex = total_solar_panel_cost + total_battery_cost + installation_cost + invertor_cost + maintenance_cost
+
 
 #Calculations of the cashflows 
-
-cost_grid = grid_cost(total_panel_surface:int= 1 ,annual_degredation: int=0.02, panel_efficiency: int= 0.55, temperature_Coefficient: int=0.02,  tilt_angle:int=0, Orientation:str=N, battery_capacity: int= 1000, battery_count: int=1) 
-constant_cash_flow = grid_cost(solar_count=0, battery_count=0) - cost_grid    #Besparing van kosten door zonnepanelen, kan men zien als de profit
+cost_grid = electricity_cost(solar_panel_count = 1, panel_surface = 1 ,annual_degredation = 0.02, panel_efficiency = 0.55, temperature_Coefficient =0.02,  tilt_angle =-1, Orientation ="N", battery_capacity = 1000, battery_count =1)
+constant_cash_flow = electricity_cost(solar_panel_count = 0, panel_surface = 0, battery_count=0) - electricity_cost    #Besparing van kosten door zonnepanelen, kan men zien als de profit
 
 # Calculate NPV
-npv = calculate_npv(battery_cost, solar_panel_cost, battery_lifetime, solar_panel_lifetime, discount_rate, constant_cash_flow)
+npv = calculate_npv(total_battery_cost, total_solar_panel_cost, inverter_cost, solar_panel_lifetime, discount_rate, constant_cash_flow)
 print("Net Present Value (NPV):", npv)
 
 
