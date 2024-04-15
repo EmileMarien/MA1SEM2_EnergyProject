@@ -13,7 +13,6 @@ def electricity_cost(solar_count: int=1, panel_surface:int= 1 ,annual_degredatio
     if provided tilt angle is -1, the optimal angle for this orientation is chosen
     """        
 
-
     # Opens the file including the direct irradiance on the roof for the optimal tilt angle depending on the orientation provided
     notYetCalculated=False
     if (Orientation =='O') & (tilt_angle==-1):
