@@ -22,8 +22,8 @@ longitude=5.53972 # [degrees]
 #irradiance=pickle.load(file)
 #print(irradiance.get_dataset())
 #file.close()
-irradiance.plot_columns(["DirectIrradiance","GlobRad","DiffRad"])
-
+#irradiance.plot_columns(["DirectIrradiance","GlobRad","DiffRad"])
+print('start')
 irradiance.calculate_direct_irradiance(latitude=latitude, tilt_angle=30,longitude=longitude,temperature=10,orientation='S')
 file=open('data/initialized_dataframes/pd_S_30','wb')
 pickle.dump(irradiance,file)
