@@ -17,7 +17,7 @@ class PowerCalculations():
         file_path (str): The file path to the Excel file containing the dataset 
         dataset (DataFrame): The dataset to be used for the calculations if file_path is not provided       
         """
-        if file_path_combined is not "":
+        if file_path_combined != "":
             # Use the dataset directly if provided
             merged_df = pd.read_excel(file_path_combined)
             print(merged_df)
@@ -52,9 +52,10 @@ class PowerCalculations():
         self.pd.index = pd.to_datetime(self.pd.index)
 
         # Initialize the columns that will be used for the calculations
-        self.pd['DirectIrradiance'] = None       
-        self.pd['PV_generated_power'] = None
-        self.pd['PowerGrid'] = None
+        self.pd['DirectIrradiance'] = None    # [W]  
+        self.pd['PV_generated_power'] = None  # [kW]
+        self.pd['GridFlow'] = None           # [kW], if neg, then subtracted from grid, if pos the added to the grid
+        self.pd['BatteryCharge'] = None       # [kW]
         self.pd['NettoProduction'] = None # Netto production is the difference between the PV generated power and the load
 
 
@@ -72,6 +73,7 @@ class PowerCalculations():
     from ._directirradiance import calculate_direct_irradiance
 
     from ._powerflows import power_flow
+    from ._powerflows import nettoProduction
     
     from ._getters import get_dataset
     from ._getters import get_irradiance

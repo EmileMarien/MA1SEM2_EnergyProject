@@ -1,4 +1,4 @@
-from gridcost import grid_cost
+from electricitycost import electricity_cost
 from components import SolarPanelType, BatteryType
 
 def calculate_npv(capex, battery_lifetime, battery_cost, solar_panel_lifetime,total_solar_panel_cost, discount_rate, constant_cash_flow):
@@ -144,37 +144,13 @@ print("Net Present Value (NPV):", npv)
 # panel_efficiency degradation into account nemen -> dus geen constanr cash flows 
 # energieprijzen van energiecrisis in rekening gebracht? -> zoja factor reduceren
 class InverterType:
-    def __init__(self, inverter_cost, inverter_lifetime, inverter_efficiency, DC_battery, DC_solar_panels, AC_output_power):
+    def __init__(self, inverter_cost, inverter_lifetime, inverter_efficiency, DC_battery, DC_solar_panels, AC_output):
         self.inverter_cost = inverter_cost
         self.inverter_lifetime = inverter_lifetime
         self.inverter_efficiency = inverter_efficiency
         self.DC_battery = DC_battery
         self.DC_solar_panels = DC_solar_panels
-        self.AC_output_power = AC_output_power
-
+        self.AC_output = AC_output
 inverter_types = {
-    "Sungrow_SH_RS": InverterType(
-            inverter_cost = 1000 # find
-            inverter_lifetime = 10 # find
-            inverter_efficiency = 0.97
-            DC_solar_panels = 600
-            DC_battery = 460
-            AC_output_power = 3000 # size can be chosen
-    ),
-    "FroniusGEN24": InverterType( # enter correct data here
-            inverter_cost = 1000 
-            inverter_lifetime = 10 
-            inverter_efficiency = 0.97
-            DC_solar_panels = 600
-            DC_battery = 460
-            AC_output_power = 3000  
-    ),
-    "TeslaPowerwall3": InverterType( # enter correct data here
-            inverter_cost = 1000 
-            inverter_lifetime = 10 
-            inverter_efficiency = 0.97
-            DC_solar_panels = 600
-            DC_battery = 460
-            AC_output_power = 3000  
-    ),
+    
 }

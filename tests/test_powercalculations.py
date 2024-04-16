@@ -115,7 +115,11 @@ class test_Getters(unittest.TestCase):
 
 class test_Powerflows(unittest.TestCase):
     def setUp(self):
-        self.powercalculations_test = pc.PowerCalculations(file_path_irradiance='data/Irradiance_data_vtest.xlsx',file_path_load='data/Load_profile_6_vtest.xlsx') 
+        self.powercalculations_test = pc.PowerCalculations(file_path_irradiance='data/Irradiance_data_vtest.xlsx',file_path_load='data/Load_profile_6_vtest.xlsx')
+        self.powercalculations_test.filter_data_by_date_interval(start_date="24/1/2018 08:30:00",end_date="30/1/2018 08:30:00",interval_str="1h")
+        self.powercalculations_test.PV_generated_power()
+        print(self.powercalculations_test.get_PV_generated_power())
+        
 
 class test_Export(unittest.TestCase):
     def setUp(self):

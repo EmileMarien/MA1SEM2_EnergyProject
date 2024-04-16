@@ -1,60 +1,69 @@
-def power_flow(self, max_charge):
-    cumulative_charge=0
-    def power_flow_row(row, cumulative_charge, max_charge):
+
+def power_flow(self, max_charge: int = 500):
+    """
+    Calculates power flows, how much is going to and from the battery and how much is being tapped from the grid
+    #TODO: add units, PV_generated_power and Load_kW are both in kW. Depending on the frequency of this data, a different amount is subtracted from the battery charge (in kWh?) (e.g. if 1h freq, the load of each line can be subtracted directly since 1kW*1h=1kWh. If in minutes, then 1kW*1min=1/60kWh) 
+
+    Args:
+        max_charge (int, optional): Maximum charge capacity of the battery. Defaults to 500.
+
+    Returns:
+        None
+    """ 
+    # Initialize variables
+    previous_charge = 0  # Variable to store the previous cumulative charge
+    battery_charge = []  # List to store calculated battery charges
+    grid_flow = []  # List to store calculated grid flows
+
+    # Iterate over DataFrame rows
+    for _, row in self.pd.iterrows():
         PV_power = row['PV_generated_power']
         load = row['Load_kW']
         excess_power = PV_power - load
+
+        # Calculate battery charge and grid flow
         if excess_power > 0:  # Excess power from PV
-            available_space = max_charge - cumulative_charge
+            available_space = max_charge - previous_charge
             if available_space > 0:  # Battery has room for excess power
                 if excess_power <= available_space:  # Excess power fills battery partially
-                    new_charge = cumulative_charge + excess_power
-                    return new_charge, 0  # No grid draw
+                    new_charge = previous_charge + excess_power
+                    grid_draw = 0  # No grid draw
                 else:  # Battery almost full, partially fill it and send excess to grid
                     new_charge = max_charge
                     grid_draw = excess_power - available_space
-                    return new_charge, grid_draw
             else:  # Battery full, send excess power to the grid
-                return 0, excess_power
+                new_charge = max_charge
+                grid_draw = excess_power
         elif excess_power < 0:  # Insufficient PV power, need to draw from battery or grid
-            if cumulative_charge > 0:  # Battery has some energy
-                if -excess_power <= cumulative_charge:  # Battery has enough power to cover load
-                    new_charge = cumulative_charge + excess_power
-                    return max(new_charge, 0), 0  # No grid tap
-                else:  # Battery does not have enough power, draw from battery and grid
-                    grid_tap = min(-excess_power, cumulative_charge)
-                    grid_draw = -excess_power - grid_tap
-                    return 0, -grid_tap if grid_tap > 0 else 0
-            else:  # Battery is empty, draw from the grid
-                return 0, excess_power
+            if previous_charge >= -excess_power:  # Battery has enough power to cover load deficit
+                new_charge = previous_charge + excess_power
+                grid_draw = 0  # No grid tap
+            else:  # Battery does not have enough power, draw from battery and grid
+                new_charge = 0
+                grid_draw = -excess_power - previous_charge
         else:  # No excess power or deficit
-            return 0, 0
+            new_charge = previous_charge
+            grid_draw = 0
 
-    result = self.pd.apply(
-        lambda row: power_flow_row(row=row, cumulative_charge=cumulative_charge, max_charge=max_charge),
-        axis=1
-    )
-    
-    self.pd['Battery_charge'] = cumulative_charge + [val[0] for val in result]
-    self.pd['Grid_flow'] = [val[1] for val in result]
-    
-    """
-    Converts the irradiance data to power data using the specified column name
-    https://www.researchgate.net/post/How_can_I_calculate_the_power_output_of_a_PV_system_in_one_day_using_a_function_of_the_temperature_of_the_cell_and_the_reference_temperature
-    Args:
-    df (DataFrame): The DataFrame containing the dataset
-    column_name (str): The name of the column to be converted. Choose between: GlobRad, DiffRad
+        # Append calculated values to lists
+        battery_charge.append(new_charge)
+        grid_flow.append(grid_draw)
+        previous_charge = new_charge  # Update previous charge for next iteration
 
-    Returns:
-    DataFrame: The DataFrame containing the converted power data
-    """
+    # Update DataFrame with optimized data
+    self.pd['BatteryCharge'] = battery_charge
+    self.pd['GridFlow'] = grid_flow
+
     return None
+
 
 def nettoProduction(self):
     """
     Calculates the netto production by subtracting the load from the PV generated power
     """
+
     assert 'PV_generated_power' in self.pd.columns, 'The column PV_generated_power is missing'
     assert 'Load_kW' in self.pd.columns, 'The column Load_kW is missing'
+
     self.pd['NettoProduction'] = self.pd['PV_generated_power'] - self.pd['Load_kW']
     return None
