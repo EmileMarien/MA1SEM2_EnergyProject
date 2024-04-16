@@ -37,8 +37,6 @@ class test_DataCleaning(unittest.TestCase):
     def setUp(self):
         self.powercalculations_test = pc.PowerCalculations(file_path_irradiance='data/Irradiance_data_vtest.xlsx',file_path_load='data/Load_profile_6_vtest.xlsx') 
 
-
-
     def test_filter_data_by_date_interval(self):
         # Test with some specific values
         #print(self.powercalculations_test.get_dataset())
