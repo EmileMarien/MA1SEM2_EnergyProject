@@ -7,12 +7,11 @@ sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')
 import powercalculations.powercalculations as pc
 import gridcost.gridcost as gc
 
-def electricity_cost(solar_count: int=1, panel_surface:int= 1 ,annual_degredation: int=0.02, panel_efficiency: int= 0.55, temperature_Coefficient: int=0.02,  tilt_angle:int=-1, Orientation:str="N", battery_capacity: int= 1000, battery_count: int=1):
+def electricity_cost(solar_panel_count: int=1, panel_surface:int= 1 ,annual_degredation: int=0.02, panel_efficiency: int= 0.55, temperature_Coefficient: int=0.02,  tilt_angle:int=-1, Orientation:str="N", battery_capacity: int= 1000, battery_count: int=1):
     """
     Calculates
     if provided tilt angle is -1, the optimal angle for this orientation is chosen
     """        
-
 
     # Opens the file including the direct irradiance on the roof for the optimal tilt angle depending on the orientation provided
     notYetCalculated=False
@@ -47,7 +46,7 @@ def electricity_cost(solar_count: int=1, panel_surface:int= 1 ,annual_degredatio
     else: 
         None # Direct irradiance at the location is already calculated in a few cases specified above
     print("2.1/4: Direct irradiance calculated")
-    irradiance.PV_generated_power(panel_count=solar_count, cell_area=panel_surface, efficiency_max=panel_efficiency*(1-annual_degredation),Temp_coeff=temperature_Coefficient)
+    irradiance.PV_generated_power(panel_count=solar_panel_count, cell_area=panel_surface, efficiency_max=panel_efficiency*(1-annual_degredation),Temp_coeff=temperature_Coefficient)
     print("2.2/4: PV generated power calculated")
     irradiance.power_flow(max_charge=battery_capacity*battery_count)
     print("2.3/4: Powerflows calculated")
