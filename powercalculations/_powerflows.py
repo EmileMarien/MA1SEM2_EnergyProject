@@ -1,11 +1,13 @@
 
-def power_flow(self, max_charge: int = 500):
+def power_flow(self, max_charge:int = 8, max_AC_power_output:int = 5, max_DC_batterypower_output:int = 5):
     """
     Calculates power flows, how much is going to and from the battery and how much is being tapped from the grid
     #TODO: add units, PV_generated_power and Load_kW are both in kW. Depending on the frequency of this data, a different amount is subtracted from the battery charge (in kWh?) (e.g. if 1h freq, the load of each line can be subtracted directly since 1kW*1h=1kWh. If in minutes, then 1kW*1min=1/60kWh) 
 
     Args:
         max_charge (int, optional): Maximum charge capacity of the battery. Defaults to 500.
+        max_AC_power_output (int): Maximum inverter AC output power. 
+        max_DC_batterypower_output (int, optional): Maximum inverter DC ouput to the battery.
 
     Returns:
         None
@@ -26,21 +28,21 @@ def power_flow(self, max_charge: int = 500):
             available_space = max_charge - previous_charge
             if available_space > 0:  # Battery has room for excess power
                 if excess_power <= available_space:  # Excess power fills battery partially
-                    new_charge = previous_charge + excess_power
+                    new_charge = previous_charge + min(excess_power, max_DC_batterypower_output)
                     grid_draw = 0  # No grid draw
                 else:  # Battery almost full, partially fill it and send excess to grid
                     new_charge = max_charge
-                    grid_draw = excess_power - available_space
+                    grid_draw = min(excess_power - available_space, max_AC_power_output)
             else:  # Battery full, send excess power to the grid
                 new_charge = max_charge
-                grid_draw = excess_power
+                grid_draw = min(excess_power, max_AC_power_output)
         elif excess_power < 0:  # Insufficient PV power, need to draw from battery or grid
             if previous_charge >= -excess_power:  # Battery has enough power to cover load deficit
                 new_charge = previous_charge + excess_power
                 grid_draw = 0  # No grid tap
             else:  # Battery does not have enough power, draw from battery and grid
                 new_charge = 0
-                grid_draw = -excess_power - previous_charge
+                grid_draw = min(-excess_power, max_AC_power_output)
         else:  # No excess power or deficit
             new_charge = previous_charge
             grid_draw = 0
@@ -55,6 +57,7 @@ def power_flow(self, max_charge: int = 500):
     self.pd['GridFlow'] = grid_flow
 
     return None
+
 
 
 def nettoProduction(self):

@@ -250,52 +250,60 @@ battery_capacity = chosen_battery.battery_capacity
 # panel_efficiency degradation into account nemen -> dus geen constanr cash flows 
 # energieprijzen van energiecrisis in rekening gebracht? -> zoja factor reduceren
 class InverterType:
-    def __init__(self, inverter_cost, inverter_size, inverter_lifetime, inverter_efficiency):
+    def __init__(self, inverter_cost, inverter_size_AC, inverter_maxinput_DC, inverter_lifetime, inverter_efficiency):
         self.inverter_cost = inverter_cost
-        self.inverter_size = inverter_size
+        self.inverter_size = inverter_size_AC
+        self.inverter_maxinput_DC = inverter_maxinput_DC
         self.inverter_lifetime = inverter_lifetime
         self.inverter_efficiency = inverter_efficiency
 # Define different types of batteries
 inverter_types = {
     "Sungrow_3": InverterType(
-        inverter_cost = 1,
-        inverter_size = 3,
+        inverter_cost = 1219,
+        inverter_size_AC = 3,
+        inverter_maxinput_DC = 10,
         inverter_lifetime = 10,
         inverter_efficiency = 0.97,
     ),
     "Sungrow_3.6": InverterType(
-        inverter_cost = 1,
-        inverter_size = 3.68,
+        inverter_cost = 1380,
+        inverter_size_AC = 3.68,
+        inverter_maxinput_DC = 10.7,
         inverter_lifetime = 10,
         inverter_efficiency = 0.971,  
     ),
     "Sungrow_4": InverterType(
-        inverter_cost = 1,
-        inverter_size = 4,
+        inverter_cost = 1460,
+        inverter_size_AC = 4,
+        inverter_maxinput_DC = 11,
         inverter_lifetime = 10,
         inverter_efficiency = 0.972,
     ),
     "Fronius_3": InverterType(
-        inverter_cost = 1,
-        inverter_size = 3,
+        inverter_cost = 1579,
+        inverter_size_AC = 3,
+        inverter_maxinput_DC = 4.5,
         inverter_lifetime = 10,
         inverter_efficiency = 0.968,
     ),
     "Fronius_3.6": InverterType(
-        inverter_cost = 1,
-        inverter_size = 3.68,
+        inverter_cost = 1650,
+        inverter_size_AC = 3.68,
+        inverter_maxinput_DC = 5.52,        
         inverter_lifetime = 10,
         inverter_efficiency = 0.97,   
     ),
     "Fronius_4": InverterType(
-        inverter_cost = 1,
-        inverter_size = 4,
+        inverter_cost = 1702,
+        inverter_size_AC = 4,
+        inverter_maxinput_DC = 6,
         inverter_lifetime = 10,
         inverter_efficiency = 0.971,    
     ),
     "Fronius_4.6": InverterType(
-        inverter_cost = 1,
-        inverter_size = 4.6,
+        inverter_cost = 1826,
+        inverter_size_AC = 4.6,
+        inverter_maxinput_DC = 6.9,
         inverter_lifetime = 10,
         inverter_efficiency = 0.972,    
     ),
