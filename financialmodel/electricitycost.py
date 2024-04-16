@@ -61,8 +61,8 @@ def electricity_cost(solar_panel_count: int=1, panel_surface:int= 1 ,annual_degr
 
     financials=gc.GridCost(irradiance.get_grid_power()[0],file_path_BelpexFilter="data/BelpexFilter.xlsx")
 
-    nettarief=
-    
+    nettarief=0
+
     financials.dual_tariff()    
     financials.dynamic_tariff()
     # print(financials.get_grid_cost_perhour(calculationtype='DynamicTariff'))

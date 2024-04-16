@@ -57,7 +57,7 @@ class PowerCalculations():
         self.pd['GridFlow'] = None           # [kW], if neg, then subtracted from grid, if pos the added to the grid
         self.pd['BatteryCharge'] = None       # [kW]
         self.pd['NettoProduction'] = None # Netto production is the difference between the PV generated power and the load
-
+        self.pd['EVLoad'] = None # [kW]
 
     # Imported methods
     from ._datacleaning import filter_data_by_date_interval
