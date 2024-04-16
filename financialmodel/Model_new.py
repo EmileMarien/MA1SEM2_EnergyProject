@@ -1,7 +1,7 @@
 from electricitycost import electricity_cost
 from components import SolarPanel, Battery, Inverter, solar_panel_types, battery_types, inverter_types
 
-def calculate_npv(battery_cost, total_solar_panel_cost, inverter_cost, solar_panel_lifetime, discount_rate, constant_cash_flow):
+def calculate_npv(battery_cost, total_solar_panel_cost, inverter_cost, discount_rate, constant_cash_flow):
     # Calculate the least common multiple (LCM) of battery and solar panel lifetimes
 
     capex = (total_solar_panel_cost + inverter_cost)*4  # multiplication for installation_cost + maintenance_cost
@@ -308,8 +308,8 @@ print(f"Total cost for {chosen_inverter_type}: {chosen_inverter.inverter_cost}")
 
 
 # Set-up
-tilt_angle = ... #tilt_angle: angle of the solar panel, 
-Orientation = ...#Orientation: richting naar waar de zonnepanelen staan N, E, S, W 
+tilt_angle = 30 #tilt_angle: angle of the solar panel, 
+Orientation = 'W'#Orientation: richting naar waar de zonnepanelen staan N, E, S, W 
 	
 
 # non-changeable 
@@ -322,11 +322,11 @@ discount_rate = 0.1                                          #Discount rate
 
 
 #Calculations of the cashflows 
-cost_grid = electricity_cost(solar_panel_count = 1, panel_surface = 1 ,annual_degredation = 0.02, panel_efficiency = 0.55, temperature_Coefficient =0.02,  tilt_angle =-1, Orientation ="N", battery_capacity = 1000, battery_count =1)
+cost_grid = electricity_cost(tilt_angle, Orientation, solar_panel_count = 1, panel_surface = 1 ,annual_degredation = 0.02, panel_efficiency = 0.55, temperature_Coefficient =0.02,  tilt_angle =-1, Orientation ="N", battery_capacity = 1000, battery_count =1)
 constant_cash_flow = electricity_cost(solar_panel_count = 0, panel_surface = 0, battery_count=0) - electricity_cost    #Besparing van kosten door zonnepanelen, kan men zien als de profit
 
 # Calculate NPV
-npv = calculate_npv(battery_cost, total_solar_panel_cost, inverter_cost, solar_panel_lifetime, discount_rate, constant_cash_flow)
+npv = calculate_npv(battery_cost, total_solar_panel_cost, inverter_cost, discount_rate, constant_cash_flow)
 print("Net Present Value (NPV):", npv)
 
 
