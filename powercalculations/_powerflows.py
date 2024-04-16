@@ -18,7 +18,6 @@ def power_flow(self, max_charge:int = 8, max_AC_power_output: int = 5, max_DC_ba
     power_loss = []  # List to store calculated power loss
     # Iterate over DataFrame rows
     for _, row in self.pd.iterrows():
-        print(i)
         PV_power = row['PV_generated_power']
         load = row['Load_kW']
         excess_power = PV_power - load
