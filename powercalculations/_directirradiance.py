@@ -1,5 +1,7 @@
 import math
 import pvlib
+counter = 0
+length=0
 def calculate_direct_irradiance(self, latitude:int=0, tilt_angle:int=0,longitude:int=0,temperature:int=0,orientation:str='N'): 
     """
     Calculate the direct irradiance on a tilted surface for each row in the DataFrame.
@@ -28,7 +30,10 @@ def calculate_direct_irradiance(self, latitude:int=0, tilt_angle:int=0,longitude
         - temperature: Temperature of the location [degrees Celsius].
         - surface_azimuth_angle: Azimuth angle of the surface [degrees].
         """
-
+        global counter 
+        global length
+        counter += 1
+        print(f"Calculating direct irradiance for row {counter}/{length}", end="\r")
         GHI = row['GlobRad']
         GDI = row['DiffRad']
         temperature2= row['T_RV_degC']
@@ -82,6 +87,8 @@ def calculate_direct_irradiance(self, latitude:int=0, tilt_angle:int=0,longitude
         raise ValueError("Given orientation is unvalid or not implemented")
     
 
+    global length
+    length=self.pd.shape[0]
 
     # Apply the calculation function to each row with vectorized operations
     self.pd['DirectIrradiance'] = self.pd.apply(
