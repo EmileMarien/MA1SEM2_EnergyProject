@@ -23,7 +23,7 @@ def electricity_cost(solar_panel_count: int=1, panel_surface:int= 1 ,annual_degr
     elif (Orientation =='EW') & (tilt_angle==30):
         file = open('data/initialized_dataframes/pd_EW_30','rb')
     elif (Orientation =='S') & (tilt_angle==30):
-        file = open('data/initialized_dataframes/pd_S_30','rb')
+        file = open('data/initialized_dataframes/pd_S_30_h','rb')
     else:
         print("situation not yet calculated, starting calculations from scratch ( this may take a while :( )")
         file = open('data/combined_dataframe')
@@ -64,7 +64,7 @@ def electricity_cost(solar_panel_count: int=1, panel_surface:int= 1 ,annual_degr
     financials.dynamic_tariff()
     # print(financials.get_grid_cost_perhour(calculationtype='DynamicTariff'))
     print(financials.get_dataset())
-    energy_cost=financials.get_grid_cost_total(calculationtype='DualTariff')
+    energy_cost=financials.get_grid_cost_total(calculationtype='DynamicTariff')
     print("financial grid calculations finished")
 
     # Network rates
@@ -81,6 +81,6 @@ def electricity_cost(solar_panel_count: int=1, panel_surface:int= 1 ,annual_degr
     cost=energy_cost+Data_management_cost+purchase_cost+capacity_cost+energy_contribution+energy_fund_contribution+special_excise_duty
     return cost
 
-electricity_cost(Orientation='W',tilt_angle=30)
+#print(electricity_cost(Orientation='S',tilt_angle=30))
 
     

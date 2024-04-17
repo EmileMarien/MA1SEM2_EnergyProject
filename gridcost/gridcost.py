@@ -74,3 +74,5 @@ class GridCost():
 
     from ._dualtariff import dual_tariff
     from ._dynamictariff import dynamic_tariff
+
+    from ._capacitytariff import capacity_tariff
