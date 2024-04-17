@@ -15,56 +15,55 @@ def power_flow(self, max_charge:int = 0, max_AC_power_output: int = 5, max_DC_ba
     # Initialize variables
     previous_charge = 0  # Variable to store the previous cumulative charge
     battery_charge = []  # List to store calculated battery charges
-    grid_flow = []  # List to store calculated grid flows
+    grid_flow_list = []  # List to store calculated grid flows
     power_loss = []  # List to store calculated power loss
     # Iterate over DataFrame rows
     for _, row in self.pd.iterrows():
         PV_power = row['PV_generated_power']
         load = row['Load_kW']
         excess_power = PV_power - load
-
+        available_space = max_charge - previous_charge
         # Calculate battery charge and grid flow
         if excess_power > 0:  # Excess power from PV
-            available_space = max_charge - previous_charge
             if available_space > 0:  # Battery has room for excess power
                 if excess_power <= available_space:  # Excess power fills battery partially
-                    sent_to_battery = min(excess_power, max_DC_batterypower_output)
+                    sent_to_battery = excess_power
                     new_charge = previous_charge + sent_to_battery
-                    grid_draw = 0  # No grid draw
+                    grid_flow = 0  # No grid draw
                 else:  # Battery almost full, partially fill it and send excess to grid
-                    sent_to_battery = max_DC_batterypower_output
+                    sent_to_battery = available_space
                     new_charge = max_charge
-                    grid_draw = min(excess_power - available_space, max_AC_power_output)
+                    grid_flow = excess_power - available_space # Excess power is sent to grid (positive flow)
             else:  # Battery full, send excess power to the grid
                 sent_to_battery = 0
                 new_charge = max_charge
-                grid_draw = min(excess_power, max_AC_power_output)
+                grid_flow = excess_power # All power is sent to grid (positive flow)
         elif excess_power < 0:  # Insufficient PV power, need to draw from battery or grid
             if previous_charge >= -excess_power:  # Battery has enough power to cover load deficit
                 sent_to_battery = 0
                 new_charge = previous_charge + excess_power
-                grid_draw = 0  # No grid tap
+                grid_flow = 0  # No grid flow
             else:  # Battery does not have enough power, draw from battery and grid
-                sent_to_battery = min(-excess_power, max_DC_batterypower_output)
+                sent_to_battery = 0
                 new_charge = 0
-                grid_draw = min(-excess_power - sent_to_battery, max_AC_power_output)
+                grid_flow = previous_charge + excess_power # Draw from grid (negative)
         else:  # No excess power or deficit
             sent_to_battery = 0
             new_charge = previous_charge
-            grid_draw = 0
+            grid_flow = 0
 
         # Calculate power loss
-        loss = (excess_power - sent_to_battery - grid_draw) if excess_power > 0 else (-excess_power - sent_to_battery - grid_draw)
+        loss = (excess_power - sent_to_battery - grid_flow) if excess_power > 0 else (-excess_power - sent_to_battery - grid_flow)
 
         # Append calculated values to lists
         battery_charge.append(new_charge)
-        grid_flow.append(grid_draw)
+        grid_flow_list.append(grid_flow)
         power_loss.append(loss)
         previous_charge = new_charge  # Update previous charge for next iteration
 
     # Update DataFrame with optimized data
     self.pd['BatteryCharge'] = battery_charge
-    self.pd['GridFlow'] = grid_flow
+    self.pd['GridFlow'] = grid_flow_list
     self.pd['PowerLoss'] = power_loss
 
     return None
