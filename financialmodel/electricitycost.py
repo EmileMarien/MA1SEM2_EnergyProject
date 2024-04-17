@@ -7,7 +7,7 @@ sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')
 import powercalculations.powercalculations as pc
 import gridcost.gridcost as gc
 
-def electricity_cost(solar_panel_count: int=1, panel_surface:int= 1 ,annual_degredation: int=0.02, panel_efficiency: int= 0.55, temperature_Coefficient: int=0.02,  tilt_angle:int=-1, Orientation:str="N", battery_capacity: int= 1000, battery_count: int=1):
+def electricity_cost(solar_panel_count: int=1, panel_surface:int= 1 ,annual_degredation: float=0.02, panel_efficiency: int= 0.55, temperature_Coefficient: float=0.02,  tilt_angle:int=-1, Orientation:str="S", battery_capacity: float= 1000, battery_count: int=1, data_management_rate: float =53.86, purchase_rate: float=0.05, capacity_rate: float=0.5):
     """
     Calculates
     if provided tilt angle is -1, the optimal angle for this orientation is chosen
@@ -15,18 +15,15 @@ def electricity_cost(solar_panel_count: int=1, panel_surface:int= 1 ,annual_degr
 
     # Opens the file including the direct irradiance on the roof for the optimal tilt angle depending on the orientation provided
     notYetCalculated=False
-    if (Orientation =='O') & (tilt_angle==-1):
-        file = open('data/initialized_dataframes/pd_O_optimal','rb')
-    elif (Orientation =='S') & (tilt_angle==-1):
-        file = open('data/initialized_dataframes/pd_S_optimal','rb')
-    elif (Orientation =='W') & (tilt_angle==-1):
-        file = open('data/initialized_dataframes/pd_W_optimal','rb')
-    elif (Orientation =='E') & (tilt_angle==30):
-        file = open('data/initialized_dataframes/pd_E_30','rb')
-    elif (Orientation =='W') & (tilt_angle==30):
-        file = open('data/initialized_dataframes/pd_W_30','rb')
+
+    if (Orientation =='S') & (tilt_angle==-1):
+        file = open('data/initialized_dataframes/pd_S_opt_41','rb')
+    elif (Orientation =='EW') & (tilt_angle==-1):
+        file = open('data/initialized_dataframes/pd_W_opt_32','rb')
+    elif (Orientation =='EW') & (tilt_angle==30):
+        file = open('data/initialized_dataframes/pd_EW_30','rb')
     elif (Orientation =='S') & (tilt_angle==30):
-        file = open('data/initialized_dataframes/pd_S_30','rb')
+        file = open('data/initialized_dataframes/pd_S_30_h','rb')
     else:
         print("situation not yet calculated, starting calculations from scratch ( this may take a while :( )")
         file = open('data/combined_dataframe')
@@ -63,15 +60,27 @@ def electricity_cost(solar_panel_count: int=1, panel_surface:int= 1 ,annual_degr
 
     nettarief=0
 
-    financials.dual_tariff()    
+    financials.dual_tariff(peak_tariff=0.171)    
     financials.dynamic_tariff()
     # print(financials.get_grid_cost_perhour(calculationtype='DynamicTariff'))
     print(financials.get_dataset())
-    cost=financials.get_grid_cost_total(calculationtype='DualTariff')
+    energy_cost=financials.get_grid_cost_total(calculationtype='DynamicTariff')
     print("financial grid calculations finished")
 
+    # Network rates
+    Data_management_cost=data_management_rate
+    purchase_cost=purchase_rate*financials.get_total_energy_from_grid()
+    capacity_cost=financials.capacity_tariff(capacity_rate)
+
+    # Levies
+    energy_contribution = 3.06
+    energy_fund_contribution = 0
+    special_excise_duty=75.49
+
+    # Total cost
+    cost=energy_cost+Data_management_cost+purchase_cost+capacity_cost+energy_contribution+energy_fund_contribution+special_excise_duty
     return cost
 
-electricity_cost(Orientation='W',tilt_angle=30)
+#print(electricity_cost(Orientation='S',tilt_angle=30))
 
     

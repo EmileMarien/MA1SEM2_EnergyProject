@@ -67,10 +67,16 @@ class GridCost():
     from ._getters import get_PV_generated_power
     from ._getters import get_grid_cost_perhour
     from ._getters import get_grid_cost_total
+<<<<<<< HEAD
     from ._getters import get_columns
+=======
+    from ._getters import get_total_energy_from_grid
+>>>>>>> b0b61f5aa3a31abc0e50e5fcd6db6e49bc01cd2d
 
 
     from ._export import export_dataframe_to_excel
 
     from ._dualtariff import dual_tariff
     from ._dynamictariff import dynamic_tariff
+
+    from ._capacitytariff import capacity_tariff

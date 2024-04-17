@@ -1,31 +1,87 @@
 
 
 
+import math
 import pickle
-from visualisations import plot_columns, plot_dataframe, plot_series
+
+import pandas as pd
+from visualisations.visualisations import plot_dataframe, plot_series
 
 # Load dataset
-file = open('data/initialized_dataframes/pd_EW_30','rb')
-irradiance_pd_EW_30=pickle.load(file)
-file.close()
+
 
 file= open('data/initialized_dataframes/pd_S_30','rb')
 irradiance_pd_S_30=pickle.load(file)
-irradiance_summer=pickle.load(file)
-irradiance_winter=pickle.load(file)
 file.close()
 
-file= open('data/initialized_dataframes/pd_EW_opt','rb')
-irradiance_pd_EW_opt=pickle.load(file)
-file.close()
+### Calculations for the S 30 scenario
+#irradiance_pd_S_30.nettoProduction()
+# Calculate the PV power output
+cell_area=20
+panel_count=1
+T_STC=25
+Temp_coeff=-0.0026
+efficiency_max=0.2
+#irradiance_pd_S_30.PV_generated_power(cell_area, panel_count, T_STC, Temp_coeff, efficiency_max)
 
-file= open('data/initialized_dataframes/pd_S_opt','rb')
-irradiance_pd_S_opt=pickle.load(file)
-file.close()
+# calculate the power flow
+max_charge= 8
+max_AC_power_output= 5
+max_DC_batterypower_output= 5
+#irradiance_pd_S_30.power_flow(max_charge, max_AC_power_output, max_DC_batterypower_output)
 
-irradiance_summer.filter_data_by_date_interval('2018-06-01','2018-08-31',interval_str='1h')
-irradiance_winter.filter_data_by_date_interval('2018-12-01','2019-02-28',interval_str='1h')
+### Calculations for the other scenarios
+calculate_others=False
+if calculate_others:
+    file = open('data/initialized_dataframes/pd_EW_30','rb')
+    irradiance_pd_EW_30=pickle.load(file)
+    file.close()
+    file= open('data/initialized_dataframes/pd_S_30','rb')
+    irradiance_summer=pickle.load(file)
+    file.close()
 
+    file= open('data/initialized_dataframes/pd_S_30','rb')
+    irradiance_winter=pickle.load(file)
+    file.close()
+
+    file= open('data/initialized_dataframes/pd_EW_opt_32','rb')
+    irradiance_pd_EW_opt=pickle.load(file)
+    file.close()
+
+    file= open('data/initialized_dataframes/pd_S_opt_41','rb')
+    irradiance_pd_S_opt=pickle.load(file)
+    file.close()
+
+    irradiance_summer.filter_data_by_date_interval('2018-06-01','2018-08-31',interval_str='1h')
+    irradiance_winter.filter_data_by_date_interval('2018-12-01','2019-02-28',interval_str='1h')
+    # Calculate the netto production
+    irradiance_pd_EW_30.nettoProduction()
+    irradiance_pd_S_30.nettoProduction()
+    irradiance_pd_EW_opt.nettoProduction()
+    irradiance_pd_S_opt.nettoProduction()
+
+    # Calculate the PV power output
+    cell_area=20
+    panel_count=1
+    T_STC=25
+    Temp_coeff=-0.0026
+    efficiency_max=0.2
+    irradiance_pd_EW_30.PV_generated_power(cell_area, panel_count, T_STC, Temp_coeff, efficiency_max)
+    irradiance_pd_S_30.PV_generated_power(cell_area, panel_count, T_STC, Temp_coeff, efficiency_max)
+    irradiance_pd_EW_opt.PV_generated_power(cell_area, panel_count, T_STC, Temp_coeff, efficiency_max)
+    irradiance_pd_S_opt.PV_generated_power(cell_area, panel_count, T_STC, Temp_coeff, efficiency_max)
+
+    # calculate the power flow
+    max_charge= 8
+    max_AC_power_output= 5
+    max_DC_batterypower_output= 5
+    irradiance_pd_EW_30.power_flow(max_charge, max_AC_power_output, max_DC_batterypower_output)
+    irradiance_pd_S_30.power_flow(max_charge, max_AC_power_output, max_DC_batterypower_output)
+    irradiance_pd_EW_opt.power_flow(max_charge, max_AC_power_output, max_DC_batterypower_output)
+    irradiance_pd_S_opt.power_flow(max_charge, max_AC_power_output, max_DC_batterypower_output)
+
+#### Plots underneath
+print('start plots')
 # Plot hourly direct irradiance for the different orientations and tilt angles
 plot_hourly_direct_irradiance=False
 if plot_hourly_direct_irradiance:
@@ -61,8 +117,51 @@ if plot_hourly_flows:
 # Plot average hourly load consumption for winter and summer
 plot_average_load_consumption=False
 if plot_average_load_consumption:
-    hourly_load_summer=irradiance_summer.get_average_per_hour('Load_kW')
-    hourly_load_winter=irradiance_winter.get_average_per_hour('Load_kW')
+    hourly_load_summer=irradiance_summer.get_average_per_hour('Load_kW').rename('Summer')
+    hourly_load_winter=irradiance_winter.get_average_per_hour('Load_kW').rename('Winter')
     hourly_series=[hourly_load_summer,hourly_load_winter]
     plot_series(hourly_series)
 
+
+
+
+
+
+# Print some general figures about the data we have
+#irradiance_pd_S_30.filter_data_by_date_interval('2018-01-01 1:00','2018-12-31 23:00',interval_str='1h')
+#print("start calculations")
+#irradiance_pd_S_30.calculate_solar_angles(latitude=50.99461, longitude=5.53972)
+#print("angles calculated")
+#irradiance_pd_S_30.calculate_direct_irradiance(tilt_angle=30,latitude=50.99461,longitude=5.53972,orientation='S')
+#print("irradiance calculated")
+#formatter = pd.option_context('display.max_rows', None, 'display.max_columns', None)
+
+#with formatter:
+    # print(powercalculations_test.get_grid_power())s
+    #print(powercalculations_test.get_dataset())
+    #print(irradiance_pd_S_30.get_columns(['DirectIrradiance','GlobRad','DiffRad']))
+
+#file=open('data/initialized_dataframes/pd_S_30_h','wb')
+#pickle.dump(irradiance_pd_S_30,file)
+#file.close()
+#plot_dataframe(irradiance_pd_S_30.get_columns(['DirectIrradiance','GlobRad','DiffRad']))
+
+
+
+
+
+
+"""
+print('end plots')
+tilt_angle=30
+solar_zenith_angles= [i for i in range(85,90)]
+solar_azimuth_angle=242
+surface_azimuth_angle=180
+AOI=[]
+for solar_zenith_angle in solar_zenith_angles:
+    AOI.append(math.degrees(math.acos(
+                math.cos(math.radians(tilt_angle)) * math.cos(math.radians(solar_zenith_angle)) +
+                math.sin(math.radians(tilt_angle)) * math.sin(math.radians(solar_zenith_angle)) * math.cos(math.radians(solar_azimuth_angle - surface_azimuth_angle)))))
+
+print(AOI)
+"""

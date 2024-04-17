@@ -72,6 +72,7 @@ class PowerCalculations():
     from ._visualisations import plot_series
     
     from ._directirradiance import calculate_direct_irradiance
+    from ._directirradiance import calculate_solar_angles
 
     from ._powerflows import power_flow
     from ._powerflows import nettoProduction

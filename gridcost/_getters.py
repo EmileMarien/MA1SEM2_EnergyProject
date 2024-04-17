@@ -50,3 +50,9 @@ def get_columns(self,columns:List[str]):
     assert all(col in self.pd.columns for col in columns), 'The columns must be present in the DataFrame'
 
     return self.pd[columns]
+
+def get_total_energy_from_grid(self):
+    """
+    Returns the total energy in kWh taken from the grid
+    """
+    return sum(self.pd['GridFlow'])
