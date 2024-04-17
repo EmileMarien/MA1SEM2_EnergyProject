@@ -126,13 +126,17 @@ if plot_average_load_consumption:
 
 
 
-
 # Print some general figures about the data we have
 #irradiance_pd_S_30.filter_data_by_date_interval('2018-01-01 1:00','2018-12-31 23:00',interval_str='1h')
-#print("start calculations")
+
+print("start calculations")
 #irradiance_pd_S_30.calculate_solar_angles(latitude=50.99461, longitude=5.53972)
-#print("angles calculated")
 #irradiance_pd_S_30.calculate_direct_irradiance(tilt_angle=30,latitude=50.99461,longitude=5.53972,orientation='S')
+
+#file=open('data/initialized_dataframes/pd_S_30','wb')
+#pickle.dump(irradiance_pd_S_30,file)
+#file.close()
+print("angles calculated")
 #print("irradiance calculated")
 #formatter = pd.option_context('display.max_rows', None, 'display.max_columns', None)
 
@@ -141,13 +145,13 @@ if plot_average_load_consumption:
     #print(powercalculations_test.get_dataset())
     #print(irradiance_pd_S_30.get_columns(['DirectIrradiance','GlobRad','DiffRad']))
 
-#file=open('data/initialized_dataframes/pd_S_30_h','wb')
-#pickle.dump(irradiance_pd_S_30,file)
-#file.close()
-#plot_dataframe(irradiance_pd_S_30.get_columns(['DirectIrradiance','GlobRad','DiffRad']))
 
 
+#irradiance_pd_S_30.filter_data_by_date_interval('2018-01-01 1:00','2018-12-31 23:00',interval_str='1h')
+plot_dataframe(irradiance_pd_S_30.get_columns(['DirectIrradiance']))
+print(irradiance_pd_S_30.get_columns(['Load_kW']).sum())
 
+print(irradiance_pd_S_30.get_average_per_hour('Load_kW'))
 
 
 
