@@ -4,17 +4,17 @@ from components import SolarPanel, Battery, Inverter, solar_panel_types, battery
 def calculate_npv(battery_cost, total_solar_panel_cost, inverter_cost, discount_rate, initial_cash_flow, annual_degradation):
     # Calculate the least common multiple (LCM) of battery and solar panel lifetimes
 
-    capex = (total_solar_panel_cost)*5 + inverter_cost  # multiplication for installation_cost + maintenance_cost
+    capex = (total_solar_panel_cost)*5 + inverter_cost  + battery_cost  # multiplication for installation_cost + maintenance_cost
     
-    investment_cost = capex + battery_cost + \
-                      inverter_cost / pow(1 + discount_rate, 10) + \
-                      inverter_cost / pow(1 + discount_rate, 20) - \
-                      inverter_cost / pow(1 + discount_rate, 25) 
+    investment_cost = capex + \
+                      (inverter_cost + battery_cost) / pow(1 + discount_rate, 10) + \
+                      (inverter_cost + battery_cost) / pow(1 + discount_rate, 20) - \
+                      (inverter_cost + battery_cost) / pow(1 + discount_rate, 25) 
     print("Investment cost:", investment_cost)
     Year_1_payback = initial_cash_flow/investment_cost
     print("Year 1 payback:", Year_1_payback)
     cost_savings = sum((initial_cash_flow * pow(1 - annual_degradation, t - 1)) / pow(1 + discount_rate, t) for t in range(1, 26))
-    
+    print("Year 1 payback:", cost_savings)
     
     npv = -investment_cost + cost_savings
 
@@ -49,7 +49,7 @@ solar_panel_types = {
         solar_panel_count=10,            #aantal zonnepanelen
         solar_panel_lifetime=25,        
         panel_surface=1.953,              #oppervlakte van 1 zonnepaneel [m^2]
-        annual_degradation=0.35,         #annual_degradation: efficientieverlies per jaar in [%]
+        annual_degradation=0.0035,         #annual_degradation: efficientieverlies per jaar in [%]
         panel_efficiency=22.5,          #panel_efficiency: efficientie van het zonnepaneel in [%]
         temperature_coefficient=-0.26    #temperature_coefficient: temperatuurafhankelijkheid 
     ),
@@ -58,7 +58,7 @@ solar_panel_types = {
         solar_panel_count=10,           
         solar_panel_lifetime=25,        
         panel_surface=1.998,              
-        annual_degradation=0.4,         
+        annual_degradation=0.004,         
         panel_efficiency=22.53,            
         temperature_coefficient=-0.30  
     ),
@@ -67,7 +67,7 @@ solar_panel_types = {
         solar_panel_count=10,           
         solar_panel_lifetime=25,        
         panel_surface=1.953,              
-        annual_degradation=0.4,         
+        annual_degradation=0.004,         
         panel_efficiency=23.0,            
         temperature_coefficient=-0.29  
     ),
@@ -76,7 +76,7 @@ solar_panel_types = {
         solar_panel_count=10,           
         solar_panel_lifetime=25,        
         panel_surface=1.934,              
-        annual_degradation=0.25,         
+        annual_degradation=0.0025,         
         panel_efficiency=22.3,            
         temperature_coefficient=-0.26 
     ),
@@ -85,7 +85,7 @@ solar_panel_types = {
         solar_panel_count=10,           
         solar_panel_lifetime=40,        
         panel_surface=1.895,              
-        annual_degradation=0.25,         
+        annual_degradation=0.0025,         
         panel_efficiency=21.9,            
         temperature_coefficient=-0.27 
     ),
@@ -94,7 +94,7 @@ solar_panel_types = {
         solar_panel_count=10,           
         solar_panel_lifetime=25,        
         panel_surface=2.174,              
-        annual_degradation=0.55,         
+        annual_degradation=0.0055,         
         panel_efficiency=20.7,            
         temperature_coefficient=-0.34 
     ),
@@ -251,7 +251,7 @@ battery_types = {
 }
 
 # Choose battery type:
-chosen_battery_type = "Generac PWRcell 6" # Change this to switch between different types
+chosen_battery_type = "no battery" # Change this to switch between different types
 chosen_battery = battery_types[chosen_battery_type]
 print(f"Total cost for {chosen_battery_type}: {chosen_battery.battery_cost}")
 battery_cost = chosen_battery.battery_cost
