@@ -5,10 +5,12 @@ def calculate_npv(battery_cost, total_solar_panel_cost, inverter_cost, discount_
     # Calculate the least common multiple (LCM) of battery and solar panel lifetimes
 
     capex = (total_solar_panel_cost)*5 + inverter_cost  # multiplication for installation_cost + maintenance_cost
+    
     investment_cost = capex + battery_cost + \
                       inverter_cost / pow(1 + discount_rate, 10) + \
                       inverter_cost / pow(1 + discount_rate, 20) - \
                       inverter_cost / pow(1 + discount_rate, 25) 
+    print("Investment cost:", investment_cost)
 
     cost_savings = sum((initial_cash_flow * pow(1 - annual_degradation, t - 1)) / pow(1 + discount_rate, t) for t in range(1, 26))
     npv = -investment_cost + cost_savings
@@ -125,6 +127,15 @@ class BatteryType:
 
 # Define different types of batteries
 battery_types = {
+    "no battery": BatteryType(
+        battery_inverter = 0,
+        battery_cost= 0,                
+        battery_lifetime=0,         
+        battery_capacity= 0,
+        battery_Roundtrip_Efficiency= 0,  
+        battery_PeakPower= 0,  
+        battery_Degradation= 0, 
+    ),    
     "Panasonic EverVolt S": BatteryType(
         battery_inverter = 0,
         battery_cost=10000,                
@@ -237,7 +248,7 @@ battery_types = {
 }
 
 # Choose battery type:
-chosen_battery_type = "Panasonic EverVolt S" # Change this to switch between different types
+chosen_battery_type = "Generac PWRcell 6" # Change this to switch between different types
 chosen_battery = battery_types[chosen_battery_type]
 print(f"Total cost for {chosen_battery_type}: {chosen_battery.battery_cost}")
 battery_cost = chosen_battery.battery_cost
@@ -334,11 +345,12 @@ cost_grid_with_PV = electricity_cost(solar_panel_count, panel_surface, annual_de
 print("cost grid:", cost_grid_with_PV)
 
 solar_panel_count = 0 
+panel_surface = 0 
 Cost_with_no_PV = electricity_cost(solar_panel_count, panel_surface, annual_degradation, panel_efficiency, temperature_Coefficient, tilt_angle, Orientation, battery_capacity)
 print("cost witn no PV:", Cost_with_no_PV)
 
 initial_cash_flow = Cost_with_no_PV - cost_grid_with_PV   #Besparing van kosten door zonnepanelen, kan men zien als de profit
-print("constant cash flow:", constant_cash_flow)
+print("initial cash flow:", +initial_cash_flow)
 # Calculate NPV
 npv = calculate_npv(battery_cost, total_solar_panel_cost, inverter_cost, discount_rate, initial_cash_flow, annual_degradation)
 print("Net Present Value (NPV):", npv)
