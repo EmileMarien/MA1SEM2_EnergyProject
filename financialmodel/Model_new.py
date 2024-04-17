@@ -4,7 +4,7 @@ from components import SolarPanel, Battery, Inverter, solar_panel_types, battery
 def calculate_npv(battery_cost, total_solar_panel_cost, inverter_cost, discount_rate, constant_cash_flow):
     # Calculate the least common multiple (LCM) of battery and solar panel lifetimes
 
-    capex = (total_solar_panel_cost + inverter_cost)*4  # multiplication for installation_cost + maintenance_cost
+    capex = (total_solar_panel_cost)*5 + inverter_cost  # multiplication for installation_cost + maintenance_cost
     investment_cost = capex + battery_cost + \
                       inverter_cost / pow(1 + discount_rate, 10) + \
                       inverter_cost / pow(1 + discount_rate, 20) - \
@@ -331,10 +331,14 @@ discount_rate = 0.1                                          #Discount rate
 
 #Calculations of the cashflows 
 cost_grid = electricity_cost(solar_panel_count, panel_surface, annual_degredation, panel_efficiency, temperature_Coefficient, tilt_angle, Orientation, battery_capacity)
+print("cost grid:", cost_grid)
 
 solar_panel_count = 0 
-constant_cash_flow = electricity_cost(solar_panel_count, panel_surface, annual_degredation, panel_efficiency, temperature_Coefficient, tilt_angle, Orientation, battery_capacity) - cost_grid   #Besparing van kosten door zonnepanelen, kan men zien als de profit
+Cost_with_no_PV = electricity_cost(solar_panel_count, panel_surface, annual_degredation, panel_efficiency, temperature_Coefficient, tilt_angle, Orientation, battery_capacity)
+print("cost witn no PV:", Cost_with_no_PV)
 
+constant_cash_flow = Cost_with_no_PV - cost_grid   #Besparing van kosten door zonnepanelen, kan men zien als de profit
+print("constant cash flow:", constant_cash_flow)
 # Calculate NPV
 npv = calculate_npv(battery_cost, total_solar_panel_cost, inverter_cost, discount_rate, constant_cash_flow)
 print("Net Present Value (NPV):", npv)
