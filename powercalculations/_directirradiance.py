@@ -89,7 +89,8 @@ def calculate_direct_irradiance(self, latitude:int=0, tilt_angle:int=0,longitude
 
     global length
     length=self.pd.shape[0]
-
+    global counter
+    counter=0
     # Apply the calculation function to each row with vectorized operations
     self.pd['DirectIrradiance'] = self.pd.apply(
         lambda row: calculate_irradiance_row(row=row, latitude=latitude, tilt_angle=tilt_angle, longitude=longitude,temperature=temperature,surface_azimuth_angle=surface_azimuth_angle), axis=1
@@ -97,3 +98,37 @@ def calculate_direct_irradiance(self, latitude:int=0, tilt_angle:int=0,longitude
 
     return None
 
+
+"""
+def calculate_solar_angles(self, latitude:int=0, longitude:int=0):
+    
+    Calculate the solar angles for each row in the DataFrame.
+
+    Parameters:
+    - latitude: Latitude of the location [degrees].
+    - longitude: Longitude of the location [degrees].
+
+    Returns:
+    - None.
+
+
+    # Define the date range for a day in August
+    start = pd.Timestamp('2022-08-01', tz='Europe/Amsterdam')
+    end = pd.Timestamp('2022-08-02', tz='Europe/Amsterdam')
+    day_datetime_index = pd.date_range(start, end, freq='H')
+
+    def calculate_solar_angles_row()
+        
+        # Solar angles calculation
+        A = pvlib.solarposition.get_solarposition(day_datetime_index, latitude=latitude, longitude=longitude, temperature=15)
+
+        solar_zenith_angle = A['zenith']  # [degrees] starting from the vertical
+        solar_azimuth_angle = A['azimuth']  # [degrees] starting from the north
+
+    # Apply the calculation function to each row with vectorized operations
+    self.pd['SolarZenithAngle','SolarAzimuthAngle'] = self.pd.apply(
+        lambda row: calculate_solar_row(row=row, latitude=latitude, tilt_angle=tilt_angle, longitude=longitude,temperature=temperature,surface_azimuth_angle=surface_azimuth_angle), axis=1
+    )
+
+    return None
+"""
