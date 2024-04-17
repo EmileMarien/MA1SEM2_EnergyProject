@@ -49,7 +49,7 @@ print("2")
 #powercalculations_test.plot_columns(["PowerGrid"])
 
 #print("4")
-#powercalculations_test.nettoProduction()
+powercalculations_test.nettoProduction()
 #print("5")
 formatter = pd.option_context('display.max_rows', None, 'display.max_columns', None)
 #print(irradiance.get_dataset())
@@ -57,7 +57,8 @@ formatter = pd.option_context('display.max_rows', None, 'display.max_columns', N
 # print(irradiance.get_average_per_hour('Load_kW'))
 with formatter:
     # print(powercalculations_test.get_grid_power())s
-    print(powercalculations_test.get_columns(["BatteryCharge", "GridFlow", "NettoProduction", "PowerLoss"]))
+    #print(powercalculations_test.get_dataset())
+    print(powercalculations_test.get_columns(["Load_kW", "PV_generated_power", "GridFlow", "NettoProduction" , "BatteryCharge", "PowerLoss"]))
 
 #irradiance.calculate_beam_irradiance()
 #irradiance.PV_generated_power(0.15, 1)

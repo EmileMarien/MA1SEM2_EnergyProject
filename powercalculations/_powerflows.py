@@ -2,6 +2,7 @@ def power_flow(self, max_charge:int = 8, max_AC_power_output: int = 5, max_DC_ba
     """
     Calculates power flows, how much is going to and from the battery and how much is being tapped from the grid
     #TODO: add units, PV_generated_power and Load_kW are both in kW. Depending on the frequency of this data, a different amount is subtracted from the battery charge (in kWh?) (e.g. if 1h freq, the load of each line can be subtracted directly since 1kW*1h=1kWh. If in minutes, then 1kW*1min=1/60kWh) 
+    ADD BATTERY DEGRADATION
 
     Args:
         max_charge (int, optional): Maximum charge capacity of the battery. Defaults to 500.
