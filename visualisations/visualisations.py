@@ -5,14 +5,15 @@ from typing import List
 from matplotlib import pyplot as plt
 import pandas as pd
 
+"""
 
-def plot_columns(self, column_names: List[str]):
-    """
+def plot_columns(column_names: List[str]):
+    
     Plots multiple columns from the DataFrame with a datetime index.
 
     Args:
         column_names (list): A list of column names to plot.
-    """
+    
 
     # Assert column names are valid
     assert all(col in self.pd.columns for col in column_names), f"Invalid column names: {', '.join(set(column_names) - set(self.pd.columns))}"
@@ -35,7 +36,9 @@ def plot_columns(self, column_names: List[str]):
     # Show the plot
     plt.show()
 
-def plot_dataframe(self, df:pd.DataFrame=pd.DataFrame):
+"""
+
+def plot_dataframe(df:pd.DataFrame=pd.DataFrame):
     """
     Plots a given DataFrame with a datetime index.
 
@@ -61,7 +64,7 @@ def plot_dataframe(self, df:pd.DataFrame=pd.DataFrame):
     # Show the plot
     plt.show()
 
-def plot_series(self, series:List[pd.Series]=[pd.Series]):
+def plot_series(series:List[pd.Series]=[pd.Series], title:str='Series', xlabel:str='Datetime', ylabel:str='Value'):
     """
     Plots a given Series with a datetime index.
 
@@ -71,15 +74,19 @@ def plot_series(self, series:List[pd.Series]=[pd.Series]):
 
     # Create the plot
     fig, ax = plt.subplots()
-
+    legendentries= []
     # Plot the Series
     for serie in series:
         ax.plot(serie.index, serie)
+        legendentries.append(serie.name)
 
     # Add labels and title
-    ax.set_xlabel("Datetime")
-    ax.set_ylabel(series.name)
-    ax.set_title(f'Plot of {series.name}')
+    ax.set_xlabel(xlabel)
+    ax.set_ylabel(ylabel)
+    ax.set_title(title)
+
+    # Add legend
+    ax.legend(legendentries)
 
     # Show the plot
     plt.show()

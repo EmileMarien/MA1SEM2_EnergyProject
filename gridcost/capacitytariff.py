@@ -15,3 +15,4 @@ def capacity_tariff(self, tariff:int=1):
 
     Capacity_cost=highest_periods.sum()
     return Capacity_cost
+
