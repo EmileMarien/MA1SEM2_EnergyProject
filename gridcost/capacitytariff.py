@@ -12,6 +12,5 @@ def capacity_tariff(self, tariff:int=1):
         highest_period= grouped_data.max()
         Capacity_tariff = tariff * highest_period
         highest_periods.append(Capacity_tariff)
-
     Capacity_cost=highest_periods.sum()
     return Capacity_cost
