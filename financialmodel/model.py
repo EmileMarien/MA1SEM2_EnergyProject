@@ -9,6 +9,12 @@ def calculate_npv(capex, battery_lifetime, battery_cost, solar_panel_lifetime,to
 
     lcm_lifetime = lcm(battery_lifetime, solar_panel_lifetime)
 
+<<<<<<< HEAD
+    cost_grid=GridCost(aantal_solar_panels, )
+
+    NPV=
+    return NPV
+=======
     # Calculate cash flows for total project
 
     total_cash_flows = [-capex]
@@ -154,3 +160,5 @@ class InverterType:
 inverter_types = {
     
 }
+
+>>>>>>> 6666c750d3438d189e75762f36d929d438dfabdf
