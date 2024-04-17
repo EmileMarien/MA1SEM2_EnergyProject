@@ -11,8 +11,11 @@ def calculate_npv(battery_cost, total_solar_panel_cost, inverter_cost, discount_
                       inverter_cost / pow(1 + discount_rate, 20) - \
                       inverter_cost / pow(1 + discount_rate, 25) 
     print("Investment cost:", investment_cost)
-
+    Year_1_payback = initial_cash_flow/investment_cost
+    print("Year 1 payback:", Year_1_payback)
     cost_savings = sum((initial_cash_flow * pow(1 - annual_degradation, t - 1)) / pow(1 + discount_rate, t) for t in range(1, 26))
+    
+    
     npv = -investment_cost + cost_savings
 
     return npv
