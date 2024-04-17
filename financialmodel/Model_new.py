@@ -250,52 +250,60 @@ battery_capacity = chosen_battery.battery_capacity
 # panel_efficiency degradation into account nemen -> dus geen constanr cash flows 
 # energieprijzen van energiecrisis in rekening gebracht? -> zoja factor reduceren
 class InverterType:
-    def __init__(self, inverter_cost, inverter_size, inverter_lifetime, inverter_efficiency):
+    def __init__(self, inverter_cost, inverter_size_AC, inverter_maxinput_DC, inverter_lifetime, inverter_efficiency):
         self.inverter_cost = inverter_cost
-        self.inverter_size = inverter_size
+        self.inverter_size = inverter_size_AC
+        self.inverter_maxinput_DC = inverter_maxinput_DC
         self.inverter_lifetime = inverter_lifetime
         self.inverter_efficiency = inverter_efficiency
 # Define different types of batteries
 inverter_types = {
     "Sungrow_3": InverterType(
-        inverter_cost = 1,
-        inverter_size = 3,
+        inverter_cost = 1219,
+        inverter_size_AC = 3,
+        inverter_maxinput_DC = 10,
         inverter_lifetime = 10,
         inverter_efficiency = 0.97,
     ),
     "Sungrow_3.6": InverterType(
-        inverter_cost = 1,
-        inverter_size = 3.68,
+        inverter_cost = 1380,
+        inverter_size_AC = 3.68,
+        inverter_maxinput_DC = 10.7,
         inverter_lifetime = 10,
         inverter_efficiency = 0.971,  
     ),
     "Sungrow_4": InverterType(
-        inverter_cost = 1,
-        inverter_size = 4,
+        inverter_cost = 1460,
+        inverter_size_AC = 4,
+        inverter_maxinput_DC = 11,
         inverter_lifetime = 10,
         inverter_efficiency = 0.972,
     ),
     "Fronius_3": InverterType(
-        inverter_cost = 1,
-        inverter_size = 3,
+        inverter_cost = 1579,
+        inverter_size_AC = 3,
+        inverter_maxinput_DC = 4.5,
         inverter_lifetime = 10,
         inverter_efficiency = 0.968,
     ),
     "Fronius_3.6": InverterType(
-        inverter_cost = 1,
-        inverter_size = 3.68,
+        inverter_cost = 1650,
+        inverter_size_AC = 3.68,
+        inverter_maxinput_DC = 5.52,        
         inverter_lifetime = 10,
         inverter_efficiency = 0.97,   
     ),
     "Fronius_4": InverterType(
-        inverter_cost = 1,
-        inverter_size = 4,
+        inverter_cost = 1702,
+        inverter_size_AC = 4,
+        inverter_maxinput_DC = 6,
         inverter_lifetime = 10,
         inverter_efficiency = 0.971,    
     ),
     "Fronius_4.6": InverterType(
-        inverter_cost = 1,
-        inverter_size = 4.6,
+        inverter_cost = 1826,
+        inverter_size_AC = 4.6,
+        inverter_maxinput_DC = 6.9,
         inverter_lifetime = 10,
         inverter_efficiency = 0.972,    
     ),
@@ -308,8 +316,8 @@ print(f"Total cost for {chosen_inverter_type}: {chosen_inverter.inverter_cost}")
 
 
 # Set-up
-tilt_angle = 30 #tilt_angle: angle of the solar panel, 
-Orientation = 'W'#Orientation: richting naar waar de zonnepanelen staan N, E, S, W 
+tilt_angle = -1 #tilt_angle: angle of the solar panel, 
+Orientation = 'N'#Orientation: richting naar waar de zonnepanelen staan N, E, S, W 
 	
 
 # non-changeable 
@@ -322,8 +330,10 @@ discount_rate = 0.1                                          #Discount rate
 
 
 #Calculations of the cashflows 
-cost_grid = electricity_cost(tilt_angle, Orientation, solar_panel_count = 1, panel_surface = 1 ,annual_degredation = 0.02, panel_efficiency = 0.55, temperature_Coefficient =0.02,  tilt_angle =-1, Orientation ="N", battery_capacity = 1000, battery_count =1)
-constant_cash_flow = electricity_cost(tilt_angle, Orientation,solar_panel_count = 0, panel_surface = 0, battery_count=0) - cost_grid   #Besparing van kosten door zonnepanelen, kan men zien als de profit
+cost_grid = electricity_cost(solar_panel_count, panel_surface, annual_degredation, panel_efficiency, temperature_Coefficient, tilt_angle, Orientation, battery_capacity)
+
+solar_panel_count = 0 
+constant_cash_flow = electricity_cost(solar_panel_count, panel_surface, annual_degredation, panel_efficiency, temperature_Coefficient, tilt_angle, Orientation, battery_capacity) - cost_grid   #Besparing van kosten door zonnepanelen, kan men zien als de profit
 
 # Calculate NPV
 npv = calculate_npv(battery_cost, total_solar_panel_cost, inverter_cost, discount_rate, constant_cash_flow)
