@@ -316,8 +316,8 @@ print(f"Total cost for {chosen_inverter_type}: {chosen_inverter.inverter_cost}")
 
 
 # Set-up
-tilt_angle = -1 #tilt_angle: angle of the solar panel, 
-Orientation = 'N'#Orientation: richting naar waar de zonnepanelen staan N, E, S, W 
+tilt_angle = 30 #tilt_angle: angle of the solar panel, 
+Orientation = 'S'#Orientation: richting naar waar de zonnepanelen staan N, E, S, W 
 	
 
 # non-changeable 
