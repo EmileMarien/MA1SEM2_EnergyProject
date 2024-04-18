@@ -1,4 +1,4 @@
-def PV_generated_power(self,cell_area:int=1.6, panel_count:int=12, T_STC:int=25, T_cell:int=30, efficiency_max = 0.2, Temp_coeff = -0.026 ):
+def PV_generated_power(self,cell_area:int=1.6, panel_count:int=12, T_STC:int=25, T_cell:int=30, efficiency_max = 0.2, Temp_coeff = -0.0026 ):
         """
         Calculates the PV generated power in [kW] based on the DirectIrradiance column in the DataFrame.
         The formula used is:

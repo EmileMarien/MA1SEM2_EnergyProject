@@ -32,10 +32,10 @@ import gridcost.gridcost as gc
 #irradiance.filter_data_by_date_interval(start_date, end_date, interval)
 #with formatter:
 #print(irradiance.get_dataset())
-file=open('data/initialized_dataframes/pd_E_30','rb')
+file=open('data/initialized_dataframes/pd_S_30','rb')
 powercalculations_test=pickle.load(file)
 powercalculations_test.filter_data_by_date_interval(start_date="2018-1-1 01:00",end_date="2018-12-31 08:00",interval_str="1h")
-powercalculations_test.PV_generated_power(panel_count = 30)
+powercalculations_test.PV_generated_power()
 print("1")
 #print("3")
 powercalculations_test.power_flow()
@@ -71,4 +71,4 @@ with formatter:
 #print(irradiance.get_dataset())
 #irradiance.calculate_direct_irradiance(latitude=latitude, tilt_angle=0, day='2018-03-10 00:00',longitude=0,temperature=20)
 #print(irradiance.get_loadTOT_day())
-plot_dataframe(powercalculations_test.get_columns(['DirectIrradiance']))
+plot_dataframe(powercalculations_test.get_columns(['PV_generated_power', 'Load_kW']))
