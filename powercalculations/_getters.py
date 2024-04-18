@@ -60,10 +60,10 @@ def get_energy_TOT(self,column_name:str='Load_kW',peak:str='peak'):
 
     if peak=='peak':
         # Select data between 8:00 and 18:00 for the entire year
-        df_filtered = df_load[(df_load.index.hour >= 8) & (df_load.index.hour < 18)]
+        df_filtered = df_load[(df_load.index.hour >= 8) & (df_load.index.hour < 18) & (df_load.index.weekday < 5)]
     elif peak=='offpeak':
         # Select data outside 8:00 and 18:00 for the entire year
-        df_filtered = df_load[(df_load.index.hour <= 8) & (df_load.index.hour > 18)]
+        df_filtered = df_load[((df_load.index.hour < 8) | (df_load.index.hour >= 18)) & (df_load.index.weekday < 5) | (df_load.index.weekday >= 5)]
     else:
         AssertionError('The peak must be either peak or offpeak')
 
@@ -141,3 +141,17 @@ def get_max_per_hour(self,column_name:str='Load_kW'):
 
 def get_grid_power(self):
     return [self.pd['GridFlow'], self.pd['BatteryCharge']]
+
+def get_monthly_peaks(self,column_name:str='Load_kW'):
+    """
+    Calculates the monthly peaks for the specified column in the DataFrame. in kW
+
+    Returns:
+        pandas.Series: A Series containing the monthly peaks for the specified column.
+        The index of the Series is the month (1-12).
+    """
+
+    # Group the data by the month and calculate the maximum value
+    intervalled_data = self.pd[column_name].resample('15min').mean()
+    df_monthly_peaks = intervalled_data.groupby(intervalled_data.index.month).min()
+    return df_monthly_peaks

@@ -23,10 +23,10 @@ def electricity_cost(solar_panel_count: int=1, panel_surface:int= 1 ,annual_degr
     elif (Orientation =='EW') & (tilt_angle==30):
         file = open('data/initialized_dataframes/pd_EW_30','rb')
     elif (Orientation =='S') & (tilt_angle==30):
-        file = open('data/initialized_dataframes/pd_S_30_h','rb')
+        file = open('data/initialized_dataframes/pd_S_30','rb')
     else:
         print("situation not yet calculated, starting calculations from scratch ( this may take a while :( )")
-        file = open('data/combined_dataframe')
+        file = open('data/initialized_dataframes/pd_S_30','rb')
         notYetCalculated=True
 
     irradiance=pickle.load(file)
@@ -40,6 +40,12 @@ def electricity_cost(solar_panel_count: int=1, panel_surface:int= 1 ,annual_degr
         latitude=50.99461 # [degrees]
         longitude=5.53972 # [degrees]
         irradiance.calculate_direct_irradiance(tilt_angle=tilt_angle,latitude=latitude,longitude=longitude,orientation=Orientation)
+
+        #Store the calculated data
+        file = open('data/initialized_dataframes/pd_'+Orientation+'_'+str(tilt_angle),'wb')
+        pickle.dump(irradiance,file)
+        file.close()
+        
     else: 
         None # Direct irradiance at the location is already calculated in a few cases specified above
     print("2.1/4: Direct irradiance calculated")
@@ -50,17 +56,11 @@ def electricity_cost(solar_panel_count: int=1, panel_surface:int= 1 ,annual_degr
     irradiance.nettoProduction()
 
     print("3/4: start cost calculations")
-    #formatter = pd.option_context('display.max_rows', None, 'display.max_columns', None)
-
-    #with formatter:
-        #print(powercalculations_test.get_grid_power())
-    #    print(irradiance.get_columns(["BatteryCharge", "GridFlow", "NettoProduction",'PV_generated_power',"Load_kW"]))
 
     financials=gc.GridCost(irradiance.get_grid_power()[0],file_path_BelpexFilter="data/BelpexFilter.xlsx")
 
     financials.dual_tariff(peak_tariff=0.171)    
     financials.dynamic_tariff()
-    # print(financials.get_grid_cost_perhour(calculationtype='DynamicTariff'))
     print(financials.get_dataset())
     energy_cost=financials.get_grid_cost_total(calculationtype="DynamicTariff")
     print("financial grid calculations finished")
@@ -68,7 +68,7 @@ def electricity_cost(solar_panel_count: int=1, panel_surface:int= 1 ,annual_degr
     # Network rates
     Data_management_cost=data_management_rate
     purchase_cost=purchase_rate*financials.get_total_energy_from_grid()
-    capacity_cost=financials.capacity_tariff(capacity_rate)
+    capacity_cost = max(-(irradiance.get_monthly_peaks('GridFlow').sum() / 12), 2.5) * capacity_rate
 
     # Levies
     energy_contribution = 3.06

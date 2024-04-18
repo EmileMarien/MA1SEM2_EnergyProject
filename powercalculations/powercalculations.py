@@ -88,6 +88,7 @@ class PowerCalculations():
     from ._getters import get_average_per_hour
     from ._getters import get_grid_power
     from ._getters import get_columns
+    from ._getters import get_monthly_peaks
    
 
 
