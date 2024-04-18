@@ -34,7 +34,7 @@ import gridcost.gridcost as gc
 #print(irradiance.get_dataset())
 file=open('data/initialized_dataframes/pd_S_30','rb')
 powercalculations_test=pickle.load(file)
-powercalculations_test.filter_data_by_date_interval(start_date="2018-1-1 01:00",end_date="2018-12-31 08:00",interval_str="1h")
+powercalculations_test.filter_data_by_date_interval(start_date="2018-1-1 01:00",end_date="2018-1-6 01:00",interval_str="1h")
 powercalculations_test.PV_generated_power()
 print("1")
 #print("3")
@@ -63,12 +63,12 @@ formatter = pd.option_context('display.max_rows', None, 'display.max_columns', N
 with formatter:
     # print(powercalculations_test.get_grid_power())s
     #print(powercalculations_test.get_dataset())
-    print(powercalculations_test.get_columns(["GridFlow", "NettoProduction" , "BatteryCharge"]))
-    # print(financials.get_columns(["DynamicTariff", "BelpexFilter"]))
+    print(powercalculations_test.get_columns(["GridFlow"]))
+    print(financials.get_columns(["DynamicTariff", "BelpexFilter"]))
 
 #irradiance.calculate_beam_irradiance()
 #irradiance.PV_generated_power(0.15, 1)
 #print(irradiance.get_dataset())
 #irradiance.calculate_direct_irradiance(latitude=latitude, tilt_angle=0, day='2018-03-10 00:00',longitude=0,temperature=20)
 #print(irradiance.get_loadTOT_day())
-plot_dataframe(powercalculations_test.get_columns(['PV_generated_power', 'Load_kW']))
+#plot_dataframe(powercalculations_test.get_columns(['PV_generated_power']))

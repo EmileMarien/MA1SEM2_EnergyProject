@@ -62,7 +62,7 @@ def electricity_cost(solar_panel_count: int=1, panel_surface:int= 1 ,annual_degr
     financials.dynamic_tariff()
     # print(financials.get_grid_cost_perhour(calculationtype='DynamicTariff'))
     print(financials.get_dataset())
-    energy_cost=financials.get_grid_cost_total(calculationtype=tariff)
+    energy_cost=financials.get_grid_cost_total(calculationtype="DynamicTariff")
     print("financial grid calculations finished")
 
     # Network rates
@@ -80,5 +80,3 @@ def electricity_cost(solar_panel_count: int=1, panel_surface:int= 1 ,annual_degr
     return cost
 
 print(electricity_cost(Orientation='S',tilt_angle=30))
-
-    

@@ -7,10 +7,10 @@ def dynamic_tariff(self):
     def calculate_tariff_row(row):
         grid_flow = row['GridFlow']
         dynamic_cost = row['BelpexFilter']
-        if grid_flow < 0:
-            cost = grid_flow*(0.1*dynamic_cost+1.1)*1.06 # Depends on energy supplier (now for Engie)
-        elif grid_flow > 0:
-            cost = grid_flow*(-(0.1*dynamic_cost - 0.905)) # Depends on energy supplier (now for Engie)
+        if grid_flow < 0: # Energy is being consumed
+            cost = -grid_flow*(0.1*dynamic_cost+1.1)*1.06 # Depends on energy supplier (now for Engie)
+        elif grid_flow > 0: # Energy is being injected in the grid
+            cost = -grid_flow*(-(0.1*dynamic_cost - 0.905)) # Depends on energy supplier (now for Engie)
         else:
             cost = 0
         return cost
