@@ -36,6 +36,8 @@ class GridCost():
         
         # Assign the DataFrame to self.pd
         self.pd=merged_df
+        
+
 
         #Set a datetime index
         self.pd.set_index('DateTime', inplace=True)
@@ -46,7 +48,7 @@ class GridCost():
         self.pd = self.pd.infer_objects()
 
         # Resample the DataFrame
-        self.pd = self.pd.resample("1h") #TODO: change to freq of above index
+        self.pd = self.pd.resample("1h").mean() #TODO: change to freq of above index
 
         
         # Interpolate the missing values
@@ -55,7 +57,8 @@ class GridCost():
         self.pd['DualTariff'] = None
         self.pd['DynamicTariff'] = None
 
-
+        # (positive is added to the grid, negative is taken from the grid as seen from the consumer perspective in powercalculations
+        
 
 
 

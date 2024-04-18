@@ -10,10 +10,10 @@ import powercalculations.powercalculations as pc
 
 ### Initialisation
 # Load dataset
-file=open('data/initialized_dataframes/pd_EW_30','rb')
+file=open('data/initialized_dataframes/pd_S_30','rb')
 data=pickle.load(file)
 file.close()
-data.filter_data_by_date_interval('2018-01-01','2018-12-31',interval_str='1h')
+#data.filter_data_by_date_interval('2018-01-01','2018-12-31',interval_str='1min')
 
 # Set coordinates of PV installation (GENk)
 latitude=50.99461 # [degrees]
@@ -27,8 +27,8 @@ longitude=5.53972 # [degrees]
 findAngle=True
 if findAngle:
     
-    orientations=["S"]
-    tiltAngles=[i for i in range(40,50,1)]
+    orientations=["EW"]
+    tiltAngles=[i for i in range(30,50,1)]
 
     temperature = 10
     for orientation in orientations:

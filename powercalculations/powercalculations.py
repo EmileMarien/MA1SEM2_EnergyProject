@@ -64,6 +64,8 @@ class PowerCalculations():
     from ._datacleaning import filter_data_by_date_interval
     from ._datacleaning import interpolate_columns
     from ._datacleaning import find_duplicate_indices
+    from ._datacleaning import empty_column
+    from ._datacleaning import update_column
 
     from ._pvpower import PV_generated_power
     

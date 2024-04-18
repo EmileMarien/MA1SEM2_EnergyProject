@@ -1,5 +1,5 @@
 
-def dual_tariff(self, peak_tariff:int=2, offpeak_tariff:int=1,fixed_tariff:int=1,injection_tariff:int=2.92):
+def dual_tariff(self, peak_tariff:int=0.12, offpeak_tariff:int=0.1042,fixed_tariff:int=0,injection_tariff:int=0.0292):
     
     #Calculates the dual tariff for a specific time, day and colation
     
@@ -20,9 +20,9 @@ def dual_tariff(self, peak_tariff:int=2, offpeak_tariff:int=1,fixed_tariff:int=1
             else:  # Weekends
                 variable_tariff = offpeak_tariff
 
-            cost = variable_tariff * grid_flow + fixed_tariff
+            cost = variable_tariff * (-grid_flow) + fixed_tariff
         else:  # Energy is being produced
-            cost = -injection_tariff * grid_flow
+            cost = injection_tariff * (-grid_flow)
         return cost
     
     # Apply the calculation function to each row with vectorized operations

@@ -5,6 +5,7 @@ import math
 import pickle
 
 import pandas as pd
+from gridcost.gridcost import GridCost
 from visualisations.visualisations import plot_dataframe, plot_series
 
 # Load dataset
@@ -22,13 +23,13 @@ panel_count=1
 T_STC=25
 Temp_coeff=-0.0026
 efficiency_max=0.2
-#irradiance_pd_S_30.PV_generated_power(cell_area, panel_count, T_STC, Temp_coeff, efficiency_max)
+irradiance_pd_S_30.PV_generated_power(cell_area, panel_count, T_STC, Temp_coeff, efficiency_max)
 
 # calculate the power flow
 max_charge= 8
 max_AC_power_output= 5
 max_DC_batterypower_output= 5
-#irradiance_pd_S_30.power_flow(max_charge, max_AC_power_output, max_DC_batterypower_output)
+irradiance_pd_S_30.power_flow(max_charge, max_AC_power_output, max_DC_batterypower_output)
 
 ### Calculations for the other scenarios
 calculate_others=False
@@ -147,15 +148,28 @@ print("angles calculated")
 
 
 
+#plot_dataframe(irradiance_pd_S_30.get_columns(['Load_kW']))
+
+#plot_dataframe(irradiance_pd_S_30.get_columns(['PV_generated_power','Load_kW','NettoProduction','BatteryCharge','GridFlow']))
+
+financials=GridCost(irradiance_pd_S_30.get_grid_power()[0],file_path_BelpexFilter="data/BelpexFilter.xlsx")
+financials.dynamic_tariff()
+financials.dual_tariff()
+plot_dataframe(financials.get_dataset())
+print(financials.get_grid_cost_total(calculationtype='DualTariff'))
+print(financials.get_grid_cost_total(calculationtype='DynamicTariff'))
+
+
+
+
+
+
+#plot_dataframe(irradiance_pd_S_30.get_columns(['SolarZenithAngle','SolarAzimuthAngle']))
+
 #irradiance_pd_S_30.filter_data_by_date_interval('2018-01-01 1:00','2018-12-31 23:00',interval_str='1h')
-irradiance_pd_S_30.PV_generated_power(cell_area, panel_count, T_STC, Temp_coeff, efficiency_max)
-plot_dataframe(irradiance_pd_S_30.get_columns(['T']))
-print(irradiance_pd_S_30.get_columns(['Load_kW']).sum())
+#plot_dataframe(irradiance_pd_S_30.get_columns(['DirectIrradiance']))
 
-print(irradiance_pd_S_30.get_average_per_hour('Load_kW'))
-
-
-
+#plot_series(load_df)
 """
 print('end plots')
 tilt_angle=30
