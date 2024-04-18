@@ -56,3 +56,16 @@ def get_total_energy_from_grid(self):
     Returns the total energy in kWh taken from the grid
     """
     return sum(self.pd['GridFlow'])
+
+
+def get_total_energy_to_grid(self):
+    """
+    Returns the total energy in kWh sent to the grid
+    """
+    return -sum(self.pd['GridFlow'])
+
+def get_total_energy_from_battery(self):
+    """
+    Returns the total energy in kWh taken from the battery
+    """
+    return sum(self.pd['BatteryCharge'])

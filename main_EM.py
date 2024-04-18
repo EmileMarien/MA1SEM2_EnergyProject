@@ -148,7 +148,8 @@ print("angles calculated")
 
 
 #irradiance_pd_S_30.filter_data_by_date_interval('2018-01-01 1:00','2018-12-31 23:00',interval_str='1h')
-plot_dataframe(irradiance_pd_S_30.get_columns(['DirectIrradiance']))
+irradiance_pd_S_30.PV_generated_power(cell_area, panel_count, T_STC, Temp_coeff, efficiency_max)
+plot_dataframe(irradiance_pd_S_30.get_columns(['T']))
 print(irradiance_pd_S_30.get_columns(['Load_kW']).sum())
 
 print(irradiance_pd_S_30.get_average_per_hour('Load_kW'))
