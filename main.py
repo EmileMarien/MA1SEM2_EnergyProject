@@ -61,10 +61,10 @@ formatter = pd.option_context('display.max_rows', None, 'display.max_columns', N
 #print(irradiance.get_dataset())
 #print("test")
 # print(irradiance.get_average_per_hour('Load_kW'))
-with formatter:
+#with formatter:
     # print(powercalculations_test.get_grid_power())s
     #print(powercalculations_test.get_dataset())
-    print(powercalculations_test.get_columns(["Load_kW", "NettoProduction", "GridFlow", "BatteryCharge"]))
+    #print(powercalculations_test.get_columns(["Load_kW", "NettoProduction", "GridFlow", "BatteryCharge"]))
 #    print(financials.get_columns(["DualTariff", "DynamicTariff", "BelpexFilter"]))
 
 #irradiance.calculate_beam_irradiance()
@@ -73,4 +73,4 @@ with formatter:
 #irradiance.calculate_direct_irradiance(latitude=latitude, tilt_angle=0, day='2018-03-10 00:00',longitude=0,temperature=20)
 #print(irradiance.get_loadTOT_day())
 #plot_dataframe(financials.get_columns(["DynamicTariff", "DualTariff"]))
-# plot_dataframe(powercalculations_test.get_columns(["Load_kW", "PV_generated_power", "NettoProduction", "GridFlow", "BatteryCharge"]))
+plot_dataframe(powercalculations_test.get_columns(["Load_kW", "PV_generated_power", "GridFlow", "BatteryCharge", "NettoProduction"]))
