@@ -4,7 +4,8 @@ from components import SolarPanel, Battery, Inverter, solar_panel_types, battery
 def calculate_npv(battery_cost, total_solar_panel_cost, inverter_cost, discount_rate, initial_cash_flow, annual_degradation):
     # Calculate the least common multiple (LCM) of battery and solar panel lifetimes
 
-    capex = (total_solar_panel_cost)*5 + inverter_cost  + battery_cost  # multiplication for installation_cost + maintenance_cost
+    installation_cost = 0
+    capex = installation_cost + inverter_cost  + battery_cost  # multiplication for installation_cost + maintenance_cost
     
     investment_cost = capex + \
                       (inverter_cost + battery_cost) / pow(1 + discount_rate, 10) + \
@@ -51,7 +52,7 @@ solar_panel_types = {
         panel_surface=1.953,              #oppervlakte van 1 zonnepaneel [m^2]
         annual_degradation=0.0035,         #annual_degradation: efficientieverlies per jaar in [%]
         panel_efficiency= 0.225,          #panel_efficiency: efficientie van het zonnepaneel in [%]
-        temperature_coefficient=-0.26    #temperature_coefficient: temperatuurafhankelijkheid 
+        temperature_coefficient=-0.0026    #temperature_coefficient: temperatuurafhankelijkheid 
     ),
     "Jinko": SolarPanelType(
         solar_panel_cost=105.6,           
@@ -60,7 +61,7 @@ solar_panel_types = {
         panel_surface=1.998,              
         annual_degradation=0.004,         
         panel_efficiency= 0.2253,            
-        temperature_coefficient=-0.30  
+        temperature_coefficient=-0.0030  
     ),
     "Longi": SolarPanelType(
         solar_panel_cost=121.2,           
@@ -69,7 +70,7 @@ solar_panel_types = {
         panel_surface=1.953,              
         annual_degradation=0.004,         
         panel_efficiency= 0.230,            
-        temperature_coefficient=-0.29  
+        temperature_coefficient=-0.0029  
     ),
     "REC": SolarPanelType(
         solar_panel_cost=181.8,           
@@ -78,7 +79,7 @@ solar_panel_types = {
         panel_surface=1.934,              
         annual_degradation=0.0025,         
         panel_efficiency= 0.223,            
-        temperature_coefficient=-0.26 
+        temperature_coefficient=-0.0026 
     ),
     "Sunpower": SolarPanelType(
         solar_panel_cost=294,           
@@ -87,7 +88,7 @@ solar_panel_types = {
         panel_surface=1.895,              
         annual_degradation=0.0025,         
         panel_efficiency= 0.219,            
-        temperature_coefficient=-0.27 
+        temperature_coefficient=-0.0027 
     ),
         "Poly": SolarPanelType(
         solar_panel_cost=104.63,           
@@ -96,7 +97,7 @@ solar_panel_types = {
         panel_surface=2.174,              
         annual_degradation=0.0055,         
         panel_efficiency= 0.207,            
-        temperature_coefficient=-0.34 
+        temperature_coefficient=-0.0034 
     ),
     }
 
@@ -227,6 +228,13 @@ class InverterType:
         self.inverter_efficiency = inverter_efficiency
 # Define different types of batteries
 inverter_types = {
+    "no inverter": InverterType(
+        inverter_cost = 0,
+        inverter_size_AC = 0,
+        inverter_maxinput_DC = 0,
+        inverter_lifetime = 0,
+        inverter_efficiency = 0,
+    ),
     "Sungrow_3": InverterType(
         inverter_cost = 1219,
         inverter_size_AC = 3,
@@ -278,7 +286,7 @@ inverter_types = {
     ),
     # Define more types as needed
 }
-chosen_inverter_type = "Sungrow_3" # Change this to switch between different types
+chosen_inverter_type = "no inverter" # Change this to switch between different types
 chosen_inverter = inverter_types[chosen_inverter_type]
 inverter_cost = chosen_inverter.inverter_cost
 print(f"Total cost for {chosen_inverter_type}: {chosen_inverter.inverter_cost}")
@@ -290,9 +298,6 @@ Orientation = 'S'#Orientation: richting naar waar de zonnepanelen staan N, E, S,
 	
 
 # non-changeable 
-invertor_cost= 500
-installation_cost= 1000
-maintenance_cost = 0
 
 #Economics
 discount_rate = 0.1                                          #Discount rate
@@ -314,3 +319,4 @@ print("initial cash flow:", initial_cash_flow)
 # Calculate NPV
 npv = calculate_npv(battery_cost, total_solar_panel_cost, inverter_cost, discount_rate, initial_cash_flow, annual_degradation)
 print("Net Present Value (NPV):", npv)
+
