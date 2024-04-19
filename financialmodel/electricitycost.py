@@ -45,7 +45,7 @@ def electricity_cost(solar_panel_count: int=1, panel_surface:int= 1 ,annual_degr
     print("2.1/4: Direct irradiance calculated")
     irradiance.PV_generated_power(panel_count=solar_panel_count, cell_area=panel_surface, efficiency_max=panel_efficiency*(1-annual_degredation),Temp_coeff=temperature_Coefficient)
     print("2.2/4: PV generated power calculated")
-    irradiance.power_flow(max_charge=battery_capacity*battery_count)
+    irradiance.power_flow(max_charge=0)#battery_capacity*battery_count
     print("2.3/4: Powerflows calculated")
     irradiance.nettoProduction()
 
@@ -61,7 +61,7 @@ def electricity_cost(solar_panel_count: int=1, panel_surface:int= 1 ,annual_degr
     financials.dual_tariff(peak_tariff=0.171)    
     financials.dynamic_tariff()
     # print(financials.get_grid_cost_perhour(calculationtype='DynamicTariff'))
-    print(financials.get_dataset())
+    # print(financials.get_dataset())
     energy_cost=financials.get_grid_cost_total(calculationtype="DynamicTariff")
     print("financial grid calculations finished")
 
@@ -77,6 +77,6 @@ def electricity_cost(solar_panel_count: int=1, panel_surface:int= 1 ,annual_degr
 
     # Total cost
     cost=energy_cost+Data_management_cost+purchase_cost+capacity_cost+energy_contribution+energy_fund_contribution+special_excise_duty
-    return cost
+    return [cost, energy_cost]
 
 print(electricity_cost(Orientation='S',tilt_angle=30))
