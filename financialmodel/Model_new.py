@@ -206,7 +206,7 @@ battery_types = {
 }
 
 # Choose battery type:
-chosen_battery_type = "LG RESU Prime S" # Change this to switch between different types
+chosen_battery_type = "no battery" # Change this to switch between different types
 chosen_battery = battery_types[chosen_battery_type]
 print(f"Total cost for {chosen_battery_type}: {chosen_battery.battery_cost}")
 battery_cost = chosen_battery.battery_cost
@@ -299,6 +299,8 @@ discount_rate = 0.1                                          #Discount rate
 
 
 #Calculations of the cashflows 
+
+print(solar_panel_count, panel_surface, annual_degradation, panel_efficiency, temperature_Coefficient, tilt_angle, Orientation, battery_capacity)
 cost_grid_with_PV = electricity_cost(solar_panel_count, panel_surface, annual_degradation, panel_efficiency, temperature_Coefficient, tilt_angle, Orientation, battery_capacity)
 print("cost grid:", cost_grid_with_PV)
 
