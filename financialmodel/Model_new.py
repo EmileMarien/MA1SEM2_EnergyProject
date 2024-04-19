@@ -327,14 +327,14 @@ npv_values = {}
 
 # Iterate through each solar panel type and calculate NPV
 for panel_type, solar_panel in solar_panel_types.items():
-    total_solar_panel_cost = chosen_panel.total_solar_panel_cost
-    solar_panel_lifetime = chosen_panel.solar_panel_lifetime
-    total_panel_surface = chosen_panel.total_panel_surface
-    annual_degradation =  chosen_panel.annual_degradation
-    panel_efficiency = chosen_panel.panel_efficiency
-    temperature_Coefficient = chosen_panel.temperature_coefficient
-    panel_surface = chosen_panel.panel_surface
-    solar_panel_count = chosen_panel.solar_panel_count
+    total_solar_panel_cost = solar_panel.total_solar_panel_cost
+    solar_panel_lifetime = solar_panel.solar_panel_lifetime
+    total_panel_surface = solar_panel.total_panel_surface
+    annual_degradation =  solar_panel.annual_degradation
+    panel_efficiency = solar_panel.panel_efficiency
+    temperature_Coefficient = solar_panel.temperature_coefficient
+    panel_surface = solar_panel.panel_surface
+    solar_panel_count = solar_panel.solar_panel_count
     
     # Calculate initial cash flow for the current solar panel type
     cost_grid_with_PV = electricity_cost(solar_panel.solar_panel_count, solar_panel.panel_surface, annual_degradation, solar_panel.panel_efficiency, solar_panel.temperature_coefficient, tilt_angle, Orientation, battery_capacity)
