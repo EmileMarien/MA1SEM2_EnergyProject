@@ -320,38 +320,38 @@ print("initial cash flow:", initial_cash_flow)
 npv = calculate_npv(battery_cost, total_solar_panel_cost, inverter_cost, discount_rate, initial_cash_flow, annual_degradation)
 print("Net Present Value (NPV):", npv)
 
-import matplotlib.pyplot as plt
+# import matplotlib.pyplot as plt
 
-# Dictionary to store NPV values for each solar panel type
-npv_values = {}
+# # Dictionary to store NPV values for each solar panel type
+# npv_values = {}
 
-# Iterate through each solar panel type and calculate NPV
-for panel_type, solar_panel in solar_panel_types.items():
-    total_solar_panel_cost = solar_panel.total_solar_panel_cost
-    solar_panel_lifetime = solar_panel.solar_panel_lifetime
-    total_panel_surface = solar_panel.total_panel_surface
-    annual_degradation =  solar_panel.annual_degradation
-    panel_efficiency = solar_panel.panel_efficiency
-    temperature_Coefficient = solar_panel.temperature_coefficient
-    panel_surface = solar_panel.panel_surface
-    solar_panel_count = solar_panel.solar_panel_count
+# # Iterate through each solar panel type and calculate NPV
+# for panel_type, solar_panel in solar_panel_types.items():
+#     total_solar_panel_cost = solar_panel.total_solar_panel_cost
+#     solar_panel_lifetime = solar_panel.solar_panel_lifetime
+#     total_panel_surface = solar_panel.total_panel_surface
+#     annual_degradation =  solar_panel.annual_degradation
+#     panel_efficiency = solar_panel.panel_efficiency
+#     temperature_Coefficient = solar_panel.temperature_coefficient
+#     panel_surface = solar_panel.panel_surface
+#     solar_panel_count = solar_panel.solar_panel_count
     
-    # Calculate initial cash flow for the current solar panel type
-    cost_grid_with_PV = electricity_cost(solar_panel.solar_panel_count, solar_panel.panel_surface, annual_degradation, solar_panel.panel_efficiency, solar_panel.temperature_coefficient, tilt_angle, Orientation, battery_capacity)
-    initial_cash_flow = Cost_with_no_PV - cost_grid_with_PV
+#     # Calculate initial cash flow for the current solar panel type
+#     cost_grid_with_PV = electricity_cost(solar_panel.solar_panel_count, solar_panel.panel_surface, annual_degradation, solar_panel.panel_efficiency, solar_panel.temperature_coefficient, tilt_angle, Orientation, battery_capacity)
+#     initial_cash_flow = Cost_with_no_PV[0] - cost_grid_with_PV[0] 
     
-    # Calculate NPV for the current solar panel type
-    npv = calculate_npv(battery_cost, total_solar_panel_cost, inverter_cost, discount_rate, initial_cash_flow, annual_degradation)
+#     # Calculate NPV for the current solar panel type
+#     npv = calculate_npv(battery_cost, total_solar_panel_cost, inverter_cost, discount_rate, initial_cash_flow, annual_degradation)
     
-    # Store NPV value
-    npv_values[panel_type] = npv
+#     # Store NPV value
+#     npv_values[panel_type] = npv
 
-# Plotting
-plt.figure(figsize=(10, 6))
-plt.bar(npv_values.keys(), npv_values.values(), color='skyblue')
-plt.xlabel('Solar Panel Type')
-plt.ylabel('Net Present Value (NPV)')
-plt.title('Comparison of NPV for Different Solar Panel Types')
-plt.xticks(rotation=45, ha='right')
-plt.tight_layout()
-plt.show()
+# # Plotting
+# plt.figure(figsize=(10, 6))
+# plt.bar(npv_values.keys(), npv_values.values(), color='skyblue')
+# plt.xlabel('Solar Panel Type')
+# plt.ylabel('Net Present Value (NPV)')
+# plt.title('Comparison of NPV for Different Solar Panel Types')
+# plt.xticks(rotation=45, ha='right')
+# plt.tight_layout()
+# plt.show()
