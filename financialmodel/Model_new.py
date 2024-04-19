@@ -50,7 +50,7 @@ solar_panel_types = {
         solar_panel_lifetime=25,        
         panel_surface=1.953,              #oppervlakte van 1 zonnepaneel [m^2]
         annual_degradation=0.0035,         #annual_degradation: efficientieverlies per jaar in [%]
-        panel_efficiency=22.5,          #panel_efficiency: efficientie van het zonnepaneel in [%]
+        panel_efficiency= 0.225,          #panel_efficiency: efficientie van het zonnepaneel in [%]
         temperature_coefficient=-0.26    #temperature_coefficient: temperatuurafhankelijkheid 
     ),
     "Jinko": SolarPanelType(
@@ -59,7 +59,7 @@ solar_panel_types = {
         solar_panel_lifetime=25,        
         panel_surface=1.998,              
         annual_degradation=0.004,         
-        panel_efficiency=22.53,            
+        panel_efficiency= 0.2253,            
         temperature_coefficient=-0.30  
     ),
     "Longi": SolarPanelType(
@@ -68,7 +68,7 @@ solar_panel_types = {
         solar_panel_lifetime=25,        
         panel_surface=1.953,              
         annual_degradation=0.004,         
-        panel_efficiency=23.0,            
+        panel_efficiency= 0.230,            
         temperature_coefficient=-0.29  
     ),
     "REC": SolarPanelType(
@@ -77,7 +77,7 @@ solar_panel_types = {
         solar_panel_lifetime=25,        
         panel_surface=1.934,              
         annual_degradation=0.0025,         
-        panel_efficiency=22.3,            
+        panel_efficiency= 0.223,            
         temperature_coefficient=-0.26 
     ),
     "Sunpower": SolarPanelType(
@@ -86,7 +86,7 @@ solar_panel_types = {
         solar_panel_lifetime=40,        
         panel_surface=1.895,              
         annual_degradation=0.0025,         
-        panel_efficiency=21.9,            
+        panel_efficiency= 0.219,            
         temperature_coefficient=-0.27 
     ),
         "Poly": SolarPanelType(
@@ -95,7 +95,7 @@ solar_panel_types = {
         solar_panel_lifetime=25,        
         panel_surface=2.174,              
         annual_degradation=0.0055,         
-        panel_efficiency=20.7,            
+        panel_efficiency= 0.207,            
         temperature_coefficient=-0.34 
     ),
     }
