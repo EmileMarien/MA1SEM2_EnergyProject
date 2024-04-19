@@ -34,7 +34,6 @@ def get_PV_generated_power(self):
     """
     return self.pd['PV_generated_power']
 
-
 def get_energy_TOT(self,column_name:str='Load_kW',peak:str='peak'):
     """
     Calculates the total energy in kWh for the entire year in the DataFrame. The energy is calculated for the specified power values and peak or offpeak period.
@@ -78,8 +77,6 @@ def get_energy_TOT(self,column_name:str='Load_kW',peak:str='peak'):
 
     return energy_peak
 
-
-
 def get_columns(self,columns:List[str]):
     """
     Returns the dataset with the specific columns
@@ -89,11 +86,9 @@ def get_columns(self,columns:List[str]):
 
     return self.pd[columns]
 
-
 def get_PV_energy_per_hour(self):
     power=get_average_per_hour(self,"PV_generated_power")
     
-
 def get_average_per_hour(self, column_name: str = 'Load_kW'):
     """
     Calculates the average power per hour for each hour of the day based on the entire year in the DataFrame. in kW
