@@ -150,3 +150,17 @@ def get_monthly_peaks(self,column_name:str='Load_kW'):
     intervalled_data = self.pd[column_name].resample('15min').mean()
     df_monthly_peaks = intervalled_data.groupby(intervalled_data.index.month).min()
     return df_monthly_peaks
+
+
+def get_total_injection_and_consumption(self):
+    """
+    Calculates the total injection and consumption for the entire year in the DataFrame. in kWh
+
+    Returns:
+        tuple: A tuple containing the total injection and consumption in kWh.
+    """
+    # Calculate the total injection and consumption
+    total_injection = self.pd['GridFlow'][self.pd['GridFlow'] > 0].sum()
+    total_consumption = -self.pd['GridFlow'][self.pd['GridFlow'] < 0].sum()
+
+    return total_injection, total_consumption
