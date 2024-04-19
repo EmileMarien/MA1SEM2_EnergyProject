@@ -14,7 +14,7 @@ def calculate_npv(battery_cost, total_solar_panel_cost, inverter_cost, discount_
     Year_1_payback = initial_cash_flow/investment_cost
     print("Year 1 payback:", Year_1_payback)
     cost_savings = sum((initial_cash_flow * pow(1 - annual_degradation, t - 1)) / pow(1 + discount_rate, t) for t in range(1, 26))
-    print("Year 1 payback:", cost_savings)
+    print("Total cost savings:", cost_savings)
     
     npv = -investment_cost + cost_savings
 
@@ -50,7 +50,7 @@ solar_panel_types = {
         solar_panel_lifetime=25,        
         panel_surface=1.953,              #oppervlakte van 1 zonnepaneel [m^2]
         annual_degradation=0.0035,         #annual_degradation: efficientieverlies per jaar in [%]
-        panel_efficiency=22.5,          #panel_efficiency: efficientie van het zonnepaneel in [%]
+        panel_efficiency= 0.225,          #panel_efficiency: efficientie van het zonnepaneel in [%]
         temperature_coefficient=-0.26    #temperature_coefficient: temperatuurafhankelijkheid 
     ),
     "Jinko": SolarPanelType(
@@ -59,7 +59,7 @@ solar_panel_types = {
         solar_panel_lifetime=25,        
         panel_surface=1.998,              
         annual_degradation=0.004,         
-        panel_efficiency=22.53,            
+        panel_efficiency= 0.2253,            
         temperature_coefficient=-0.30  
     ),
     "Longi": SolarPanelType(
@@ -68,7 +68,7 @@ solar_panel_types = {
         solar_panel_lifetime=25,        
         panel_surface=1.953,              
         annual_degradation=0.004,         
-        panel_efficiency=23.0,            
+        panel_efficiency= 0.230,            
         temperature_coefficient=-0.29  
     ),
     "REC": SolarPanelType(
@@ -77,7 +77,7 @@ solar_panel_types = {
         solar_panel_lifetime=25,        
         panel_surface=1.934,              
         annual_degradation=0.0025,         
-        panel_efficiency=22.3,            
+        panel_efficiency= 0.223,            
         temperature_coefficient=-0.26 
     ),
     "Sunpower": SolarPanelType(
@@ -86,7 +86,7 @@ solar_panel_types = {
         solar_panel_lifetime=40,        
         panel_surface=1.895,              
         annual_degradation=0.0025,         
-        panel_efficiency=21.9,            
+        panel_efficiency= 0.219,            
         temperature_coefficient=-0.27 
     ),
         "Poly": SolarPanelType(
@@ -95,7 +95,7 @@ solar_panel_types = {
         solar_panel_lifetime=25,        
         panel_surface=2.174,              
         annual_degradation=0.0055,         
-        panel_efficiency=20.7,            
+        panel_efficiency= 0.207,            
         temperature_coefficient=-0.34 
     ),
     }
@@ -206,7 +206,7 @@ battery_types = {
 }
 
 # Choose battery type:
-chosen_battery_type = "no battery" # Change this to switch between different types
+chosen_battery_type = "LG RESU Prime S" # Change this to switch between different types
 chosen_battery = battery_types[chosen_battery_type]
 print(f"Total cost for {chosen_battery_type}: {chosen_battery.battery_cost}")
 battery_cost = chosen_battery.battery_cost
