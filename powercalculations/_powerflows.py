@@ -1,4 +1,4 @@
-def power_flow(self, max_charge:int = 0, max_AC_power_output: int = 5, max_DC_batterypower_output: int = 5):
+def power_flow(self, max_charge:int = 8, max_AC_power_output: int = 5, max_DC_batterypower: int = 5):
     """
     Calculates power flows, how much is going to and from the battery and how much is being tapped from the grid
     #TODO: add units, PV_generated_power and Load_kW are both in kW. Depending on the frequency of this data, a different amount is subtracted from the battery charge (in kWh?) (e.g. if 1h freq, the load of each line can be subtracted directly since 1kW*1h=1kWh. If in minutes, then 1kW*1min=1/60kWh) 
@@ -24,20 +24,22 @@ def power_flow(self, max_charge:int = 0, max_AC_power_output: int = 5, max_DC_ba
         excess_power = PV_power - load
         available_space = max_charge - previous_charge
         # Calculate battery charge and grid flow
-        if excess_power > 0:  # Excess power from PV
+        if load > max_AC_power_output:
+            grid_flow = -load # Load too high for inverter, switch to grid-tie to avoid overloading of inverter
+        elif excess_power > 0:  # Excess power from PV
             if available_space > 0:  # Battery has room for excess power
                 if excess_power <= available_space:  # Excess power fills battery partially
-                    sent_to_battery = excess_power
+                    sent_to_battery = min(excess_power, max_DC_batterypower) # Powerflow to battery has limit, excess is power loss
                     new_charge = previous_charge + sent_to_battery
                     grid_flow = 0  # No grid draw
                 else:  # Battery almost full, partially fill it and send excess to grid
-                    sent_to_battery = available_space
-                    new_charge = max_charge
-                    grid_flow = excess_power - available_space # Excess power is sent to grid (positive flow)
+                    sent_to_battery = min(available_space, max_DC_batterypower) # Battery is filled, or is limited by power flow
+                    new_charge = previous_charge + sent_to_battery
+                    grid_flow = min(excess_power - sent_to_battery, max_AC_power_output) # Excess power is sent to grid (positive flow), limited by power flow
             else:  # Battery full, send excess power to the grid
                 sent_to_battery = 0
                 new_charge = max_charge
-                grid_flow = excess_power # All power is sent to grid (positive flow)
+                grid_flow = min(excess_power,max_AC_power_output) # All power is sent to grid (positive flow), output has limit
         elif excess_power < 0:  # Insufficient PV power, need to draw from battery or grid
             if previous_charge >= -excess_power:  # Battery has enough power to cover load deficit
                 sent_to_battery = 0

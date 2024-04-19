@@ -99,7 +99,7 @@ def electricity_cost(solar_panel_count: int=1, panel_surface:int= 1.6 ,annual_de
 
     # Total cost
     cost=energy_cost+Data_management_cost+purchase_cost+capacity_cost+energy_contribution+energy_fund_contribution+special_excise_duty
-    return cost
+    return [cost, energy_cost]
 
 print(electricity_cost(Orientation='S',tilt_angle=30, tariff='DualTariff',solar_panel_count=0))
 print(electricity_cost(Orientation='S',tilt_angle=30, tariff='DualTariff',solar_panel_count=10))
