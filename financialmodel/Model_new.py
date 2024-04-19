@@ -14,7 +14,7 @@ def calculate_npv(battery_cost, total_solar_panel_cost, inverter_cost, discount_
     Year_1_payback = initial_cash_flow/investment_cost
     print("Year 1 payback:", Year_1_payback)
     cost_savings = sum((initial_cash_flow * pow(1 - annual_degradation, t - 1)) / pow(1 + discount_rate, t) for t in range(1, 26))
-    print("Year 1 payback:", cost_savings)
+    print("Total cost savings:", cost_savings)
     
     npv = -investment_cost + cost_savings
 
@@ -206,7 +206,7 @@ battery_types = {
 }
 
 # Choose battery type:
-chosen_battery_type = "no battery" # Change this to switch between different types
+chosen_battery_type = "LG RESU Prime S" # Change this to switch between different types
 chosen_battery = battery_types[chosen_battery_type]
 print(f"Total cost for {chosen_battery_type}: {chosen_battery.battery_cost}")
 battery_cost = chosen_battery.battery_cost

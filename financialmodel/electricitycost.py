@@ -7,7 +7,7 @@ sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')
 import powercalculations.powercalculations as pc
 import gridcost.gridcost as gc
 
-def electricity_cost(solar_panel_count: int=1, panel_surface:int= 1 ,annual_degredation: float=0.02, panel_efficiency: int= 0.55, temperature_Coefficient: float=0.02,  tilt_angle:int=-1, Orientation:str="S", battery_capacity: float= 1000, battery_count: int=1, data_management_rate: float =53.86, purchase_rate: float=0.05, capacity_rate: float=41.3087, tariff: str='DualTariff'):
+def electricity_cost(solar_panel_count: int=1, panel_surface:int= 1 ,annual_degredation: float=0.0002, panel_efficiency: int= 0.55, temperature_Coefficient: float=0.02,  tilt_angle:int=-1, Orientation:str="S", battery_capacity: float= 1000, battery_count: int=1, data_management_rate: float =53.86, purchase_rate: float=0.05, capacity_rate: float=41.3087, tariff: str='DualTariff'):
     """
     Calculates
     if provided tilt angle is -1, the optimal angle for this orientation is chosen
