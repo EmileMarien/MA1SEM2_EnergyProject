@@ -65,7 +65,7 @@ def power_flow(self, max_charge:int = 8, max_AC_power_output: int = 5, max_DC_ba
 
     # Update DataFrame with optimized data
     self.pd['BatteryCharge'] = battery_charge
-    self.pd['GridFlow'] = grid_flow_list
+    self.pd['GridFlow'] = grid_flow_list # Negative values indicate power drawn from the grid, positive values indicate power sent to the grid
     self.pd['PowerLoss'] = power_loss
 
     return None

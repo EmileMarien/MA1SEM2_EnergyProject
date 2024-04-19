@@ -50,7 +50,7 @@ def interpolate_columns(self, interval:int='1h'):
     self.pd = self.pd.infer_objects()
     self.pd.index = pd.to_datetime(self.pd.index)
     # Resample the DataFrame
-    self.pd = self.pd.resample(interval)
+    self.pd = self.pd.resample(interval).mean()
 
     # Interpolate the missing values
     self.pd = self.pd.interpolate(method='linear')
@@ -71,9 +71,36 @@ def find_duplicate_indices(self):
     return duplicate_indices
 
 
-"""
+def update_column(self, new_values: pd.DataFrame):
+    """
+    Update the values of a column in the DataFrame.
 
+    Parameters:
+    - df: DataFrame object.
+    - new_values: DataFrame containing the new values (single column) to update.
 
+    Returns:
+    - None.
+    """
 
+    # Check if the column exists in the DataFrame
+    assert new_values.columns[0] in self.pd.columns, 'The column does not exist in the DataFrame.'
+    self.pd.update(new_values)
+    return None
 
-"""
+def empty_column(self, column_name: str):
+    """
+    Empty the values of a column in the DataFrame.
+
+    Parameters:
+    - df: DataFrame object.
+    - column_name: Name of the column to empty.
+
+    Returns:
+    - None.
+    """
+
+    # Check if the column exists in the DataFrame
+    assert column_name in self.pd.columns, 'The column does not exist in the DataFrame.'
+    self.pd[column_name] = None
+    return None

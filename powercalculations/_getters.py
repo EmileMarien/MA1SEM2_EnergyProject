@@ -34,7 +34,6 @@ def get_PV_generated_power(self):
     """
     return self.pd['PV_generated_power']
 
-
 def get_energy_TOT(self,column_name:str='Load_kW',peak:str='peak'):
     """
     Calculates the total energy in kWh for the entire year in the DataFrame. The energy is calculated for the specified power values and peak or offpeak period.
@@ -60,10 +59,10 @@ def get_energy_TOT(self,column_name:str='Load_kW',peak:str='peak'):
 
     if peak=='peak':
         # Select data between 8:00 and 18:00 for the entire year
-        df_filtered = df_load[(df_load.index.hour >= 8) & (df_load.index.hour < 18)]
+        df_filtered = df_load[(df_load.index.hour >= 8) & (df_load.index.hour < 18) & (df_load.index.weekday < 5)]
     elif peak=='offpeak':
         # Select data outside 8:00 and 18:00 for the entire year
-        df_filtered = df_load[(df_load.index.hour <= 8) & (df_load.index.hour > 18)]
+        df_filtered = df_load[((df_load.index.hour < 8) | (df_load.index.hour >= 18)) & (df_load.index.weekday < 5) | (df_load.index.weekday >= 5)]
     else:
         AssertionError('The peak must be either peak or offpeak')
 
@@ -78,8 +77,6 @@ def get_energy_TOT(self,column_name:str='Load_kW',peak:str='peak'):
 
     return energy_peak
 
-
-
 def get_columns(self,columns:List[str]):
     """
     Returns the dataset with the specific columns
@@ -89,11 +86,9 @@ def get_columns(self,columns:List[str]):
 
     return self.pd[columns]
 
-
 def get_PV_energy_per_hour(self):
     power=get_average_per_hour(self,"PV_generated_power")
     
-
 def get_average_per_hour(self, column_name: str = 'Load_kW'):
     """
     Calculates the average power per hour for each hour of the day based on the entire year in the DataFrame. in kW
@@ -141,3 +136,31 @@ def get_max_per_hour(self,column_name:str='Load_kW'):
 
 def get_grid_power(self):
     return [self.pd['GridFlow'], self.pd['BatteryCharge']]
+
+def get_monthly_peaks(self,column_name:str='Load_kW'):
+    """
+    Calculates the monthly peaks for the specified column in the DataFrame. in kW
+
+    Returns:
+        pandas.Series: A Series containing the monthly peaks for the specified column.
+        The index of the Series is the month (1-12).
+    """
+
+    # Group the data by the month and calculate the maximum value
+    intervalled_data = self.pd[column_name].resample('15min').mean()
+    df_monthly_peaks = intervalled_data.groupby(intervalled_data.index.month).min()
+    return df_monthly_peaks
+
+
+def get_total_injection_and_consumption(self):
+    """
+    Calculates the total injection and consumption for the entire year in the DataFrame. in kWh
+
+    Returns:
+        tuple: A tuple containing the total injection and consumption in kWh.
+    """
+    # Calculate the total injection and consumption
+    total_injection = self.pd['GridFlow'][self.pd['GridFlow'] > 0].sum()
+    total_consumption = -self.pd['GridFlow'][self.pd['GridFlow'] < 0].sum()
+
+    return total_injection, total_consumption

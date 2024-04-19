@@ -64,6 +64,8 @@ class PowerCalculations():
     from ._datacleaning import filter_data_by_date_interval
     from ._datacleaning import interpolate_columns
     from ._datacleaning import find_duplicate_indices
+    from ._datacleaning import empty_column
+    from ._datacleaning import update_column
 
     from ._pvpower import PV_generated_power
     
@@ -86,6 +88,8 @@ class PowerCalculations():
     from ._getters import get_average_per_hour
     from ._getters import get_grid_power
     from ._getters import get_columns
+    from ._getters import get_monthly_peaks
+    from ._getters import get_total_injection_and_consumption
    
 
 
