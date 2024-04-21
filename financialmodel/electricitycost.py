@@ -7,7 +7,7 @@ sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')
 import powercalculations.powercalculations as pc
 import gridcost.gridcost as gc
 
-def electricity_cost(solar_panel_count: int=1, panel_surface:int= 1.6 ,annual_degredation: float=0.02, panel_efficiency: int= 0.55, temperature_Coefficient: float=0.02,  tilt_angle:int=-1, Orientation:str="S", battery_capacity: float= 1000, battery_count: int=1, data_management_rate: float =53.86, capacity_rate: float=41.3087, tariff: str='DualTariff', purchase_rate_injection: float=0.0041125, purchase_rate_consumption: float=0.0538613):
+def electricity_cost(solar_panel_count: int=1, panel_surface:int= 1.6 ,annual_degredation: float=0.02, panel_efficiency: int= 0.55, temperature_Coefficient: float=0.02, inverter_size_AC: int = 5, inverter_maxinput_DC: int = 5, tilt_angle:int=-1, Orientation:str="S", battery_capacity: float= 1000, battery_count: int=1, data_management_rate: float =53.86, capacity_rate: float=41.3087, tariff: str='DualTariff', purchase_rate_injection: float=0.0041125, purchase_rate_consumption: float=0.0538613):
     """
     Calculate the electricity cost for a given solar panel configuration and tariff.
 
@@ -69,7 +69,7 @@ def electricity_cost(solar_panel_count: int=1, panel_surface:int= 1.6 ,annual_de
     print("2.1/4: Direct irradiance calculated")
     irradiance.PV_generated_power(panel_count=solar_panel_count, cell_area=panel_surface, efficiency_max=panel_efficiency*(1-annual_degredation),Temp_coeff=temperature_Coefficient)
     print("2.2/4: PV generated power calculated")
-    irradiance.power_flow(max_charge=battery_capacity*battery_count,)
+    irradiance.power_flow(max_charge=battery_capacity*battery_count,max_AC_power_output = inverter_size_AC, max_DC_batterypower = inverter_maxinput_DC)
     print("2.3/4: Powerflows calculated")
     irradiance.nettoProduction()
 
