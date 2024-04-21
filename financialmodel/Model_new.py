@@ -286,7 +286,7 @@ inverter_types = {
     ),
     # Define more types as needed
 }
-chosen_inverter_type = "no inverter" # Change this to switch between different types
+chosen_inverter_type = "Sungrow_4" # Change this to switch between different types
 chosen_inverter = inverter_types[chosen_inverter_type]
 inverter_cost = chosen_inverter.inverter_cost
 print(f"Total cost for {chosen_inverter_type}: {chosen_inverter.inverter_cost}")
@@ -314,7 +314,7 @@ panel_surface = 0
 Cost_with_no_PV = electricity_cost(solar_panel_count, panel_surface, annual_degradation, panel_efficiency, temperature_Coefficient, tilt_angle, Orientation, battery_capacity)
 print("cost witn no PV:", Cost_with_no_PV)
 
-initial_cash_flow = Cost_with_no_PV[0] - cost_grid_with_PV[0]   #Besparing van kosten door zonnepanelen, kan men zien als de profit
+initial_cash_flow = Cost_with_no_PV - cost_grid_with_PV   #Besparing van kosten door zonnepanelen, kan men zien als de profit
 print("initial cash flow:", initial_cash_flow)
 # Calculate NPV
 npv = calculate_npv(battery_cost, total_solar_panel_cost, inverter_cost, discount_rate, initial_cash_flow, annual_degradation)
