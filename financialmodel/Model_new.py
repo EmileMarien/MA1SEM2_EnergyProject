@@ -286,7 +286,7 @@ inverter_types = {
     ),
     # Define more types as needed
 }
-chosen_inverter_type = "Sungrow_4" # Change this to switch between different types
+chosen_inverter_type = "no inverter" # Change this to switch between different types
 chosen_inverter = inverter_types[chosen_inverter_type]
 inverter_cost = chosen_inverter.inverter_cost
 print(f"Total cost for {chosen_inverter_type}: {chosen_inverter.inverter_cost}")
