@@ -73,4 +73,4 @@ formatter = pd.option_context('display.max_rows', None, 'display.max_columns', N
 #irradiance.calculate_direct_irradiance(latitude=latitude, tilt_angle=0, day='2018-03-10 00:00',longitude=0,temperature=20)
 #print(irradiance.get_loadTOT_day())
 #plot_dataframe(financials.get_columns(["DynamicTariff", "DualTariff"]))
-plot_dataframe(powercalculations_test.get_columns(["Load_kW", "PV_generated_power", "GridFlow", "BatteryCharge", "NettoProduction"]))
+plot_dataframe(powercalculations_test.get_columns(["Load_kW", "PV_generated_power", "GridFlow", "BatteryFlow", "BatteryCharge", "PowerLoss"]))
