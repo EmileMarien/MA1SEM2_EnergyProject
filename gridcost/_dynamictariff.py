@@ -8,9 +8,11 @@ def dynamic_tariff(self):
         grid_flow = row['GridFlow']
         dynamic_cost = row['BelpexFilter']
         if grid_flow < 0: # Energy is being consumed
-            cost = -grid_flow*(0.1*dynamic_cost+1.1)*1.06 # Depends on energy supplier (now for Engie)
+            cost_per = (0.1*dynamic_cost+1.1)*1.06 # cost per MWh
+            cost = (-grid_flow)*(cost_per/1000) # total cost
         elif grid_flow > 0: # Energy is being injected in the grid
-            cost = -grid_flow*(-(0.1*dynamic_cost - 0.905)) # Depends on energy supplier (now for Engie)
+            cost_per = (-0.1*dynamic_cost - 0.905) # profit per MWh
+            cost = grid_flow*(cost_per/1000) # total profit
         else:
             cost = 0
         return cost
