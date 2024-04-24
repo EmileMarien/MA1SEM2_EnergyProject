@@ -222,7 +222,7 @@ battery_capacity = chosen_battery.battery_capacity
 class InverterType:
     def __init__(self, inverter_cost, inverter_size_AC, inverter_maxinput_DC, inverter_lifetime, inverter_efficiency):
         self.inverter_cost = inverter_cost
-        self.inverter_size = inverter_size_AC
+        self.inverter_size_AC = inverter_size_AC
         self.inverter_maxinput_DC = inverter_maxinput_DC
         self.inverter_lifetime = inverter_lifetime
         self.inverter_efficiency = inverter_efficiency
@@ -289,6 +289,9 @@ inverter_types = {
 chosen_inverter_type = "Sungrow_3" # Change this to switch between different types
 chosen_inverter = inverter_types[chosen_inverter_type]
 inverter_cost = chosen_inverter.inverter_cost
+inverter_maxinput_DC = chosen_inverter.inverter_maxinput_DC
+inverter_size_AC = chosen_inverter.inverter_size_AC
+inverter_efficiency = chosen_inverter.inverter_efficiency
 print(f"Total cost for {chosen_inverter_type}: {chosen_inverter.inverter_cost}")
 
 
