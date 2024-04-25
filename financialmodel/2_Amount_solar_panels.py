@@ -4,8 +4,9 @@ from components import SolarPanel, Battery, Inverter, solar_panel_types, battery
 def calculate_npv(battery_cost, total_solar_panel_cost, inverter_cost, discount_rate, initial_cash_flow, annual_degradation):
     # Calculate the least common multiple (LCM) of battery and solar panel lifetimes
 
-    installation_cost = 0
-    capex = installation_cost + total_solar_panel_cost + inverter_cost  + battery_cost  # multiplication for installation_cost + maintenance_cost
+    installation_cost = 4*total_solar_panel_cost
+    BOS_cost = 2*total_solar_panel_cost
+    capex = BOS_cost + installation_cost + total_solar_panel_cost + inverter_cost  + battery_cost  # multiplication for installation_cost + maintenance_cost
     
     investment_cost = capex + \
                       (inverter_cost + battery_cost) / pow(1 + discount_rate, 10) + \
