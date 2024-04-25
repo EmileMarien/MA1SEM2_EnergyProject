@@ -18,6 +18,7 @@ def power_flow(self, max_charge: int = 8, max_AC_power_output: int = 2, max_DC_b
     grid_flow_list = []  # List to store calculated grid flows
     power_loss_list = [] # List to store calculated power loss
     battery_flow_list = [] # List to store flow to and from the battery
+    max_charge=max_charge*60 #kWmin
     # Iterate over DataFrame rows
     for _, row in self.pd.iterrows():
         PV_power = min(row['PV_generated_power'], max_PV_input) 
@@ -27,9 +28,9 @@ def power_flow(self, max_charge: int = 8, max_AC_power_output: int = 2, max_DC_b
         available_space = max_charge - previous_charge #kWh
         # Calculate battery charge and grid flow
         if load > max_AC_power_output:  # Load too high for inverter, switch to grid-tie to avoid overloading of inverter
-            battery_flow = min(available_space, PV_power, max_DC_batterypower) # PV power is sent straight to battery, depending on how much space there is
-            power_loss += min(available_space, PV_power) - battery_flow # Battery charging power is limited, causing power loss
-            grid_flow = -load + (PV_power-battery_flow) # All power that is not sent to the battery, is sent to the grid
+            battery_flow = min(available_space, PV_power, max_DC_batterypower) # kW, PV power is sent straight to battery, depending on how much space there is
+            power_loss += min(available_space, PV_power) - battery_flow # kWh, Battery charging power is limited, causing power loss
+            grid_flow = -load + (PV_power-battery_flow) # kW, All power that is not sent to the battery, is sent to the grid
             new_charge = previous_charge + battery_flow
         elif excess_power > 0:  # Excess power from PV
             if available_space > 0:  # Battery has room for excess power
@@ -66,7 +67,7 @@ def power_flow(self, max_charge: int = 8, max_AC_power_output: int = 2, max_DC_b
             power_loss = 0
 
         # Append calculated values to lists
-        battery_charge.append(new_charge)
+        battery_charge.append(new_charge/60) #kWmin -> kWh
         grid_flow_list.append(grid_flow)
         power_loss_list.append(power_loss)
         battery_flow_list.append(battery_flow)
