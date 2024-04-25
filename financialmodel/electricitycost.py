@@ -73,17 +73,18 @@ def electricity_cost(solar_panel_count: int=1, panel_surface:int= 1.6 ,annual_de
     print("2.3/4: Powerflows calculated")
 
     print("3/4: start cost calculations")
-    plot_dataframe(irradiance.get_columns(["Load_kW", "PV_generated_power", "GridFlow", "BatteryFlow", "BatteryCharge", "PowerLoss"]))
+    #plot_dataframe(irradiance.get_columns(["Load_kW", "PV_generated_power", "GridFlow", "BatteryFlow", "BatteryCharge", "PowerLoss"]))
+    
     financials=gc.GridCost(irradiance.get_grid_power()[0],file_path_BelpexFilter="data/BelpexFilter.xlsx")
 
     financials.dual_tariff()    #peak_tariff=0.171
     financials.dynamic_tariff()
     print("financial grid calculations finished")
-    
+    plot_dataframe(financials.get_columns(["DynamicTariff", "DualTariff"]))
     ## Electricity cost
     fixed_component=98.4 # [€/year]
     energy_cost=financials.get_grid_cost_total(calculationtype=tariff)+fixed_component
-
+    print(financials.get_grid_cost_total(calculationtype=tariff))
     ## Network rates
     #data_management_cost
 
@@ -110,7 +111,7 @@ def electricity_cost(solar_panel_count: int=1, panel_surface:int= 1.6 ,annual_de
     print("Total consumption:", irradiance.get_total_injection_and_consumption()[1])
     return cost
 
-print(electricity_cost(Orientation='S',tilt_angle=30, tariff='DualTariff',solar_panel_count=10))
+print(electricity_cost(Orientation='S',tilt_angle=30, tariff='DynamicTariff',solar_panel_count=0))
 #print(electricity_cost(Orientation='S',tilt_angle=30, tariff='DynamicTariff',solar_panel_count=0))
 #print(electricity_cost(Orientation='S',tilt_angle=30, tariff='DualTariff',solar_panel_count=10))
 #print(electricity_cost(Orientation='S',tilt_angle=30, tariff='DualTariff',solar_panel_count=30))
