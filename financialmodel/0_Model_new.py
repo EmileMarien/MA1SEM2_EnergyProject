@@ -419,7 +419,7 @@ battery_lifetime = 0
 battery_capacity = 0
 
 # Set up lists to store results
-solar_panel_counts = list(range(2, 23))  # From 2 to 22 solar panels
+solar_panel_counts = list(range(6, 23))  # From 2 to 22 solar panels
 npv_values = []
 
 # Iterate over different numbers of solar panels
@@ -429,7 +429,27 @@ for panel_count in solar_panel_counts:
     
     # Calculate total solar panel cost
     total_solar_panel_cost = chosen_panel.total_solar_panel_cost
+
+     # Determine the appropriate inverter type based on the number of solar panels
+    if panel_count >= 14:
+        chosen_inverter_type = "Sungrow_5.0"
+    elif panel_count >= 13:
+        chosen_inverter_type = "Sungrow_4.0"
+    elif panel_count >= 11:
+        chosen_inverter_type = "Sungrow_3.6"
+    elif panel_count >= 6:
+        chosen_inverter_type = "Sungrow_3.0"
+    else:
+        # If the number of solar panels is less than 6, no inverter is chosen
+        chosen_inverter_type = "no inverter"
     
+    # Get the chosen inverter
+    chosen_inverter = inverter_types[chosen_inverter_type]
+    inverter_cost = chosen_inverter.inverter_cost
+    inverter_maxsolar_DC = chosen_inverter.inverter_maxsolar_DC
+    inverter_size_AC = chosen_inverter.inverter_size_AC
+    inverter_efficiency = chosen_inverter.inverter_efficiency
+    inverter_maxbattery_DC = chosen_inverter.inverter_maxbattery_DC
     # Calculate initial cash flow
     cost_grid_with_PV = electricity_cost(solar_panel_count = chosen_panel.solar_panel_count, panel_surface = panel_surface, annual_degradation = annual_degradation, panel_efficiency = panel_efficiency, temperature_coefficient = temperature_coefficient, inverter_size_AC = inverter_size_AC, inverter_maxsolar_DC = inverter_maxsolar_DC, inverter_maxbattery_DC = inverter_maxbattery_DC, tilt_angle = tilt_angle, Orientation = Orientation, battery_capacity = battery_capacity)
     initial_cash_flow = Cost_with_no_PV - cost_grid_with_PV  
