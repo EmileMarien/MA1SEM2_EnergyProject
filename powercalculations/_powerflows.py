@@ -20,11 +20,11 @@ def power_flow(self, max_charge: int = 8, max_AC_power_output: int = 2, max_DC_b
     battery_flow_list = [] # List to store flow to and from the battery
     # Iterate over DataFrame rows
     for _, row in self.pd.iterrows():
-        PV_power = min(row['PV_generated_power'], max_PV_input)
+        PV_power = min(row['PV_generated_power'], max_PV_input) 
         power_loss = row['PV_generated_power'] - PV_power
         load = row['Load_kW']
         excess_power = PV_power - load
-        available_space = max_charge - previous_charge
+        available_space = max_charge - previous_charge #kWh
         # Calculate battery charge and grid flow
         if load > max_AC_power_output:  # Load too high for inverter, switch to grid-tie to avoid overloading of inverter
             battery_flow = min(available_space, PV_power, max_DC_batterypower) # PV power is sent straight to battery, depending on how much space there is
