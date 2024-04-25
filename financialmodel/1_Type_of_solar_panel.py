@@ -109,7 +109,7 @@ solar_panel_lifetime = chosen_panel.solar_panel_lifetime
 total_panel_surface = chosen_panel.total_panel_surface
 annual_degradation =  chosen_panel.annual_degradation
 panel_efficiency = chosen_panel.panel_efficiency
-temperature_Coefficient = chosen_panel.temperature_coefficient
+temperature_coefficient = chosen_panel.temperature_coefficient
 panel_surface = chosen_panel.panel_surface
 solar_panel_count = chosen_panel.solar_panel_count
 
@@ -300,7 +300,7 @@ discount_rate = 0.10                                        #Discount rate
 
 solar_panel_count = 0 
 panel_surface = 0 
-Cost_with_no_PV = electricity_cost(solar_panel_count=solar_panel_count,panel_surface=panel_surface, annual_degradation=annual_degradation, panel_efficiency=panel_efficiency, temperature_Coefficient=temperature_Coefficient, inverter_size_AC=inverter_size_AC, inverter_maxinput_DC=inverter_maxinput_DC, tilt_angle=tilt_angle, Orientation=Orientation, battery_capacity=battery_capacity)
+Cost_with_no_PV = electricity_cost(solar_panel_count=solar_panel_count,panel_surface=panel_surface, annual_degradation=annual_degradation, panel_efficiency=panel_efficiency, temperature_coefficient=temperature_coefficient, inverter_size_AC=inverter_size_AC, inverter_maxinput_DC=inverter_maxinput_DC, tilt_angle=tilt_angle, Orientation=Orientation, battery_capacity=battery_capacity)
 
 import matplotlib.pyplot as plt
 
@@ -319,7 +319,7 @@ for panel_type, solar_panel in solar_panel_types.items():
     solar_panel_count = solar_panel.solar_panel_count
 
     # Calculate initial cash flow for the current solar panel type
-    cost_grid_with_PV = electricity_cost(solar_panel_count=solar_panel_count,panel_surface=panel_surface, annual_degradation=annual_degradation, panel_efficiency=panel_efficiency, temperature_Coefficient=temperature_Coefficient, inverter_size_AC=inverter_size_AC, inverter_maxinput_DC=inverter_maxinput_DC, tilt_angle=tilt_angle, Orientation=Orientation, battery_capacity=battery_capacity)
+    cost_grid_with_PV = electricity_cost(solar_panel_count=solar_panel_count,panel_surface=panel_surface, annual_degradation=annual_degradation, panel_efficiency=panel_efficiency, temperature_coefficient=temperature_coefficient, inverter_size_AC=inverter_size_AC, inverter_maxinput_DC=inverter_maxinput_DC, tilt_angle=tilt_angle, Orientation=Orientation, battery_capacity=battery_capacity)
     initial_cash_flow = Cost_with_no_PV - cost_grid_with_PV  
 
     # Calculate NPV for the current solar panel type
