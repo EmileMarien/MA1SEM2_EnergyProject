@@ -91,13 +91,13 @@ solar_panel_types = {
         temperature_coefficient=-0.0027 
     ),
         "Poly": SolarPanelType(
-        solar_panel_cost=104.63,           
+        solar_panel_cost=72.84,           
         solar_panel_count=10,           
         solar_panel_lifetime=25,        
-        panel_surface=2.174,              
-        annual_degradation=0.0055,         
-        panel_efficiency= 0.207,            
-        temperature_coefficient=-0.0034 
+        panel_surface=1.62688,              
+        annual_degradation=0.005,         
+        panel_efficiency= 0.177,            
+        temperature_coefficient=-0.0035 
     ),
     }
 
@@ -375,14 +375,14 @@ temperature_Coefficient = chosen_panel.temperature_coefficient
 panel_surface = chosen_panel.panel_surface
 solar_panel_count = chosen_panel.solar_panel_count
 # Define inverter type
-chosen_inverter_type = "no inverter"
+chosen_inverter_type = "Sungrow_3"
 chosen_inverter = inverter_types[chosen_inverter_type]
 inverter_cost = chosen_inverter.inverter_cost
 inverter_maxinput_DC = chosen_inverter.inverter_maxinput_DC
 inverter_size_AC = chosen_inverter.inverter_size_AC
 inverter_efficiency = chosen_inverter.inverter_efficiency
 # Set other parameters
-discount_rate = 0.05
+discount_rate = 0.10
 battery_cost = 0  # No battery
 battery_lifetime = 0
 battery_capacity = 0
