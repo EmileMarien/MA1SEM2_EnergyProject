@@ -9,14 +9,14 @@ from visualisations.visualisations import plot_dataframe
 import powercalculations.powercalculations as pc
 import gridcost.gridcost as gc
 
-def electricity_cost(solar_panel_count: int=1, panel_surface:int= 1.6 ,annual_degredation: float=0.02, panel_efficiency: int= 0.55, temperature_coefficient: float=-0.0026, inverter_size_AC: int = 5, inverter_maxsolar_DC: int = 8, inveter_maxbattery_DC: int=5,tilt_angle:int=-1, Orientation:str="S", battery_capacity: float= 8, battery_count: int=1, data_management_cost: float =53.86, capacity_rate: float=41.3087, tariff: str='DualTariff', purchase_rate_injection: float=0.0041125, purchase_rate_consumption: float=0.0538613, energy_contribution_levy: float=8.72, energy_fund_contribution_levy: float=0, special_excise_duty_levy: float=215.16):
+def electricity_cost(solar_panel_count: int=1, panel_surface:int= 1.6 ,annual_degredation: float=0.02, panel_efficiency: int= 0.55, temperature_coefficient: float=-0.0026, inverter_size_AC: int = 5, inverter_maxsolar_DC: int = 8, inveter_maxbattery_DC: int=5,tilt_angle:int=-1, Orientation:str="S", battery_capacity: float= 8, battery_count: int=1, data_management_cost: float =53.86, capacity_rate: float=41.3087, tariff: str='DualTariff', purchase_rate_injection: float=0.00414453, purchase_rate_consumption: float=0.0538613, energy_contribution_levy: float=8.72, energy_fund_contribution_levy: float=0, special_excise_duty_levy: float=215.16):
     """
     Calculate the electricity cost for a given solar panel configuration and tariff.
 
     Args:
     solar_panel_count (int): The number of solar panels.
     panel_surface (float): The surface area of a single solar panel in m^2.
-    annual_degredation (float): The annual degradation rate of the solar panels (%, geef kommagetal).
+    annual_degradation (float): The annual degradation rate of the solar panels (%, geef kommagetal).
     panel_efficiency (float): The efficiency of the solar panels (%, geef kommagetal).
     temperature_Coefficient (float): The temperature coefficient of the solar panels (%/°C).
     tilt_angle (int): The tilt angle of the solar panels (°).
@@ -67,7 +67,7 @@ def electricity_cost(solar_panel_count: int=1, panel_surface:int= 1.6 ,annual_de
         file.close()
         
     print("2.1/4: Direct irradiance calculated")
-    irradiance.PV_generated_power(panel_count=solar_panel_count, cell_area=panel_surface, efficiency_max=panel_efficiency*(1-annual_degredation),Temp_coeff=temperature_coefficient)
+    irradiance.PV_generated_power(panel_count=solar_panel_count, cell_area=panel_surface, efficiency_max=panel_efficiency*(1-annual_degradation),Temp_coeff=temperature_coefficient)
     print("2.2/4: PV generated power calculated")
     irradiance.power_flow(max_charge=battery_capacity*battery_count, max_AC_power_output = inverter_size_AC, max_PV_input = inverter_maxsolar_DC, max_DC_batterypower = inveter_maxbattery_DC)
     print("2.3/4: Powerflows calculated")
@@ -77,13 +77,14 @@ def electricity_cost(solar_panel_count: int=1, panel_surface:int= 1.6 ,annual_de
     
     financials=gc.GridCost(irradiance.get_grid_power()[0],file_path_BelpexFilter="data/BelpexFilter.xlsx")
 
-    financials.dual_tariff()    #peak_tariff=0.171
+    financials.dual_tariff()
     financials.dynamic_tariff()
     print("financial grid calculations finished")
     plot_dataframe(financials.get_columns(["DynamicTariff", "DualTariff"]))
     ## Electricity cost
-    fixed_component=98.4 # [€/year]
-    energy_cost=financials.get_grid_cost_total(calculationtype=tariff)+fixed_component
+    fixed_component_dual=42.4 # [€/year]
+    fixed_component_dynamic=100.7 # [€/year]
+    energy_cost=financials.get_grid_cost_total(calculationtype=tariff)+fixed_component_dual if tariff=='DualTariff' else financials.get_grid_cost_total(calculationtype=tariff)+fixed_component_dynamic
     print(financials.get_grid_cost_total(calculationtype=tariff))
     ## Network rates
     #data_management_cost

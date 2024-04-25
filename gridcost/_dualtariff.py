@@ -1,5 +1,5 @@
 
-def dual_tariff(self, peak_tariff:int=0.12, offpeak_tariff:int=0.1042,fixed_tariff:int=0,injection_tariff:int=0.0292):
+def dual_tariff(self, peak_tariff:int=0.1503, offpeak_tariff:int=0.1256,fixed_tariff:int=(0.01554),injection_tariff:int=0.0292):
     
     #Calculates the dual tariff for a specific time, day and colation
     
@@ -20,7 +20,7 @@ def dual_tariff(self, peak_tariff:int=0.12, offpeak_tariff:int=0.1042,fixed_tari
             else:  # Weekends
                 variable_tariff = offpeak_tariff
 
-            cost = variable_tariff * (-grid_flow) + fixed_tariff
+            cost = (variable_tariff+fixed_tariff) * (-grid_flow)
         else:  # Energy is being produced
             cost = injection_tariff * (-grid_flow)
         return cost
