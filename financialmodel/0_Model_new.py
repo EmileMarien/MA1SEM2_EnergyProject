@@ -317,7 +317,7 @@ panel_surface = 0
 Cost_with_no_PV = electricity_cost(solar_panel_count, panel_surface, annual_degradation, panel_efficiency, temperature_Coefficient, inverter_size_AC, inverter_maxinput_DC, tilt_angle, Orientation, battery_capacity)
 print("cost witn no PV:", Cost_with_no_PV)
 
-initial_cash_flow = Cost_with_no_PV[0] - cost_grid_with_PV[0]   #Besparing van kosten door zonnepanelen, kan men zien als de profit
+initial_cash_flow = Cost_with_no_PV - cost_grid_with_PV   #Besparing van kosten door zonnepanelen, kan men zien als de profit
 print("initial cash flow:", initial_cash_flow)
 # Calculate NPV
 npv = calculate_npv(battery_cost, total_solar_panel_cost, inverter_cost, discount_rate, initial_cash_flow, annual_degradation)
@@ -401,7 +401,7 @@ for panel_count in solar_panel_counts:
     
     # Calculate initial cash flow
     cost_grid_with_PV = electricity_cost(panel_count, chosen_panel.panel_surface, chosen_panel.annual_degradation, chosen_panel.panel_efficiency, chosen_panel.temperature_coefficient, chosen_inverter.inverter_size_AC, chosen_inverter.inverter_maxinput_DC, tilt_angle, Orientation, battery_capacity)
-    initial_cash_flow = Cost_with_no_PV[0] - cost_grid_with_PV[0] 
+    initial_cash_flow = Cost_with_no_PV - cost_grid_with_PV  
     
     # Calculate NPV
     npv = calculate_npv(battery_cost, total_solar_panel_cost, chosen_inverter.inverter_cost, discount_rate, initial_cash_flow, chosen_panel.annual_degradation)
