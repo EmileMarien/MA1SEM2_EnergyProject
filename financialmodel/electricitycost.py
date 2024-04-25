@@ -80,7 +80,7 @@ def electricity_cost(solar_panel_count: int=1, panel_surface:int= 1.6 ,annual_de
     financials.dual_tariff()
     financials.dynamic_tariff()
     print("financial grid calculations finished")
-    plot_dataframe(financials.get_columns(["DynamicTariff", "DualTariff"]))
+    # plot_dataframe(financials.get_columns(["DynamicTariff", "DualTariff"]))
     ## Electricity cost
     fixed_component_dual=42.4 # [€/year]
     fixed_component_dynamic=100.7 # [€/year]
