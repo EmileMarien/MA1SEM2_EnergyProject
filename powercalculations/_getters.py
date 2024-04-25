@@ -162,5 +162,9 @@ def get_total_injection_and_consumption(self):
     # Calculate the total injection and consumption
     total_injection = self.pd['GridFlow'][self.pd['GridFlow'] > 0].sum()
     total_consumption = -self.pd['GridFlow'][self.pd['GridFlow'] < 0].sum()
+     #Integrate the power over time to get the energy in [kWh]
+    interval = pd.Timedelta(self.pd['GridFlow'].index.freq).total_seconds() / 3600 # Convert seconds to hours
+    total_injection_kWh=total_injection*interval        # [kWh]
+    total_consumption_kWh=total_consumption*interval    # [kWh]
 
-    return total_injection, total_consumption
+    return total_injection_kWh, total_consumption_kWh
