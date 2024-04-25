@@ -81,8 +81,9 @@ def electricity_cost(solar_panel_count: int=1, panel_surface:int= 1.6 ,annual_de
     print("financial grid calculations finished")
     
     ## Electricity cost
-    fixed_component=42.4 # [€/year]
-    energy_cost=financials.get_grid_cost_total(calculationtype=tariff)+fixed_component
+    fixed_component_dual=42.4 # [€/year]
+    fixed_component_dynamic=100.7 # [€/year]
+    energy_cost=financials.get_grid_cost_total(calculationtype=tariff)+fixed_component_dual if tariff=='DualTariff' else financials.get_grid_cost_total(calculationtype=tariff)+fixed_component_dynamic
 
     ## Network rates
     #data_management_cost
