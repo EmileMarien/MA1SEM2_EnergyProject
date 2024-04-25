@@ -76,12 +76,12 @@ def electricity_cost(solar_panel_count: int=1, panel_surface:int= 1.6 ,annual_de
     #plot_dataframe(irradiance.get_columns(["Load_kW", "PV_generated_power", "GridFlow", "BatteryFlow", "BatteryCharge", "PowerLoss"]))
     financials=gc.GridCost(irradiance.get_grid_power()[0],file_path_BelpexFilter="data/BelpexFilter.xlsx")
 
-    financials.dual_tariff()    #peak_tariff=0.171
+    financials.dual_tariff()
     financials.dynamic_tariff()
     print("financial grid calculations finished")
     
     ## Electricity cost
-    fixed_component=98.4 # [€/year]
+    fixed_component=42.4 # [€/year]
     energy_cost=financials.get_grid_cost_total(calculationtype=tariff)+fixed_component
 
     ## Network rates
