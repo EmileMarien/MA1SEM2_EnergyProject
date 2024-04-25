@@ -18,16 +18,13 @@ file.close()
 ### Calculations for the S 30 scenario
 #irradiance_pd_S_30.nettoProduction()
 # Calculate the PV power output
-cell_area=0
-panel_count=1
-T_STC=25
-Temp_coeff=-0.0026
-efficiency_max=0.2
+
+panel_count=6
 print('start calculations')
-irradiance_pd_S_30.PV_generated_power(cell_area, panel_count, T_STC, Temp_coeff, efficiency_max)
+irradiance_pd_S_30.PV_generated_power(panel_count=panel_count)
 
 # calculate the power flow
-max_charge= 0
+max_charge= 8 #kWh
 max_AC_power_output= 5
 max_DC_batterypower_output= 5
 irradiance_pd_S_30.power_flow(max_charge, max_AC_power_output, max_DC_batterypower_output)
@@ -97,7 +94,7 @@ if plot_hourly_direct_irradiance:
 # Print average net load consumption for the different orientations and tilt angles
 
 # Plot comparison of direct, global and diffuse irradiance for S 30 scenario
-plot_comparison_irradiance=False
+plot_comparison_irradiance=True
 if plot_comparison_irradiance:
     hourly_direct_irradiance_pd_S_30=irradiance_pd_S_30.get_average_per_hour('DirectIrradiance')
     hourly_global_irradiance_pd_S_30=irradiance_pd_S_30.get_average_per_hour('GlobRad')
@@ -106,15 +103,17 @@ if plot_comparison_irradiance:
     plot_series(hourly_series)
 
 # Plot hourly flows (pv-load) 
-plot_hourly_flows=False
+plot_hourly_flows=True
 if plot_hourly_flows:
+    irradiance_pd_S_30.filter_data_by_date_interval('2018-06-01 1:00','2018-09-30 23:00',interval_str='1min')
     hourly_pv_generated_power_pd_S_30=irradiance_pd_S_30.get_average_per_hour('PV_generated_power')
     hourly_load_pd_S_30=irradiance_pd_S_30.get_average_per_hour('Load_kW')
     hourly_netto_production_pd_S_30=irradiance_pd_S_30.get_average_per_hour('NettoProduction')
     hourly_battery_charge_pd_S_30=irradiance_pd_S_30.get_average_per_hour('BatteryCharge')
     hourly_grid_flow_pd_S_30=irradiance_pd_S_30.get_average_per_hour('GridFlow')
-    hourly_series=[hourly_pv_generated_power_pd_S_30,hourly_load_pd_S_30,hourly_netto_production_pd_S_30,hourly_battery_charge_pd_S_30,hourly_grid_flow_pd_S_30]
-    plot_series(hourly_series)
+    hourly_battery_flow_pd_S_30=irradiance_pd_S_30.get_average_per_hour('BatteryFlow')
+    hourly_series=[hourly_pv_generated_power_pd_S_30,hourly_load_pd_S_30,hourly_netto_production_pd_S_30,hourly_grid_flow_pd_S_30,hourly_battery_flow_pd_S_30]
+    plot_series(series=hourly_series,title='Hourly average power flows for S 30 scenario',secondary_series=hourly_battery_charge_pd_S_30,ylabel2='Battery charge (kWh)')
 
 # Plot average hourly load consumption for winter and summer
 plot_average_load_consumption=False
@@ -156,14 +155,15 @@ print("angles calculated")
 financials=GridCost(irradiance_pd_S_30.get_grid_power()[0],file_path_BelpexFilter="data/BelpexFilter.xlsx")
 financials.dynamic_tariff()
 financials.dual_tariff()
-plot_dataframe(financials.get_dataset())
-print(financials.get_grid_cost_total(calculationtype='DualTariff'))
-print(financials.get_grid_cost_total(calculationtype='DynamicTariff'))
+#plot_dataframe(financials.get_dataset())
 
 
-print('the total energy taken from the grid is:',irradiance_pd_S_30.get_columns(['GridFlow']).sum())
-print('the total energy taken from the grid is:',financials.get_columns(['GridFlow']).sum())
-print('the total load consumed is:',irradiance_pd_S_30.get_columns(['Load_kW']).sum()/60)
+print_figures=False
+if print_figures:
+    print('the total energy taken from the grid is:',financials.get_columns(['GridFlow']).sum())
+    print('the total load consumed is:',irradiance_pd_S_30.get_columns(['Load_kW']).sum()/60)
+    print(financials.get_grid_cost_total(calculationtype='DualTariff'))
+    print(financials.get_grid_cost_total(calculationtype='DynamicTariff'))
 
 #print('the total offpeak energy taken from the grid is:',irradiance_pd_S_30.get_energy_TOT(column_name='GridFlow',peak="offpeak"))
 #print('the total peak energy taken from the grid is:',irradiance_pd_S_30.get_energy_TOT(column_name='GridFlow',peak="peak"))
