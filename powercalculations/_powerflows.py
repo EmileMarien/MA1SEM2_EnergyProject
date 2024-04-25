@@ -5,9 +5,9 @@ def power_flow(self, max_charge: int = 8, max_AC_power_output: int = 2, max_DC_b
     ADD BATTERY DEGRADATION
 
     Args:
-        max_charge (int, optional): Maximum charge capacity of the battery. Defaults to 500.
-        max_AC_power_output (int): Maximum power that can be sent to the grid.
-        max_DC_batterypower_output (int, optional): Maximum power that can be sent to the battery. Defaults to 500.
+        max_charge (int, optional): Maximum charge capacity of the battery in kWh. Defaults to 8.
+        max_AC_power_output (int): Maximum power that can be sent to the grid in kW. Defaults to 2.
+        max_DC_batterypower_output (int, optional): Maximum power that can be sent to the battery in kW. Defaults to 2.
 
     Returns:
         None

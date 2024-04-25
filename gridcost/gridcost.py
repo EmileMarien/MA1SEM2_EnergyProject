@@ -36,8 +36,6 @@ class GridCost():
         
         # Assign the DataFrame to self.pd
         self.pd=merged_df
-        
-
 
         #Set a datetime index
         self.pd.set_index('DateTime', inplace=True)

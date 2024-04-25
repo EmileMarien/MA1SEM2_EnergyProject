@@ -2,7 +2,9 @@ import os
 import sys
 import pandas as pd
 import pickle
+
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+from visualisations.visualisations import plot_dataframe
 
 import powercalculations.powercalculations as pc
 import gridcost.gridcost as gc
@@ -71,7 +73,7 @@ def electricity_cost(solar_panel_count: int=1, panel_surface:int= 1.6 ,annual_de
     print("2.3/4: Powerflows calculated")
 
     print("3/4: start cost calculations")
-
+    #plot_dataframe(irradiance.get_columns(["Load_kW", "PV_generated_power", "GridFlow", "BatteryFlow", "BatteryCharge", "PowerLoss"]))
     financials=gc.GridCost(irradiance.get_grid_power()[0],file_path_BelpexFilter="data/BelpexFilter.xlsx")
 
     financials.dual_tariff()    #peak_tariff=0.171
@@ -108,8 +110,8 @@ def electricity_cost(solar_panel_count: int=1, panel_surface:int= 1.6 ,annual_de
     print("Total consumption:", irradiance.get_total_injection_and_consumption()[1])
     return cost
 
-print(electricity_cost(Orientation='S',tilt_angle=30, tariff='DualTariff',solar_panel_count=0))
-print(electricity_cost(Orientation='S',tilt_angle=30, tariff='DynamicTariff',solar_panel_count=0))
+print(electricity_cost(Orientation='S',tilt_angle=30, tariff='DualTariff',solar_panel_count=10))
+#print(electricity_cost(Orientation='S',tilt_angle=30, tariff='DynamicTariff',solar_panel_count=0))
 #print(electricity_cost(Orientation='S',tilt_angle=30, tariff='DualTariff',solar_panel_count=10))
 #print(electricity_cost(Orientation='S',tilt_angle=30, tariff='DualTariff',solar_panel_count=30))
 
