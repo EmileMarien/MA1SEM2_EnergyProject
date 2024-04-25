@@ -91,13 +91,13 @@ solar_panel_types = {
         temperature_coefficient=-0.0027 
     ),
         "Poly": SolarPanelType(
-        solar_panel_cost=104.63,           
+        solar_panel_cost=72.84,           
         solar_panel_count=10,           
         solar_panel_lifetime=25,        
-        panel_surface=2.174,              
-        annual_degradation=0.0055,         
-        panel_efficiency= 0.207,            
-        temperature_coefficient=-0.0034 
+        panel_surface=1.62688,              
+        annual_degradation=0.008,         
+        panel_efficiency= 0.177,            
+        temperature_coefficient=-0.0035 
     ),
     }
 
