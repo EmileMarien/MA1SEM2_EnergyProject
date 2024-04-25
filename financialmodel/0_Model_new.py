@@ -95,7 +95,7 @@ solar_panel_types = {
         solar_panel_count=10,           
         solar_panel_lifetime=25,        
         panel_surface=1.62688,              
-        annual_degradation=0.005,         
+        annual_degradation=0.008,         
         panel_efficiency= 0.177,            
         temperature_coefficient=-0.0035 
     ),
