@@ -9,7 +9,7 @@ from visualisations.visualisations import plot_dataframe
 import powercalculations.powercalculations as pc
 import gridcost.gridcost as gc
 
-def electricity_cost(solar_panel_count: int=1, panel_surface:int= 1.6 ,annual_degredation: float=0.02, panel_efficiency: int= 0.55, temperature_coefficient: float=-0.0026, inverter_size_AC: int = 5, inverter_maxsolar_DC: int = 8, inveter_maxbattery_DC: int=5,tilt_angle:int=-1, Orientation:str="S", battery_capacity: float= 8, battery_count: int=1, data_management_cost: float =53.86, capacity_rate: float=41.3087, tariff: str='DualTariff', purchase_rate_injection: float=0.00414453, purchase_rate_consumption: float=0.0538613, energy_contribution_levy: float=8.72, energy_fund_contribution_levy: float=0, special_excise_duty_levy: float=215.16):
+def electricity_cost(solar_panel_count: int=1, panel_surface:int= 1.6 ,annual_degredation: float=0.02, panel_efficiency: int= 0.55, temperature_coefficient: float=-0.0026, inverter_size_AC: int = 5, inverter_maxsolar_DC: int = 8, inveter_maxbattery_DC: int=5,tilt_angle:int=-1, Orientation:str="S", battery_capacity: float= 8, battery_count: int=1,tariff: str='DualTariff', ):
     """
     Calculate the electricity cost for a given solar panel configuration and tariff.
 
@@ -80,6 +80,15 @@ def electricity_cost(solar_panel_count: int=1, panel_surface:int= 1.6 ,annual_de
     financials.dynamic_tariff()
     print("financial grid calculations finished")
     
+    #Financial components
+    purchase_rate_injection=0.00414453
+    purchase_rate_consumption=0.0538613
+    energy_contribution_levy=8.72
+    energy_fund_contribution_levy=0
+    special_excise_duty_levy=215.16
+    data_management_cost: float =53.86
+    capacity_rate: float=41.3087
+     
     ## Electricity cost
     fixed_component_dual=42.4 # [€/year]
     fixed_component_dynamic=100.7 # [€/year]

@@ -60,7 +60,7 @@ def calculate_direct_irradiance(self, latitude:int=0, tilt_angle:int=0,longitude
         if solar_zenith_angle > 87:
             direct_irradiance=min([GHI,direct_irradiance])
         
-        return direct_irradiance
+        return direct_irradiance, DNI
 
     #angles of azimuth
     if orientation =="N":
