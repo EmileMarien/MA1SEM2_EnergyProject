@@ -16,7 +16,7 @@ def electricity_cost(solar_panel_count: int=1, panel_surface:int= 1.6 ,annual_de
     Args:
     solar_panel_count (int): The number of solar panels.
     panel_surface (float): The surface area of a single solar panel in m^2.
-    annual_degredation (float): The annual degradation rate of the solar panels (%, geef kommagetal).
+    annual_degradation (float): The annual degradation rate of the solar panels (%, geef kommagetal).
     panel_efficiency (float): The efficiency of the solar panels (%, geef kommagetal).
     temperature_Coefficient (float): The temperature coefficient of the solar panels (%/°C).
     tilt_angle (int): The tilt angle of the solar panels (°).
@@ -67,7 +67,7 @@ def electricity_cost(solar_panel_count: int=1, panel_surface:int= 1.6 ,annual_de
         file.close()
         
     print("2.1/4: Direct irradiance calculated")
-    irradiance.PV_generated_power(panel_count=solar_panel_count, cell_area=panel_surface, efficiency_max=panel_efficiency*(1-annual_degredation),Temp_coeff=temperature_coefficient)
+    irradiance.PV_generated_power(panel_count=solar_panel_count, cell_area=panel_surface, efficiency_max=panel_efficiency*(1-annual_degradation),Temp_coeff=temperature_coefficient)
     print("2.2/4: PV generated power calculated")
     irradiance.power_flow(max_charge=battery_capacity*battery_count, max_AC_power_output = inverter_size_AC, max_PV_input = inverter_maxsolar_DC, max_DC_batterypower = inveter_maxbattery_DC)
     print("2.3/4: Powerflows calculated")
