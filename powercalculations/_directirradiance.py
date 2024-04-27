@@ -74,9 +74,14 @@ def calculate_direct_irradiance(self, latitude:int=0, tilt_angle:int=0,longitude
     elif orientation=="EW":
         # Calculate the direct irradiance for both "E" and "W" orientations
         # Apply the calculation function to each row with vectorized operations
-        self.pd['DirectIrradiance'] = self.pd.apply(
-            lambda row: (calculate_irradiance_row(row=row, latitude=latitude, tilt_angle=tilt_angle, longitude=longitude,surface_azimuth_angle=90)+calculate_irradiance_row(row=row, latitude=latitude, tilt_angle=tilt_angle, longitude=longitude,surface_azimuth_angle=270))/2, axis=1
+        self.pd[['DirectIrradiance', 'DNI']] = self.pd.apply(
+            lambda row: pd.Series({
+                'DirectIrradiance': (calculate_irradiance_row(row, latitude, tilt_angle, longitude, surface_azimuth_angle=90)[0] + calculate_irradiance_row(row, latitude, tilt_angle, longitude, surface_azimuth_angle=270)[0]) / 2,
+                'DNI': (calculate_irradiance_row(row, latitude, tilt_angle, longitude, surface_azimuth_angle=90)[1] + calculate_irradiance_row(row, latitude, tilt_angle, longitude, surface_azimuth_angle=270)[1]) / 2
+            }),
+            axis=1
         )
+
         return None
     else:
         raise ValueError("Given orientation is unvalid or not implemented")
@@ -87,7 +92,7 @@ def calculate_direct_irradiance(self, latitude:int=0, tilt_angle:int=0,longitude
     global counter
     counter=0
     # Apply the calculation function to each row with vectorized operations
-    self.pd['DirectIrradiance'] = self.pd.apply(
+    self.pd[['DirectIrradiance','DNI']] = self.pd.apply(
         lambda row: calculate_irradiance_row(row=row, latitude=latitude, tilt_angle=tilt_angle, longitude=longitude,surface_azimuth_angle=surface_azimuth_angle), axis=1
     )
 

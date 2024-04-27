@@ -94,7 +94,8 @@ def plot_series(series:List[pd.Series]=[pd.Series], title:str='Series', xlabel:s
     # Add labels and title
     ax.set_xlabel(xlabel)
     ax.set_ylabel(ylabel)
-    ax2.set_ylabel(ylabel2)
+    if 'ax2' in locals():
+        ax2.set_ylabel(ylabel2)
     ax.set_title(title)
     #plt.style.use(['science','ieee'])
 

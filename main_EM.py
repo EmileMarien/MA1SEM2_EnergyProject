@@ -113,7 +113,7 @@ if plot_hourly_flows:
     hourly_grid_flow_pd_S_30=irradiance_pd_S_30.get_average_per_hour('GridFlow')
     hourly_battery_flow_pd_S_30=irradiance_pd_S_30.get_average_per_hour('BatteryFlow')
     hourly_series=[hourly_pv_generated_power_pd_S_30,hourly_load_pd_S_30,hourly_netto_production_pd_S_30,hourly_grid_flow_pd_S_30,hourly_battery_flow_pd_S_30]
-    plot_series(series=hourly_series,title='Hourly average power flows for S 30 scenario',secondary_series=hourly_battery_charge_pd_S_30,ylabel2='Battery charge (kWh)')
+    plot_series(series=hourly_series,title='Hourly average power flows for S 30 scenario, summer',secondary_series=[hourly_battery_charge_pd_S_30],xlabel='hours',ylabel='Power [kWh]',ylabel2='Battery charge (kWh)')
 
 # Plot average hourly load consumption for winter and summer
 plot_average_load_consumption=False
@@ -124,7 +124,7 @@ if plot_average_load_consumption:
     plot_series(hourly_series)
 
 
-
+# Plot average 15min load consumption
 
 
 # Print some general figures about the data we have
