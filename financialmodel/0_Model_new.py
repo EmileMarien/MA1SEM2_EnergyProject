@@ -15,7 +15,7 @@ def calculate_npv(battery_cost, total_solar_panel_cost, inverter_cost, discount_
     print("Investment cost:", investment_cost)
     Year_1_payback = initial_cash_flow/investment_cost
     print("Year 1 payback:", Year_1_payback)
-    cost_savings = sum((1.5*initial_cash_flow * pow(1 - annual_degradation + 0.02, t - 1)) / pow(1 + discount_rate, t) for t in range(1, 26))
+    cost_savings = sum((initial_cash_flow * pow(1 - annual_degradation, t - 1)) / pow(1 + discount_rate, t) for t in range(1, 26))
     print("Total cost savings:", cost_savings)
     
     npv = -investment_cost + cost_savings
@@ -332,7 +332,7 @@ Orientation = 'S'#Orientation: richting naar waar de zonnepanelen staan N, E, S,
 
 #Economics
 discount_rate = 0.0658                                      #Discount rate
-tariff = 'DynamicTariff'
+tariff = 'DualTariff'
 
 #Calculations of the cashflows 
 
@@ -432,13 +432,13 @@ for panel_count in solar_panel_counts:
 
      # Determine the appropriate inverter type based on the number of solar panels
     if panel_count >= 14:
-        chosen_inverter_type = "Sungrow_5.0"
+        chosen_inverter_type = "Sungrow_5"
     elif panel_count >= 13:
-        chosen_inverter_type = "Sungrow_4.0"
+        chosen_inverter_type = "Sungrow_4"
     elif panel_count >= 11:
         chosen_inverter_type = "Sungrow_3.6"
     elif panel_count >= 6:
-        chosen_inverter_type = "Sungrow_3.0"
+        chosen_inverter_type = "Sungrow_3"
     else:
         # If the number of solar panels is less than 6, no inverter is chosen
         chosen_inverter_type = "no inverter"

@@ -9,7 +9,7 @@ from visualisations.visualisations import plot_dataframe
 import powercalculations.powercalculations as pc
 import gridcost.gridcost as gc
 
-def electricity_cost(solar_panel_count: int=1, panel_surface:int= 1.6 ,annual_degradation: float=0.02, panel_efficiency: int= 0.55, temperature_coefficient: float=-0.0026, inverter_size_AC: int = 5, inverter_maxsolar_DC: int = 8, inverter_maxbattery_DC: int=5,tilt_angle:int=-1, Orientation:str="S", battery_capacity: float= 8, battery_count: int=1,tariff: str='DualTariff', ):
+def electricity_cost(solar_panel_count: int=10, panel_surface:int= 1.998 ,annual_degradation: float=0.004, panel_efficiency: int= 0.2253, temperature_coefficient: float=-0.0030 , inverter_size_AC: int = 3, inverter_maxsolar_DC: int = 10, inverter_maxbattery_DC: int=6.6,tilt_angle:int=-1, Orientation:str="S", battery_capacity: float= 0, battery_count: int=1,tariff: str='DualTariff', ):
     """
     Calculate the electricity cost for a given solar panel configuration and tariff.
 
