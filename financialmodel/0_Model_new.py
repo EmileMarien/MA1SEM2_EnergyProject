@@ -332,7 +332,7 @@ Orientation = 'S'#Orientation: richting naar waar de zonnepanelen staan N, E, S,
 
 #Economics
 discount_rate = 0.0658                                      #Discount rate
-tariff = 'DualTariff'
+tariff = 'Dualtariff'
 
 #Calculations of the cashflows 
 
@@ -419,7 +419,7 @@ battery_lifetime = 0
 battery_capacity = 0
 
 # Set up lists to store results
-solar_panel_counts = list(range(6, 23))  # From 2 to 22 solar panels
+solar_panel_counts = list(range(60, 82))  # From 2 to 22 solar panels
 npv_values = []
 
 # Iterate over different numbers of solar panels
