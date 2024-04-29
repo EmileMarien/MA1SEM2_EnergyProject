@@ -7,6 +7,7 @@ import pickle
 import pandas as pd
 from gridcost.gridcost import GridCost
 from visualisations.visualisations import plot_dataframe, plot_series
+import matplotlib.dates as md
 
 # Load dataset
 
@@ -130,7 +131,7 @@ if plot_minutely_nettoproduction:
     minutely_nettoproduction_pd_S_30=irradiance_pd_S_30.get_average_per_minute_day('NettoProduction')
     hourly_battery_charge_pd_S_30 = irradiance_pd_S_30.get_average_per_minute_day('BatteryCharge')
     minutely_series=[minutely_nettoproduction_pd_S_30]
-    plot_series(series=minutely_series,title='Minutely average netto production for S 30 scenario',secondary_series=[hourly_battery_charge_pd_S_30],xlabel='minutes',ylabel='Power [kWh]',ylabel2='Battery charge (kWh)')
+    plot_series(series=minutely_series,title='Minutely average netto production for S 30 scenario',secondary_series=[hourly_battery_charge_pd_S_30],xlabel='Time',ylabel='Power [kWh]',ylabel2='Battery charge (kWh)')
 
 
 # Plot hourly flows (pv-load) 
@@ -144,7 +145,7 @@ if plot_hourly_flows:
     hourly_grid_flow_pd_S_30=irradiance_pd_S_30.get_average_per_hour('GridFlow')
     hourly_battery_flow_pd_S_30=irradiance_pd_S_30.get_average_per_hour('BatteryFlow')
     hourly_series=[hourly_netto_production_pd_S_30, hourly_pv_generated_power_pd_S_30, hourly_load_pd_S_30, hourly_grid_flow_pd_S_30, hourly_battery_flow_pd_S_30]
-    plot_series(series=hourly_series,title='Hourly average power flows for S 30 scenario, summer',secondary_series=[hourly_battery_charge_pd_S_30],xlabel='hours',ylabel='Power [kWh]',ylabel2='Battery charge (kWh)')
+    plot_series(series=hourly_series,title='Hourly average power flows for S 30 scenario, summer',secondary_series=[hourly_battery_charge_pd_S_30],xlabel='hours',ylabel='Power [kWh]',ylabel2='Battery charge (kWh)',display_time='hour')
 
 # Plot average hourly load consumption for winter and summer
 plot_average_load_consumption=False
@@ -158,6 +159,7 @@ if plot_average_load_consumption:
 plot_weekly_load_consumption=True
 if plot_weekly_load_consumption:
     #irradiance_pd_S_30.filter_data_by_date_interval('2018-06-01 1:00','2018-09-30 23:00',interval_str='1min')
+    print(irradiance_pd_S_30.get_dataset())
     hourly_load_pd_S_30=irradiance_pd_S_30.get_columns('Load_kW')
     hourly_load_pd_S_30['day_of_week'] = hourly_load_pd_S_30['time'].dt.day_name()
     hourly_series=hourly_load_pd_S_30.groupby('day_of_week').mean()

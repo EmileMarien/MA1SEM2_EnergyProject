@@ -9,7 +9,7 @@ from visualisations.visualisations import plot_dataframe
 import powercalculations.powercalculations as pc
 import gridcost.gridcost as gc
 
-def electricity_cost(solar_panel_count: int=10, panel_surface:int= 2,annual_degradation: float=0.000, panel_efficiency: int= 0.2253, temperature_coefficient: float=-0.0026, inverter_size_AC: int = 5, inverter_maxsolar_DC: int = 8, inverter_maxbattery_DC: int=5,tilt_angle:int=-1, Orientation:str="S", battery_capacity: float= 0, battery_count: int=0,tariff: str='DualTariff',add_EV:bool=True):
+def electricity_cost(solar_panel_count: int=10, panel_surface:int= 2,annual_degradation: float=0.000, panel_efficiency: int= 0.2253, temperature_coefficient: float=-0.0026, inverter_size_AC: int = 5, inverter_maxsolar_DC: int = 8, inverter_maxbattery_DC: int=5,tilt_angle:int=-1, Orientation:str="S", battery_capacity: float= 0, battery_count: int=1,tariff: str='DualTariff',add_EV:bool=True):
     """
     Calculate the electricity cost for a given solar panel configuration and tariff.
 
@@ -52,7 +52,7 @@ def electricity_cost(solar_panel_count: int=10, panel_surface:int= 2,annual_degr
     irradiance=pickle.load(file)
     file.close()
     print("1/4: file opened")
-    irradiance.filter_data_by_date_interval(start_date="2018-1-1 00:00",end_date="2018-12-31 23:00",interval_str="1min")
+    irradiance.filter_data_by_date_interval(start_date="2018-1-1 00:00",end_date="2018-12-31 23:00",interval_str="20min")
     print("2/4: start calculations")
     
     if notYetCalculated:

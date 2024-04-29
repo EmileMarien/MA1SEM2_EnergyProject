@@ -64,7 +64,7 @@ def plot_dataframe(df:pd.DataFrame=pd.DataFrame):
     # Show the plot
     plt.show()
 
-def plot_series(series:List[pd.Series]=[pd.Series], title:str='Series', xlabel:str='Datetime', ylabel:str='Value', secondary_series:List[pd.Series]=[],ylabel2:str='Value'):
+def plot_series(series:List[pd.Series]=[pd.Series], title:str='Series', xlabel:str='Datetime', ylabel:str='Value', secondary_series:List[pd.Series]=[],ylabel2:str='Value',selected_format:str=None,display_time:str='hour'):
     """
     Plots a given Series with a datetime index.
 
@@ -75,32 +75,35 @@ def plot_series(series:List[pd.Series]=[pd.Series], title:str='Series', xlabel:s
         ylabel (str): The label for the y-axis.
         secondary_series (List[pd.Series]): The secondary Series to plot on a secondary axis.
     """
-
     # Create the plot
     fig, ax = plt.subplots()
-    legendentries= []
-
+    lns=[]
     # Plot the primary Series
     for serie in series:
-        ax.plot(serie.index, serie)
-        legendentries.append(serie.name)
+        lns+=ax.plot(serie.index, serie,label=serie.name)
 
     # Plot the secondary Series on a secondary axis
     for secondary_serie in secondary_series:
         ax2 = ax.twinx()
-        ax2.plot(secondary_serie.index, secondary_serie, linestyle='--')
-        legendentries.append(secondary_serie.name)
+        lns+=ax2.plot(secondary_serie.index, secondary_serie, linestyle='--',label=secondary_serie.name)
+
+    length=series[0].shape[0]
+    if display_time=='hour':
+        ax.set_xticks(range(0, length, length//24))
 
     # Add labels and title
     ax.set_xlabel(xlabel)
     ax.set_ylabel(ylabel)
     if 'ax2' in locals():
         ax2.set_ylabel(ylabel2)
+    
+    # add legend
+    labs = [l.get_label() for l in lns]
+    ax.legend(lns, labs, loc=0)
     ax.set_title(title)
     #plt.style.use(['science','ieee'])
-
-    # Add legend
-    ax.legend(legendentries)
+    if selected_format!=None:
+        ax.xaxis.set_major_formatter(selected_format)
 
     # Show the plot
     plt.show()
