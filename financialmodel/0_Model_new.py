@@ -323,6 +323,17 @@ inverter_maxbattery_DC = chosen_inverter.inverter_maxbattery_DC
 print(f"Total cost for {chosen_inverter_type}: {chosen_inverter.inverter_cost}")
 
 
+
+
+
+
+
+
+
+
+
+
+
 # Set-up
 tilt_angle = 30 #tilt_angle: angle of the solar panel, 
 Orientation = 'S'#Orientation: richting naar waar de zonnepanelen staan N, E, S, W 
@@ -332,7 +343,7 @@ Orientation = 'S'#Orientation: richting naar waar de zonnepanelen staan N, E, S,
 
 #Economics
 discount_rate = 0.0658                                      #Discount rate
-tariff = 'Dualtariff'
+tariff = 'DualTariff'
 
 #Calculations of the cashflows 
 
@@ -419,7 +430,7 @@ battery_lifetime = 0
 battery_capacity = 0
 
 # Set up lists to store results
-solar_panel_counts = list(range(60, 82))  # From 2 to 22 solar panels
+solar_panel_counts = list(range(6, 22))  # From 2 to 22 solar panels
 npv_values = []
 
 # Iterate over different numbers of solar panels
