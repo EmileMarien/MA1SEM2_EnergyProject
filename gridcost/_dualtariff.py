@@ -1,5 +1,5 @@
 
-def dual_tariff(self, peak_tariff:int=0.1701, offpeak_tariff:int=0.1463,fixed_tariff:int=0.01554,injection_tariff:int=0.0292):
+def dual_tariff(self, peak_tariff:int=0.1701, offpeak_tariff:int=0.1463,fixed_tariff:int=0.01554,injection_tariff:int=0.046):
     
     #Calculates the dual tariff for a specific time, day and colation
     
