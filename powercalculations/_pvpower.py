@@ -27,3 +27,4 @@ def PV_generated_power(self,cell_area:int=1.6, panel_count:int=1, T_STC:int=25, 
     else:
         raise ValueError("The 'DirectIrradiance' column is empty or not present in the DataFrame")
     return None
+

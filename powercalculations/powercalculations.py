@@ -91,7 +91,6 @@ class PowerCalculations():
     from ._getters import get_columns
     from ._getters import get_monthly_peaks
     from ._getters import get_total_injection_and_consumption
-   
-
+    from ._getters import get_average_per_minute_day
 
     from ._export import export_dataframe_to_excel

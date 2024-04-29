@@ -1,8 +1,9 @@
 import math
+import pandas as pd
 import pvlib
 counter = 0
 length=0
-def calculate_direct_irradiance(self, latitude:int=0, tilt_angle:int=0,longitude:int=0,orientation:str='S'): 
+def calculate_direct_irradiance(self, tilt_angle:int=0, orientation:str='S'): 
     """
     Calculate the direct irradiance on a tilted surface for each row in the DataFrame.
 
@@ -52,15 +53,22 @@ def calculate_direct_irradiance(self, latitude:int=0, tilt_angle:int=0,longitude
 
         # Calculate the Direct Normal Irradiance (DNI)
         DNI = (GHI - GDI) / math.cos(math.radians(solar_zenith_angle)) # if the sun is above the horizon, calculate DNI
-        
+
         # Calculate the Direct Irradiance which is the sum of the DNI and the GDI but limited to positive values
         direct_irradiance = max([DNI*math.cos(AOI),0]) + GDI
-
+        if DNI < 0:
+            DNI = 0
+        if solar_zenith_angle > 89:
+            DNI=max(GHI-GDI,0)
+            
         # Limit the direct irradiance to the GHI value if the sun is close to the horizon
         if solar_zenith_angle > 87:
             direct_irradiance=min([GHI,direct_irradiance])
         
         return direct_irradiance, DNI
+    # Initialize DNI column of the dataset if not already present
+    if 'DNI' not in self.pd.columns:
+        self.pd['DNI'] = None
 
     #angles of azimuth
     if orientation =="N":
@@ -76,8 +84,8 @@ def calculate_direct_irradiance(self, latitude:int=0, tilt_angle:int=0,longitude
         # Apply the calculation function to each row with vectorized operations
         self.pd[['DirectIrradiance', 'DNI']] = self.pd.apply(
             lambda row: pd.Series({
-                'DirectIrradiance': (calculate_irradiance_row(row, latitude, tilt_angle, longitude, surface_azimuth_angle=90)[0] + calculate_irradiance_row(row, latitude, tilt_angle, longitude, surface_azimuth_angle=270)[0]) / 2,
-                'DNI': (calculate_irradiance_row(row, latitude, tilt_angle, longitude, surface_azimuth_angle=90)[1] + calculate_irradiance_row(row, latitude, tilt_angle, longitude, surface_azimuth_angle=270)[1]) / 2
+                'DirectIrradiance': (calculate_irradiance_row(row, tilt_angle, surface_azimuth_angle=90)[0] + calculate_irradiance_row(row, tilt_angle, surface_azimuth_angle=270)[0]) / 2,
+                'DNI': (calculate_irradiance_row(row, tilt_angle, surface_azimuth_angle=90)[1] + calculate_irradiance_row(row, tilt_angle, surface_azimuth_angle=270)[1]) / 2
             }),
             axis=1
         )
@@ -93,7 +101,11 @@ def calculate_direct_irradiance(self, latitude:int=0, tilt_angle:int=0,longitude
     counter=0
     # Apply the calculation function to each row with vectorized operations
     self.pd[['DirectIrradiance','DNI']] = self.pd.apply(
-        lambda row: calculate_irradiance_row(row=row, latitude=latitude, tilt_angle=tilt_angle, longitude=longitude,surface_azimuth_angle=surface_azimuth_angle), axis=1
+        lambda row: pd.Series({
+            'DirectIrradiance': calculate_irradiance_row(row=row, tilt_angle=tilt_angle,surface_azimuth_angle=surface_azimuth_angle)[0],
+            'DNI': calculate_irradiance_row(row=row, tilt_angle=tilt_angle,surface_azimuth_angle=surface_azimuth_angle)[1]
+        }),
+        axis=1
     )
 
     return None
@@ -134,12 +146,5 @@ def calculate_solar_angles(self, latitude:int=0, longitude:int=0):
 
 
 
-def calculate_irradiance_new(self, tilt_angle,orientation):
-    
-    GHI = self.pd['GlobRad']
-    GDI = self.pd['DiffRad']
 
-    # Solar angles calculation
-        
-    return None
 
