@@ -39,7 +39,7 @@ def electricity_cost(solar_panel_count: int=20, panel_surface:int= 2,annual_degr
     if (Orientation =='S') & (tilt_angle==-1):
         file = open('data/initialized_dataframes/pd_S_opt_41','rb')
     elif (Orientation =='EW') & (tilt_angle==-1):
-        file = open('data/initialized_dataframes/pd_W_opt_32','rb')
+        file = open('data/initialized_dataframes/pd_EW_opt_32','rb')
     elif (Orientation =='EW') & (tilt_angle==30):
         file = open('data/initialized_dataframes/pd_EW_30','rb')
     elif (Orientation =='S') & (tilt_angle==30):
