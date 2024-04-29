@@ -4,11 +4,11 @@ from components import SolarPanel, Battery, Inverter, solar_panel_types, battery
 def calculate_npv(battery_cost, total_solar_panel_cost, inverter_cost, discount_rate, initial_cash_flow, annual_degradation):
     # Calculate the least common multiple (LCM) of battery and solar panel lifetimes
 
-    installation_cost = total_solar_panel_cost/1.2
-    BOS_cost = total_solar_panel_cost/2
-    capex = BOS_cost + installation_cost + total_solar_panel_cost + inverter_cost  + battery_cost  # multiplication for installation_cost + maintenance_cost
+    installation_cost = total_solar_panel_cost*0.3/0.35
+    BOS_cost = total_solar_panel_cost/0.35*0.125
+    capex = (BOS_cost + installation_cost + total_solar_panel_cost)*(1+0.21)  + inverter_cost  + battery_cost  # multiplication for installation_cost + maintenance_cost
     
-    investment_cost = capex + \
+    investment_cost = capex+ \
                       (inverter_cost + battery_cost) / pow(1 + discount_rate, 10) + \
                       (inverter_cost + battery_cost) / pow(1 + discount_rate, 20) - \
                       (inverter_cost + battery_cost) / pow(1 + discount_rate, 25) 
@@ -92,7 +92,7 @@ solar_panel_types = {
         temperature_coefficient=-0.0027 
     ),
         "Poly": SolarPanelType(
-        solar_panel_cost=60.48,           
+        solar_panel_cost=72.84,           
         solar_panel_count=10,           
         solar_panel_lifetime=25,        
         panel_surface=1.62688,              
@@ -402,81 +402,81 @@ print("Net Present Value (NPV):", npv)
 
 
 
-import matplotlib.pyplot as plt
+# import matplotlib.pyplot as plt
 
-# Define solar panel type
-chosen_panel_type = "Jinko"
-chosen_panel = solar_panel_types[chosen_panel_type]
-total_solar_panel_cost = chosen_panel.total_solar_panel_cost
-solar_panel_lifetime = chosen_panel.solar_panel_lifetime
-total_panel_surface = chosen_panel.total_panel_surface
-annual_degradation =  chosen_panel.annual_degradation
-panel_efficiency = chosen_panel.panel_efficiency
-temperature_coefficient = chosen_panel.temperature_coefficient
-panel_surface = chosen_panel.panel_surface
-solar_panel_count = chosen_panel.solar_panel_count
-# Define inverter type
-chosen_inverter_type = "Sungrow_3"
-chosen_inverter = inverter_types[chosen_inverter_type]
-inverter_cost = chosen_inverter.inverter_cost
-inverter_maxsolar_DC = chosen_inverter.inverter_maxsolar_DC
-inverter_size_AC = chosen_inverter.inverter_size_AC
-inverter_efficiency = chosen_inverter.inverter_efficiency
-inverter_maxbattery_DC = chosen_inverter.inverter_maxbattery_DC
-# Set other parameters
-discount_rate = 0.0682
-battery_cost = 0  # No battery
-battery_lifetime = 0
-battery_capacity = 0
+# # Define solar panel type
+# chosen_panel_type = "Jinko"
+# chosen_panel = solar_panel_types[chosen_panel_type]
+# total_solar_panel_cost = chosen_panel.total_solar_panel_cost
+# solar_panel_lifetime = chosen_panel.solar_panel_lifetime
+# total_panel_surface = chosen_panel.total_panel_surface
+# annual_degradation =  chosen_panel.annual_degradation
+# panel_efficiency = chosen_panel.panel_efficiency
+# temperature_coefficient = chosen_panel.temperature_coefficient
+# panel_surface = chosen_panel.panel_surface
+# solar_panel_count = chosen_panel.solar_panel_count
+# # Define inverter type
+# chosen_inverter_type = "Sungrow_3"
+# chosen_inverter = inverter_types[chosen_inverter_type]
+# inverter_cost = chosen_inverter.inverter_cost
+# inverter_maxsolar_DC = chosen_inverter.inverter_maxsolar_DC
+# inverter_size_AC = chosen_inverter.inverter_size_AC
+# inverter_efficiency = chosen_inverter.inverter_efficiency
+# inverter_maxbattery_DC = chosen_inverter.inverter_maxbattery_DC
+# # Set other parameters
+# discount_rate = 0.0682
+# battery_cost = 0  # No battery
+# battery_lifetime = 0
+# battery_capacity = 0
 
-# Set up lists to store results
-solar_panel_counts = list(range(6, 22))  # From 2 to 22 solar panels
-npv_values = []
+# # Set up lists to store results
+# solar_panel_counts = list(range(6, 22))  # From 2 to 22 solar panels
+# npv_values = []
 
-# Iterate over different numbers of solar panels
-for panel_count in solar_panel_counts:
-    # Update solar panel count
-    chosen_panel.solar_panel_count = panel_count
+# # Iterate over different numbers of solar panels
+# for panel_count in solar_panel_counts:
+#     # Update solar panel count
+#     chosen_panel.solar_panel_count = panel_count
     
-    # Calculate total solar panel cost
-    total_solar_panel_cost = chosen_panel.total_solar_panel_cost
+#     # Calculate total solar panel cost
+#     total_solar_panel_cost = chosen_panel.total_solar_panel_cost
 
-     # Determine the appropriate inverter type based on the number of solar panels
-    if panel_count >= 14:
-        chosen_inverter_type = "Sungrow_5"
-    elif panel_count >= 13:
-        chosen_inverter_type = "Sungrow_4"
-    elif panel_count >= 11:
-        chosen_inverter_type = "Sungrow_3.6"
-    elif panel_count >= 6:
-        chosen_inverter_type = "Sungrow_3"
-    else:
-        # If the number of solar panels is less than 6, no inverter is chosen
-        chosen_inverter_type = "no inverter"
+#      # Determine the appropriate inverter type based on the number of solar panels
+#     if panel_count >= 14:
+#         chosen_inverter_type = "Sungrow_5"
+#     elif panel_count >= 13:
+#         chosen_inverter_type = "Sungrow_4"
+#     elif panel_count >= 11:
+#         chosen_inverter_type = "Sungrow_3.6"
+#     elif panel_count >= 6:
+#         chosen_inverter_type = "Sungrow_3"
+#     else:
+#         # If the number of solar panels is less than 6, no inverter is chosen
+#         chosen_inverter_type = "no inverter"
     
-    # Get the chosen inverter
-    chosen_inverter = inverter_types[chosen_inverter_type]
-    inverter_cost = chosen_inverter.inverter_cost
-    inverter_maxsolar_DC = chosen_inverter.inverter_maxsolar_DC
-    inverter_size_AC = chosen_inverter.inverter_size_AC
-    inverter_efficiency = chosen_inverter.inverter_efficiency
-    inverter_maxbattery_DC = chosen_inverter.inverter_maxbattery_DC
-    # Calculate initial cash flow
-    cost_grid_with_PV = electricity_cost(solar_panel_count = chosen_panel.solar_panel_count, panel_surface = panel_surface, annual_degradation = annual_degradation, panel_efficiency = panel_efficiency, temperature_coefficient = temperature_coefficient, inverter_size_AC = inverter_size_AC, inverter_maxsolar_DC = inverter_maxsolar_DC, inverter_maxbattery_DC = inverter_maxbattery_DC, tilt_angle = tilt_angle, Orientation = Orientation, battery_capacity = battery_capacity, tariff = tariff)
-    initial_cash_flow = Cost_with_no_PV - cost_grid_with_PV  
+#     # Get the chosen inverter
+#     chosen_inverter = inverter_types[chosen_inverter_type]
+#     inverter_cost = chosen_inverter.inverter_cost
+#     inverter_maxsolar_DC = chosen_inverter.inverter_maxsolar_DC
+#     inverter_size_AC = chosen_inverter.inverter_size_AC
+#     inverter_efficiency = chosen_inverter.inverter_efficiency
+#     inverter_maxbattery_DC = chosen_inverter.inverter_maxbattery_DC
+#     # Calculate initial cash flow
+#     cost_grid_with_PV = electricity_cost(solar_panel_count = chosen_panel.solar_panel_count, panel_surface = panel_surface, annual_degradation = annual_degradation, panel_efficiency = panel_efficiency, temperature_coefficient = temperature_coefficient, inverter_size_AC = inverter_size_AC, inverter_maxsolar_DC = inverter_maxsolar_DC, inverter_maxbattery_DC = inverter_maxbattery_DC, tilt_angle = tilt_angle, Orientation = Orientation, battery_capacity = battery_capacity, tariff = tariff)
+#     initial_cash_flow = Cost_with_no_PV - cost_grid_with_PV  
     
-    # Calculate NPV
-    npv = calculate_npv(battery_cost, total_solar_panel_cost, chosen_inverter.inverter_cost, discount_rate, initial_cash_flow, chosen_panel.annual_degradation)
+#     # Calculate NPV
+#     npv = calculate_npv(battery_cost, total_solar_panel_cost, chosen_inverter.inverter_cost, discount_rate, initial_cash_flow, chosen_panel.annual_degradation)
     
-    # Append NPV to list
-    npv_values.append(npv)
+#     # Append NPV to list
+#     npv_values.append(npv)
 
-# Plotting
-plt.figure(figsize=(10, 6))
-plt.plot(solar_panel_counts, npv_values, marker='o', linestyle='-')
-plt.xlabel('Number of Solar Panels')
-plt.ylabel('Net Present Value (NPV)')
-plt.title('NPV vs Number of Solar Panels (Jinko Panels, Sungrow_3 Inverter)')
-plt.grid(True)
-plt.tight_layout()
-plt.show()
+# # Plotting
+# plt.figure(figsize=(10, 6))
+# plt.plot(solar_panel_counts, npv_values, marker='o', linestyle='-')
+# plt.xlabel('Number of Solar Panels')
+# plt.ylabel('Net Present Value (NPV)')
+# plt.title('NPV vs Number of Solar Panels (Jinko Panels, Sungrow_3 Inverter)')
+# plt.grid(True)
+# plt.tight_layout()
+# plt.show()
