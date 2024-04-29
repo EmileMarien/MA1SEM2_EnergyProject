@@ -91,7 +91,7 @@ solar_panel_types = {
         panel_efficiency= 0.219,            
         temperature_coefficient=-0.0027 
     ),
-        "Poly": SolarPanelType(
+    "Poly": SolarPanelType(
         solar_panel_cost=72.84,           
         solar_panel_count=10,           
         solar_panel_lifetime=25,        
@@ -121,7 +121,7 @@ print(f"Total surface for {chosen_panel_type}: {chosen_panel.total_panel_surface
 # battery type 
 class BatteryType:
     def __init__(self, battery_cost, battery_lifetime, battery_capacity, battery_inverter,
-                 battery_Roundtrip_Efficiency, battery_PeakPower, battery_Degradation):
+                 battery_Roundtrip_Efficiency, battery_PeakPower, battery_Degradation, battery_count):
         self.battery_cost = battery_cost
         self.battery_lifetime = battery_lifetime
         self.battery_capacity = battery_capacity
@@ -129,6 +129,7 @@ class BatteryType:
         self.battery_Roundtrip_Efficiency = battery_Roundtrip_Efficiency
         self.battery_PeakPower = battery_PeakPower
         self.battery_Degradation = battery_Degradation
+        self.battery_count = battery_count
 
 # Define different types of batteries
 battery_types = {
@@ -140,6 +141,7 @@ battery_types = {
         battery_Roundtrip_Efficiency= 0,  
         battery_PeakPower= 0,  
         battery_Degradation= 0, 
+        battery_count = 0
     ),    
     "LG RESU Prime S": BatteryType(
         battery_inverter = 1,
@@ -149,6 +151,7 @@ battery_types = {
         battery_Roundtrip_Efficiency=97.5, #in procent 
         battery_PeakPower=7,  #in W
         battery_Degradation=3,   #in procent per year 
+        battery_count = 1
     ),
     "LG RESU Prime L": BatteryType(
         battery_inverter = 1,
@@ -157,7 +160,8 @@ battery_types = {
         battery_capacity=16,
         battery_Roundtrip_Efficiency=97.5,  
         battery_PeakPower=11,  
-        battery_Degradation=3,     
+        battery_Degradation=3,   
+        battery_count = 1  
     ),
     "tesla Powerwall 3": BatteryType(
         battery_inverter = 0,
@@ -166,7 +170,8 @@ battery_types = {
         battery_capacity=13.5,
         battery_Roundtrip_Efficiency=97.5,  
         battery_PeakPower=11.5,  
-        battery_Degradation=3,     
+        battery_Degradation=3, 
+        battery_count = 1    
     ),
     "Generac PWRcell 3": BatteryType(
         battery_inverter = 1,
@@ -175,7 +180,8 @@ battery_types = {
         battery_capacity=9,
         battery_Roundtrip_Efficiency=96.5,  
         battery_PeakPower=6,  
-        battery_Degradation=3,     
+        battery_Degradation=3, 
+        battery_count = 1    
     ),
     "Generac PWRcell 4": BatteryType(
         battery_inverter = 1,
@@ -184,7 +190,8 @@ battery_types = {
         battery_capacity=12,
         battery_Roundtrip_Efficiency=96.5,  
         battery_PeakPower=6000,  
-        battery_Degradation=3,     
+        battery_Degradation=3, 
+        battery_count = 1    
     ),
     "Generac PWRcell 5": BatteryType(
         battery_inverter = 1,
@@ -193,7 +200,8 @@ battery_types = {
         battery_capacity=15,
         battery_Roundtrip_Efficiency=96.5,  
         battery_PeakPower=6,  
-        battery_Degradation=3,     
+        battery_Degradation=3, 
+        battery_count = 1    
     ),
     "Generac PWRcell 6": BatteryType(
         battery_inverter = 1,
@@ -202,7 +210,8 @@ battery_types = {
         battery_capacity=18,
         battery_Roundtrip_Efficiency=96.5,  
         battery_PeakPower=6,  
-        battery_Degradation=3,     
+        battery_Degradation=3,  
+        battery_count = 1   
     ),
     # Define more types as needed
 }
@@ -214,7 +223,7 @@ print(f"Total cost for {chosen_battery_type}: {chosen_battery.battery_cost}")
 battery_cost = chosen_battery.battery_cost
 battery_lifetime = chosen_battery.battery_lifetime
 battery_capacity = chosen_battery.battery_capacity
-
+battery_count = chosen_battery.battery_count
 
 
 # bedenkingen 
@@ -350,18 +359,18 @@ Orientation = 'S'#Orientation: richting naar waar de zonnepanelen staan N, E, S,
 
 #Economics
 discount_rate = 0.0658                                      #Discount rate
-tariff = 'DynamicTariff'
+tariff = 'DualTariff'
 
 #Calculations of the cashflows 
 
 print(solar_panel_count, panel_surface, annual_degradation, panel_efficiency, temperature_coefficient, tilt_angle, Orientation, battery_capacity)
-cost_grid_with_PV = electricity_cost(solar_panel_count = solar_panel_count, panel_surface = panel_surface, annual_degradation = annual_degradation, panel_efficiency = panel_efficiency, temperature_coefficient = temperature_coefficient, inverter_size_AC = inverter_size_AC, inverter_maxsolar_DC = inverter_maxsolar_DC, inverter_maxbattery_DC = inverter_maxbattery_DC, tilt_angle = tilt_angle, Orientation = Orientation, battery_capacity = battery_capacity, tariff = tariff)
+cost_grid_with_PV = electricity_cost(solar_panel_count = solar_panel_count, panel_surface = panel_surface, annual_degradation = annual_degradation, panel_efficiency = panel_efficiency, temperature_coefficient = temperature_coefficient, inverter_size_AC = inverter_size_AC, inverter_maxsolar_DC = inverter_maxsolar_DC, inverter_maxbattery_DC = inverter_maxbattery_DC, tilt_angle = tilt_angle, Orientation = Orientation, battery_capacity = battery_capacity, tariff = tariff, battery_count = battery_count)
 print("cost grid:", cost_grid_with_PV)
 
 solar_panel_count = 0 
 panel_surface = 0 
-
-Cost_with_no_PV = electricity_cost(solar_panel_count = solar_panel_count, panel_surface = panel_surface, annual_degradation = annual_degradation, panel_efficiency = panel_efficiency, temperature_coefficient = temperature_coefficient, inverter_size_AC = inverter_size_AC, inverter_maxsolar_DC = inverter_maxsolar_DC, inverter_maxbattery_DC = inverter_maxbattery_DC, tilt_angle = tilt_angle, Orientation = Orientation, battery_capacity = battery_capacity, tariff = tariff)
+battery_count = 0
+Cost_with_no_PV = electricity_cost(solar_panel_count = solar_panel_count, panel_surface = panel_surface, annual_degradation = annual_degradation, panel_efficiency = panel_efficiency, temperature_coefficient = temperature_coefficient, inverter_size_AC = inverter_size_AC, inverter_maxsolar_DC = inverter_maxsolar_DC, inverter_maxbattery_DC = inverter_maxbattery_DC, tilt_angle = tilt_angle, Orientation = Orientation, battery_capacity = battery_capacity, tariff = tariff, battery_count = battery_count)
 
 print("cost witn no PV:", Cost_with_no_PV)
 
@@ -371,41 +380,41 @@ print("initial cash flow:", initial_cash_flow)
 npv = calculate_npv(battery_cost, total_solar_panel_cost, inverter_cost, discount_rate, initial_cash_flow, annual_degradation)
 print("Net Present Value (NPV):", npv)
 
-# import matplotlib.pyplot as plt
+import matplotlib.pyplot as plt
 
-# # Dictionary to store NPV values for each solar panel type
-# npv_values = {}
+# Dictionary to store NPV values for each solar panel type
+npv_values = {}
 
-# # Iterate through each solar panel type and calculate NPV
-# for panel_type, solar_panel in solar_panel_types.items():
-#     total_solar_panel_cost = solar_panel.total_solar_panel_cost
-#     solar_panel_lifetime = solar_panel.solar_panel_lifetime
-#     total_panel_surface = solar_panel.total_panel_surface
-#     annual_degradation =  solar_panel.annual_degradation
-#     panel_efficiency = solar_panel.panel_efficiency
-#     temperature_coefficient = solar_panel.temperature_coefficient
-#     panel_surface = solar_panel.panel_surface
-#     solar_panel_count = solar_panel.solar_panel_count
+# Iterate through each solar panel type and calculate NPV
+for panel_type, solar_panel in solar_panel_types.items():
+    total_solar_panel_cost = solar_panel.total_solar_panel_cost
+    solar_panel_lifetime = solar_panel.solar_panel_lifetime
+    total_panel_surface = solar_panel.total_panel_surface
+    annual_degradation =  solar_panel.annual_degradation
+    panel_efficiency = solar_panel.panel_efficiency
+    temperature_coefficient = solar_panel.temperature_coefficient
+    panel_surface = solar_panel.panel_surface
+    solar_panel_count = solar_panel.solar_panel_count
 
-#     # Calculate initial cash flow for the current solar panel type
-#     cost_grid_with_PV = electricity_cost(solar_panel_count = solar_panel_count, panel_surface = panel_surface, annual_degradation = annual_degradation, panel_efficiency = panel_efficiency, temperature_coefficient = temperature_coefficient, inverter_size_AC = inverter_size_AC, inverter_maxsolar_DC = inverter_maxsolar_DC, inverter_maxbattery_DC = inverter_maxbattery_DC, tilt_angle = tilt_angle, Orientation = Orientation, battery_capacity = battery_capacity)
-#     initial_cash_flow = Cost_with_no_PV - cost_grid_with_PV 
+    # Calculate initial cash flow for the current solar panel type
+    cost_grid_with_PV = electricity_cost(solar_panel_count = solar_panel_count, panel_surface = panel_surface, annual_degradation = annual_degradation, panel_efficiency = panel_efficiency, temperature_coefficient = temperature_coefficient, inverter_size_AC = inverter_size_AC, inverter_maxsolar_DC = inverter_maxsolar_DC, inverter_maxbattery_DC = inverter_maxbattery_DC, tilt_angle = tilt_angle, Orientation = Orientation, battery_capacity = battery_capacity, battery_count = battery_count)
+    initial_cash_flow = Cost_with_no_PV - cost_grid_with_PV 
 
-#     # Calculate NPV for the current solar panel type
-#     npv = calculate_npv(battery_cost, total_solar_panel_cost, inverter_cost, discount_rate, initial_cash_flow, annual_degradation)
+    # Calculate NPV for the current solar panel type
+    npv = calculate_npv(battery_cost, total_solar_panel_cost, inverter_cost, discount_rate, initial_cash_flow, annual_degradation)
 
-#     # Store NPV value
-#     npv_values[panel_type] = npv
+    # Store NPV value
+    npv_values[panel_type] = npv
 
-# Plotting
-# plt.figure(figsize=(10, 6))
-# plt.bar(npv_values.keys(), npv_values.values(), color='skyblue')
-# plt.xlabel('Solar Panel Type')
-# plt.ylabel('Net Present Value (NPV)')
-# plt.title('Comparison of NPV for Different Solar Panel Types')
-# plt.xticks(rotation=45, ha='right')
-# plt.tight_layout()
-# plt.show()
+Plotting
+plt.figure(figsize=(10, 6))
+plt.bar(npv_values.keys(), npv_values.values(), color='skyblue')
+plt.xlabel('Solar Panel Type')
+plt.ylabel('Net Present Value (NPV)')
+plt.title('Comparison of NPV for Different Solar Panel Types')
+plt.xticks(rotation=45, ha='right')
+plt.tight_layout()
+plt.show()
 
 
 
@@ -469,7 +478,7 @@ print("Net Present Value (NPV):", npv)
 #     inverter_efficiency = chosen_inverter.inverter_efficiency
 #     inverter_maxbattery_DC = chosen_inverter.inverter_maxbattery_DC
 #     # Calculate initial cash flow
-#     cost_grid_with_PV = electricity_cost(solar_panel_count = chosen_panel.solar_panel_count, panel_surface = panel_surface, annual_degradation = annual_degradation, panel_efficiency = panel_efficiency, temperature_coefficient = temperature_coefficient, inverter_size_AC = inverter_size_AC, inverter_maxsolar_DC = inverter_maxsolar_DC, inverter_maxbattery_DC = inverter_maxbattery_DC, tilt_angle = tilt_angle, Orientation = Orientation, battery_capacity = battery_capacity, tariff = tariff)
+#     cost_grid_with_PV = electricity_cost(solar_panel_count = chosen_panel.solar_panel_count, panel_surface = panel_surface, annual_degradation = annual_degradation, panel_efficiency = panel_efficiency, temperature_coefficient = temperature_coefficient, inverter_size_AC = inverter_size_AC, inverter_maxsolar_DC = inverter_maxsolar_DC, inverter_maxbattery_DC = inverter_maxbattery_DC, tilt_angle = tilt_angle, Orientation = Orientation, battery_capacity = battery_capacity, tariff = tariff, , battery_count = battery_count)
 #     initial_cash_flow = Cost_with_no_PV - cost_grid_with_PV  
     
 #     # Calculate NPV
