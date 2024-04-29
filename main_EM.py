@@ -28,6 +28,7 @@ max_charge= 8 #kWh
 max_AC_power_output= 5
 max_DC_batterypower_output= 5
 irradiance_pd_S_30.power_flow(max_charge, max_AC_power_output, max_DC_batterypower_output)
+irradiance_pd_S_30.nettoProduction()
 
 ### Calculations for the other scenarios
 calculate_others=False
@@ -109,7 +110,7 @@ if plot_hourly_direct_irradiance:
 # Plot comparison of direct, global and diffuse irradiance for S 30 scenario, winter 
 ## Mean irradiance during summer and winter (GHI, DHI, DNI)
 
-plot_comparison_irradiance=True
+plot_comparison_irradiance=False
 if plot_comparison_irradiance:
     irradiance_pd_S_30.filter_data_by_date_interval('2018-06-21 0:00','2018-09-20 23:00',interval_str='1min') #Summer
     #irradiance_pd_S_30.filter_data_by_date_interval('2018-12-21 0:00','2019-03-20 23:00',interval_str='1min') #Winter
@@ -125,12 +126,12 @@ if plot_comparison_irradiance:
 # Plot minutely nettoproduction per day for the S 30 scenario
 plot_minutely_nettoproduction=True
 if plot_minutely_nettoproduction:
-    irradiance_pd_S_30.filter_data_by_date_interval('2018-06-01 1:00','2018-09-30 23:00',interval_str='1min')
-    irradiance_pd_S_30.nettoProduction()
-    #print(irradiance_pd_S_30.get_columns(['NettoProduction']))
+    irradiance_pd_S_30.filter_data_by_date_interval('2018-01-01 1:00','2018-12-30 23:00',interval_str='1min')
     minutely_nettoproduction_pd_S_30=irradiance_pd_S_30.get_average_per_minute_day('NettoProduction')
+    hourly_battery_charge_pd_S_30 = irradiance_pd_S_30.get_average_per_minute_day('BatteryCharge')
     minutely_series=[minutely_nettoproduction_pd_S_30]
-    plot_series(minutely_series)
+    plot_series(series=minutely_series,title='Minutely average netto production for S 30 scenario',secondary_series=[hourly_battery_charge_pd_S_30],xlabel='minutes',ylabel='Power [kWh]',ylabel2='Battery charge (kWh)')
+
 
 # Plot hourly flows (pv-load) 
 plot_hourly_flows=False
@@ -142,7 +143,7 @@ if plot_hourly_flows:
     hourly_battery_charge_pd_S_30=irradiance_pd_S_30.get_average_per_hour('BatteryCharge')
     hourly_grid_flow_pd_S_30=irradiance_pd_S_30.get_average_per_hour('GridFlow')
     hourly_battery_flow_pd_S_30=irradiance_pd_S_30.get_average_per_hour('BatteryFlow')
-    hourly_series=[hourly_pv_generated_power_pd_S_30,hourly_load_pd_S_30,hourly_netto_production_pd_S_30,hourly_grid_flow_pd_S_30,hourly_battery_flow_pd_S_30]
+    hourly_series=[hourly_netto_production_pd_S_30, hourly_pv_generated_power_pd_S_30, hourly_load_pd_S_30, hourly_grid_flow_pd_S_30, hourly_battery_flow_pd_S_30]
     plot_series(series=hourly_series,title='Hourly average power flows for S 30 scenario, summer',secondary_series=[hourly_battery_charge_pd_S_30],xlabel='hours',ylabel='Power [kWh]',ylabel2='Battery charge (kWh)')
 
 # Plot average hourly load consumption for winter and summer

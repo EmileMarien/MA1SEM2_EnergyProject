@@ -92,7 +92,8 @@ def electricity_cost(solar_panel_count: int=10, panel_surface:int= 2,annual_degr
     ## Electricity cost
     fixed_component_dual=111.3 # [€/year]
     fixed_component_dynamic=100.7 # [€/year]
-    energy_cost=financials.get_grid_cost_total(calculationtype=tariff)+fixed_component_dual if tariff=='DualTariff' else financials.get_grid_cost_total(calculationtype=tariff)+fixed_component_dynamic
+    energy_cost=financials.get_grid_cost_total(calculationtype=tariff)
+    fixed_component = fixed_component_dual if tariff=='DualTariff' else fixed_component_dynamic
     ## Network rates
     #data_management_cost
 
@@ -108,8 +109,9 @@ def electricity_cost(solar_panel_count: int=10, panel_surface:int= 2,annual_degr
     capacity_cost = max(-(irradiance.get_monthly_peaks('GridFlow').sum() / 12), 2.5) * capacity_rate
 
     # Total cost
-    cost=energy_cost+data_management_cost+purchase_cost+capacity_cost+levy_cost
+    cost=energy_cost+data_management_cost+purchase_cost+capacity_cost+levy_cost+fixed_component
     print("Components of the cost:")
+    print("Fixed component:", fixed_component)
     print("Energy cost:", energy_cost)
     print("Data management cost:", data_management_cost)
     print("Purchase cost (injection):", purchase_cost_injection)
