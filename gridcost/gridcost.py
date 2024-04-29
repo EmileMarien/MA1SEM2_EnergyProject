@@ -37,6 +37,9 @@ class GridCost():
         # Assign the DataFrame to self.pd
         self.pd=merged_df
 
+        #Scale belpex column
+        self.pd['BelpexFilter'] = self.pd['BelpexFilter']*1.1261 # scale to 2024 values
+
         #Set a datetime index
         self.pd.set_index('DateTime', inplace=True)
         self.pd.index = pd.to_datetime(self.pd.index)
