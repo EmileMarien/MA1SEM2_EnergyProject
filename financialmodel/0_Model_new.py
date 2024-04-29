@@ -4,11 +4,11 @@ from components import SolarPanel, Battery, Inverter, solar_panel_types, battery
 def calculate_npv(battery_cost, total_solar_panel_cost, inverter_cost, discount_rate, initial_cash_flow, annual_degradation):
     # Calculate the least common multiple (LCM) of battery and solar panel lifetimes
 
-    installation_cost = total_solar_panel_cost/1.2
-    BOS_cost = total_solar_panel_cost/2
-    capex = BOS_cost + installation_cost + total_solar_panel_cost + inverter_cost  + battery_cost  # multiplication for installation_cost + maintenance_cost
+    installation_cost = total_solar_panel_cost*0.3/0.35
+    BOS_cost = total_solar_panel_cost/0.35*0.125
+    capex = (BOS_cost + installation_cost + total_solar_panel_cost)*(1+0.21)  + inverter_cost  + battery_cost  # multiplication for installation_cost + maintenance_cost
     
-    investment_cost = capex + \
+    investment_cost = capex+ \
                       (inverter_cost + battery_cost) / pow(1 + discount_rate, 10) + \
                       (inverter_cost + battery_cost) / pow(1 + discount_rate, 20) - \
                       (inverter_cost + battery_cost) / pow(1 + discount_rate, 25) 
@@ -62,7 +62,7 @@ solar_panel_types = {
         panel_surface=1.998,              
         annual_degradation=0.004,         
         panel_efficiency= 0.2253,            
-        temperature_coefficient=-0.0030  
+        temperature_coefficient=-0.0026  
     ),
     "Longi": SolarPanelType(
         solar_panel_cost=121.2,           
@@ -145,43 +145,43 @@ battery_types = {
         battery_inverter = 1,
         battery_cost=6497*1.25,         #in Eur, times for installation cost       
         battery_lifetime=10,         #in years 
-        battery_capacity=9600,#in Wh 
+        battery_capacity=9.6,#in Wh 
         battery_Roundtrip_Efficiency=97.5, #in procent 
-        battery_PeakPower=7000,  #in W
+        battery_PeakPower=7,  #in W
         battery_Degradation=3,   #in procent per year 
     ),
     "LG RESU Prime L": BatteryType(
         battery_inverter = 1,
         battery_cost=8987*1.25,                
         battery_lifetime=10,         
-        battery_capacity=16000,
+        battery_capacity=16,
         battery_Roundtrip_Efficiency=97.5,  
-        battery_PeakPower=11000,  
+        battery_PeakPower=11,  
         battery_Degradation=3,     
     ),
     "tesla Powerwall 3": BatteryType(
         battery_inverter = 0,
         battery_cost=6945*1.25,                
         battery_lifetime=10,         
-        battery_capacity=13500,
+        battery_capacity=13.5,
         battery_Roundtrip_Efficiency=97.5,  
-        battery_PeakPower=11500,  
+        battery_PeakPower=11.5,  
         battery_Degradation=3,     
     ),
     "Generac PWRcell 3": BatteryType(
         battery_inverter = 1,
         battery_cost=9417*1.25*0.94,                
         battery_lifetime=10,         
-        battery_capacity=9000,
+        battery_capacity=9,
         battery_Roundtrip_Efficiency=96.5,  
-        battery_PeakPower=6000,  
+        battery_PeakPower=6,  
         battery_Degradation=3,     
     ),
     "Generac PWRcell 4": BatteryType(
         battery_inverter = 1,
         battery_cost=11406*1.25*0.94,                
         battery_lifetime=10,         
-        battery_capacity=12000,
+        battery_capacity=12,
         battery_Roundtrip_Efficiency=96.5,  
         battery_PeakPower=6000,  
         battery_Degradation=3,     
@@ -190,18 +190,18 @@ battery_types = {
         battery_inverter = 1,
         battery_cost=13395*1.25*0.94,                
         battery_lifetime=10,         
-        battery_capacity=15000,
+        battery_capacity=15,
         battery_Roundtrip_Efficiency=96.5,  
-        battery_PeakPower=6000,  
+        battery_PeakPower=6,  
         battery_Degradation=3,     
     ),
     "Generac PWRcell 6": BatteryType(
         battery_inverter = 1,
         battery_cost=15384*1.25*0.94,                
         battery_lifetime=10,         
-        battery_capacity=18000,
+        battery_capacity=18,
         battery_Roundtrip_Efficiency=96.5,  
-        battery_PeakPower=6000,  
+        battery_PeakPower=6,  
         battery_Degradation=3,     
     ),
     # Define more types as needed
@@ -323,6 +323,24 @@ inverter_maxbattery_DC = chosen_inverter.inverter_maxbattery_DC
 print(f"Total cost for {chosen_inverter_type}: {chosen_inverter.inverter_cost}")
 
 
+
+
+
+print("Total solar panel cost:", total_solar_panel_cost)
+print("Solar panel lifetime:", solar_panel_lifetime)
+print("Total panel surface:", total_panel_surface)
+print("Annual degradation:", annual_degradation)
+print("Panel efficiency:", panel_efficiency)
+print("Temperature coefficient:", temperature_coefficient)
+print("Panel surface:", panel_surface)
+print("Solar panel count:", solar_panel_count)
+
+
+
+
+
+
+
 # Set-up
 tilt_angle = 30 #tilt_angle: angle of the solar panel, 
 Orientation = 'S'#Orientation: richting naar waar de zonnepanelen staan N, E, S, W 
@@ -332,7 +350,7 @@ Orientation = 'S'#Orientation: richting naar waar de zonnepanelen staan N, E, S,
 
 #Economics
 discount_rate = 0.0658                                      #Discount rate
-tariff = 'Dualtariff'
+tariff = 'DualTariff'
 
 #Calculations of the cashflows 
 
@@ -379,7 +397,7 @@ print("Net Present Value (NPV):", npv)
 #     # Store NPV value
 #     npv_values[panel_type] = npv
 
-# # Plotting
+# Plotting
 # plt.figure(figsize=(10, 6))
 # plt.bar(npv_values.keys(), npv_values.values(), color='skyblue')
 # plt.xlabel('Solar Panel Type')
@@ -419,7 +437,7 @@ battery_lifetime = 0
 battery_capacity = 0
 
 # Set up lists to store results
-solar_panel_counts = list(range(60, 82))  # From 2 to 22 solar panels
+solar_panel_counts = list(range(6, 22))  # From 2 to 22 solar panels
 npv_values = []
 
 # Iterate over different numbers of solar panels
