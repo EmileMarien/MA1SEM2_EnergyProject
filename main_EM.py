@@ -115,11 +115,12 @@ if plot_comparison_irradiance:
     irradiance_pd_S_30.filter_data_by_date_interval('2018-06-21 0:00','2018-09-20 23:00',interval_str='1min') #Summer
     #irradiance_pd_S_30.filter_data_by_date_interval('2018-12-21 0:00','2019-03-20 23:00',interval_str='1min') #Winter
     irradiance_pd_S_30.calculate_direct_irradiance(tilt_angle=30,orientation='S')
-    hourly_direct_irradiance_pd_S_30=irradiance_pd_S_30.get_average_per_minute_day('DNI')
+    hourly_d_irradiance_pd_S_30=irradiance_pd_S_30.get_average_per_minute_day('DNI')
     hourly_global_irradiance_pd_S_30=irradiance_pd_S_30.get_average_per_minute_day('GlobRad')
     hourly_diffuse_irradiance_pd_S_30=irradiance_pd_S_30.get_average_per_minute_day('DiffRad')
-    hourly_series=[hourly_direct_irradiance_pd_S_30,hourly_global_irradiance_pd_S_30,hourly_diffuse_irradiance_pd_S_30]
-    print(hourly_series)
+    hourly_direct_irradiance_pd_S_30=irradiance_pd_S_30.get_average_per_minute_day('DirectIrradiance')
+    hourly_series=[hourly_d_irradiance_pd_S_30,hourly_global_irradiance_pd_S_30,hourly_diffuse_irradiance_pd_S_30,
+                    hourly_direct_irradiance_pd_S_30]
     plot_series(hourly_series)
 
 # Plot minutely nettoproduction per day for the S 30 scenario
@@ -154,7 +155,7 @@ if plot_average_load_consumption:
     plot_series(hourly_series)
 
 # Plot hourly load consumption for each day of the weak on one graph
-plot_weekly_load_consumption=False
+plot_weekly_load_consumption=True
 if plot_weekly_load_consumption:
     #irradiance_pd_S_30.filter_data_by_date_interval('2018-06-01 1:00','2018-09-30 23:00',interval_str='1min')
     hourly_load_pd_S_30=irradiance_pd_S_30.get_columns('Load_kW')

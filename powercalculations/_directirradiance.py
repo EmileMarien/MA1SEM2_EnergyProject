@@ -37,7 +37,7 @@ def calculate_direct_irradiance(self, tilt_angle:int=0, orientation:str='S'):
         print(f"Calculating direct irradiance for row {counter}/{length}", end="\r")
         GHI = row['GlobRad']
         GDI = row['DiffRad']
-
+         
         # Solar angles calculation
 
         solar_zenith_angle = row['SolarZenithAngle'] #float(A['zenith'].iloc[0]) # [degrees] starting from the vertical
@@ -60,7 +60,7 @@ def calculate_direct_irradiance(self, tilt_angle:int=0, orientation:str='S'):
             DNI = 0
         if solar_zenith_angle > 89:
             DNI=max(GHI-GDI,0)
-            
+
         # Limit the direct irradiance to the GHI value if the sun is close to the horizon
         if solar_zenith_angle > 87:
             direct_irradiance=min([GHI,direct_irradiance])

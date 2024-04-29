@@ -115,10 +115,13 @@ def get_average_per_minute_day(self,column_name:str='Load_kW'):
         The index of the Series is the minute of the day (0-1439).
     """
 
-    # Resample the DataFrame by minute ('T') and calculate the mean
-    df_minutely_avg = self.pd[column_name].resample('min').mean()
 
-    return df_minutely_avg
+    # Group by hour and minute and calculate average value
+    avg_by_time = self.pd.groupby([self.pd.index.hour, self.pd.index.minute])[column_name].mean()        
+    avg_by_time.index = pd.to_datetime(avg_by_time.index.map(lambda x: f"2024-01-01 {x[0]:02d}:{x[1]:02d}"))
+    print(avg_by_time)
+
+    return avg_by_time
 
 def get_average_per_day(self,column_name:str='Load_kW'):
     """
