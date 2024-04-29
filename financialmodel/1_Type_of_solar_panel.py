@@ -92,7 +92,7 @@ solar_panel_types = {
         temperature_coefficient=-0.0027 
     ),
         "Poly": SolarPanelType(
-        solar_panel_cost=72.84,           
+        solar_panel_cost=60.48,           
         solar_panel_count=10,           
         solar_panel_lifetime=25,        
         panel_surface=1.62688,              
