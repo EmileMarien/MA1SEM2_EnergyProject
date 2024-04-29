@@ -106,6 +106,20 @@ def get_average_per_hour(self, column_name: str = 'Load_kW'):
 
     return df_hourly_avg
 
+def get_average_per_minute_day(self,column_name:str='Load_kW'):
+    """
+    Calculates the average load per minute for each day of the year based on the entire year in the DataFrame. in kW
+
+    Returns:
+        pandas.Series: A Series containing the average 'Load_kW' for each minute of the day.
+        The index of the Series is the minute of the day (0-1439).
+    """
+
+    # Resample the DataFrame by minute ('T') and calculate the mean
+    df_minutely_avg = self.pd[column_name].resample('min').mean()
+
+    return df_minutely_avg
+
 def get_average_per_day(self,column_name:str='Load_kW'):
     """
     Calculates the average load per day for each day of the year based on the entire year in the DataFrame. in kW
@@ -159,12 +173,23 @@ def get_total_injection_and_consumption(self):
     Returns:
         tuple: A tuple containing the total injection and consumption in kWh.
     """
-    # Calculate the total injection and consumption
-    total_injection = self.pd['GridFlow'][self.pd['GridFlow'] > 0].sum()
-    total_consumption = -self.pd['GridFlow'][self.pd['GridFlow'] < 0].sum()
-     #Integrate the power over time to get the energy in [kWh]
-    interval = pd.Timedelta(self.pd['GridFlow'].index.freq).total_seconds() / 3600 # Convert seconds to hours
-    total_injection_kWh=total_injection*interval        # [kWh]
-    total_consumption_kWh=total_consumption*interval    # [kWh]
+    # injection during peak hours
+    total_injection_peak = self.pd['GridFlow'][(self.pd['GridFlow'] > 0) & (self.pd.index.hour >= 8) & (self.pd.index.hour < 18) & (self.pd.index.weekday < 5)].sum()
 
-    return total_injection_kWh, total_consumption_kWh
+    # injection during offpeak hours
+    total_injection_offpeak = self.pd['GridFlow'][(self.pd['GridFlow'] > 0) & (((self.pd.index.hour < 8) | (self.pd.index.hour >= 18)) & (self.pd.index.weekday < 5) | (self.pd.index.weekday >= 5))].sum()
+
+    # consumption during peak hours
+    total_consumption_peak = -self.pd['GridFlow'][(self.pd['GridFlow'] < 0) & (self.pd.index.hour >= 8) & (self.pd.index.hour < 18) & (self.pd.index.weekday < 5)].sum()
+
+    # consumption during offpeak hours
+    total_consumption_offpeak = -self.pd['GridFlow'][(self.pd['GridFlow'] < 0) & (((self.pd.index.hour < 8) | (self.pd.index.hour >= 18)) & (self.pd.index.weekday < 5) | (self.pd.index.weekday >= 5))].sum()
+    
+    #Integrate the power over time to get the energy in [kWh]
+    interval = pd.Timedelta(self.pd['GridFlow'].index.freq).total_seconds() / 3600 # Convert seconds to hours
+    total_injection_peak_kWh = total_injection_peak * interval        # [kWh]
+    total_injection_offpeak_kWh = total_injection_offpeak * interval  # [kWh]
+    total_consumption_peak_kWh = total_consumption_peak * interval    # [kWh]
+    total_consumption_offpeak_kWh = total_consumption_offpeak * interval  # [kWh]
+
+    return total_injection_peak_kWh, total_injection_offpeak_kWh, total_consumption_peak_kWh, total_consumption_offpeak_kWh

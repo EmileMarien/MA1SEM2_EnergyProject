@@ -79,28 +79,55 @@ if calculate_others:
     irradiance_pd_EW_opt.power_flow(max_charge, max_AC_power_output, max_DC_batterypower_output)
     irradiance_pd_S_opt.power_flow(max_charge, max_AC_power_output, max_DC_batterypower_output)
 
+
+
 #### Plots underneath
 print('start plots')
 # Plot hourly direct irradiance for the different orientations and tilt angles
 plot_hourly_direct_irradiance=False
 if plot_hourly_direct_irradiance:
-    hourly_irradiance_pd_EW_30=irradiance_pd_EW_30.get_average_per_hour('DirectIrradiance')
-    hourly_irradiance_pd_S_30=irradiance_pd_S_30.get_average_per_hour('DirectIrradiance')
-    hourly_irradiance_pd_EW_opt=irradiance_pd_EW_opt.get_average_per_hour('DirectIrradiance')
-    hourly_irradiance_pd_S_opt=irradiance_pd_S_opt.get_average_per_hour('DirectIrradiance')
-    hourly_series=[hourly_irradiance_pd_EW_30,hourly_irradiance_pd_S_30,hourly_irradiance_pd_EW_opt,hourly_irradiance_pd_S_opt]
-    plot_series(hourly_series)
+    irradiance_pd_EW_30=irradiance_pd_EW_30.calculate_direct_irradiance(tilt_angle=30,orientation='EW')
+    hourly_irradiance_pd_EW_30=irradiance_pd_EW_30.get_average_per_hour('DirectIrradiance') #30 degrees tilt angle
+
+    irradiance_pd_S_30=irradiance_pd_S_30.calculate_direct_irradiance(tilt_angle=30,orientation='S')
+    hourly_irradiance_pd_S_30=irradiance_pd_S_30.get_average_per_hour('DirectIrradiance') #30 degrees tilt angle
+
+    irradiance_pd_E_30=irradiance_pd_EW_30.calculate_direct_irradiance(tilt_angle=30,orientation='E')
+    hourly_irradiance_pd_E_30=irradiance_pd_E_30.get_average_per_hour('DirectIrradiance') #30 degrees tilt angle
+
+    irradiance_pd_W_30=irradiance_pd_EW_30.calculate_direct_irradiance(tilt_angle=30,orientation='EW')
+    hourly_irradiance_pd_W_30=irradiance_pd_W_30.get_average_per_hour('DirectIrradiance') #30 degrees tilt angle
+
+    #hourly_irradiance_pd_EW_opt=irradiance_pd_EW_opt.get_average_per_hour('DirectIrradiance') #optimal tilt angle
+    #hourly_irradiance_pd_S_opt=irradiance_pd_S_opt.get_average_per_hour('DirectIrradiance') #optimal tilt angle
+    hourly_series_30=[hourly_irradiance_pd_EW_30,hourly_irradiance_pd_S_30]
+    #hourly_series_opt=[hourly_irradiance_pd_EW_opt,hourly_irradiance_pd_S_opt]
+    plot_series(hourly_series_30)
 
 # Print average net load consumption for the different orientations and tilt angles
 
-# Plot comparison of direct, global and diffuse irradiance for S 30 scenario
+# Plot comparison of direct, global and diffuse irradiance for S 30 scenario, winter 
+## Mean irradiance during summer and winter (GHI, DHI, DNI)
+
 plot_comparison_irradiance=True
 if plot_comparison_irradiance:
-    hourly_direct_irradiance_pd_S_30=irradiance_pd_S_30.get_average_per_hour('DirectIrradiance')
-    hourly_global_irradiance_pd_S_30=irradiance_pd_S_30.get_average_per_hour('GlobRad')
-    hourly_diffuse_irradiance_pd_S_30=irradiance_pd_S_30.get_average_per_hour('DiffRad')
+    irradiance_pd_S_30.filter_data_by_date_interval('2018-06-21 0:00','2018-09-20 23:00',interval_str='1min') #Summer
+    #irradiance_pd_S_30.filter_data_by_date_interval('2018-12-21 0:00','2019-03-20 23:00',interval_str='1min') #Winter
+    irradiance_pd_S_30.calculate_direct_irradiance(tilt_angle=30,orientation='S')
+    hourly_direct_irradiance_pd_S_30=irradiance_pd_S_30.get_average_per_minute_day('DNI')
+    hourly_global_irradiance_pd_S_30=irradiance_pd_S_30.get_average_per_minute_day('GlobRad')
+    hourly_diffuse_irradiance_pd_S_30=irradiance_pd_S_30.get_average_per_minute_day('DiffRad')
     hourly_series=[hourly_direct_irradiance_pd_S_30,hourly_global_irradiance_pd_S_30,hourly_diffuse_irradiance_pd_S_30]
+    print(hourly_series)
     plot_series(hourly_series)
+
+# Plot minutely nettoproduction per day for the S 30 scenario
+plot_minutely_nettoproduction=True
+if plot_minutely_nettoproduction:
+    irradiance_pd_S_30.filter_data_by_date_interval('2018-06-01 1:00','2018-09-30 23:00',interval_str='1min')
+    minutely_nettoproduction_pd_S_30=irradiance_pd_S_30.get_average_per_minute_day('NettoProduction')
+    minutely_series=[minutely_nettoproduction_pd_S_30]
+    plot_series(minutely_series)
 
 # Plot hourly flows (pv-load) 
 plot_hourly_flows=True
@@ -123,6 +150,17 @@ if plot_average_load_consumption:
     hourly_series=[hourly_load_summer,hourly_load_winter]
     plot_series(hourly_series)
 
+# Plot hourly load consumption for each day of the weak on one graph
+plot_weekly_load_consumption=False
+if plot_weekly_load_consumption:
+    #irradiance_pd_S_30.filter_data_by_date_interval('2018-06-01 1:00','2018-09-30 23:00',interval_str='1min')
+    hourly_load_pd_S_30=irradiance_pd_S_30.get_columns('Load_kW')
+    hourly_load_pd_S_30['day_of_week'] = hourly_load_pd_S_30['time'].dt.day_name()
+    hourly_series=hourly_load_pd_S_30.groupby('day_of_week').mean()
+
+    #hourly_load_pd_S_30=hourly_load_pd_S_30.reset_index()
+    hourly_load_pd_S_30=hourly_load_pd_S_30.set_index('time')
+    plot_series(hourly_series)
 
 # Plot average 15min load consumption
 
