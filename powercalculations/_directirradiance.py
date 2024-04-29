@@ -52,7 +52,7 @@ def calculate_direct_irradiance(self, tilt_angle:int=0, orientation:str='S'):
         ) # [radians]
 
         # Calculate the Direct Normal Irradiance (DNI)
-        DNI = (GHI - GDI) / math.cos(math.radians(solar_zenith_angle)) # if the sun is above the horizon, calculate DNI
+        DNI = (GHI - GDI) / math.cos(math.radians(solar_zenith_angle)/1.2) # if the sun is above the horizon, calculate DNI
 
         # Calculate the Direct Irradiance which is the sum of the DNI and the GDI but limited to positive values
         direct_irradiance = max([DNI*math.cos(AOI),0]) + GDI
@@ -99,14 +99,15 @@ def calculate_direct_irradiance(self, tilt_angle:int=0, orientation:str='S'):
     length=self.pd.shape[0]
     global counter
     counter=0
-    # Apply the calculation function to each row with vectorized operations
-    self.pd[['DirectIrradiance','DNI']] = self.pd.apply(
-        lambda row: pd.Series({
-            'DirectIrradiance': calculate_irradiance_row(row=row, tilt_angle=tilt_angle,surface_azimuth_angle=surface_azimuth_angle)[0],
-            'DNI': calculate_irradiance_row(row=row, tilt_angle=tilt_angle,surface_azimuth_angle=surface_azimuth_angle)[1]
-        }),
+    # Calculate irradiance for each row
+    irradiance_values = self.pd.apply(
+        lambda row: calculate_irradiance_row(row=row, tilt_angle=tilt_angle, surface_azimuth_angle=surface_azimuth_angle),
         axis=1
     )
+
+    # Assign irradiance values to new columns
+    self.pd[['DirectIrradiance', 'DNI']] = irradiance_values.apply(lambda x: pd.Series({'DirectIrradiance': x[0], 'DNI': x[1]}))
+
 
     return None
 

@@ -78,14 +78,17 @@ def plot_series(series:List[pd.Series]=[pd.Series], title:str='Series', xlabel:s
     # Create the plot
     fig, ax = plt.subplots()
     lns=[]
+    line_styles=['-', '--', '-.', 'dashdot', ':', 'dotted', '', ' ', 'solid', 'dashed']
+    line_colors=['b', 'r', 'c', 'm', 'y', 'k', 'g','w']
     # Plot the primary Series
-    for serie in series:
-        lns+=ax.plot(serie.index, serie,label=serie.name)
+    for i in range(len(series)):
+        serie=series[i]
+        lns+=ax.plot(serie.index, serie,label=serie.name,linestyle=line_styles[i],color=line_colors[i])
 
     # Plot the secondary Series on a secondary axis
     for secondary_serie in secondary_series:
         ax2 = ax.twinx()
-        lns+=ax2.plot(secondary_serie.index, secondary_serie, linestyle='--',label=secondary_serie.name)
+        lns+=ax2.plot(secondary_serie.index, secondary_serie,label=secondary_serie.name)
 
     length=series[0].shape[0]
     if display_time=='hour':
@@ -102,8 +105,8 @@ def plot_series(series:List[pd.Series]=[pd.Series], title:str='Series', xlabel:s
     ax.legend(lns, labs, loc=0)
     ax.set_title(title)
     #plt.style.use(['science','ieee'])
-    if selected_format!=None:
-        ax.xaxis.set_major_formatter(selected_format)
+    #if selected_format!=None:
+    #    ax.xaxis.set_major_formatter(selected_format)
 
     # Show the plot
     plt.show()

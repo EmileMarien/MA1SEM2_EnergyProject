@@ -125,7 +125,7 @@ if plot_comparison_irradiance:
     plot_series(hourly_series)
 
 # Plot minutely nettoproduction per day for the S 30 scenario
-plot_minutely_nettoproduction=True
+plot_minutely_nettoproduction=False
 if plot_minutely_nettoproduction:
     irradiance_pd_S_30.filter_data_by_date_interval('2018-01-01 1:00','2018-12-30 23:00',interval_str='1min')
     minutely_nettoproduction_pd_S_30=irradiance_pd_S_30.get_average_per_minute_day('NettoProduction')
@@ -156,17 +156,41 @@ if plot_average_load_consumption:
     plot_series(hourly_series)
 
 # Plot hourly load consumption for each day of the weak on one graph
-plot_weekly_load_consumption=True
+plot_weekly_load_consumption=False
 if plot_weekly_load_consumption:
+
     #irradiance_pd_S_30.filter_data_by_date_interval('2018-06-01 1:00','2018-09-30 23:00',interval_str='1min')
     print(irradiance_pd_S_30.get_dataset())
-    hourly_load_pd_S_30=irradiance_pd_S_30.get_columns('Load_kW')
-    hourly_load_pd_S_30['day_of_week'] = hourly_load_pd_S_30['time'].dt.day_name()
-    hourly_series=hourly_load_pd_S_30.groupby('day_of_week').mean()
+    hourly_load_pd_S_30=irradiance_pd_S_30.get_columns(['Load_kW'])
 
-    #hourly_load_pd_S_30=hourly_load_pd_S_30.reset_index()
-    hourly_load_pd_S_30=hourly_load_pd_S_30.set_index('time')
-    plot_series(hourly_series)
+    # Extract hour and minute from DateTimeIndex
+    hourly_load_pd_S_30['hour'] = hourly_load_pd_S_30.index.hour
+    hourly_load_pd_S_30['minute'] = hourly_load_pd_S_30.index.minute
+
+    # Create an empty list to store the Series
+    daily_load_series_list = []
+    # List of day names
+    day_names = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
+
+    # Iterate over the days of the week
+    for day in range(5):  # 0 represents Monday, 1 represents Tuesday, ..., 6 represents Sunday
+        # Filter rows where the DateTimeIndex corresponds to the current day
+        day_rows = hourly_load_pd_S_30[hourly_load_pd_S_30.index.dayofweek == day]
+        
+        # Group by hour and minute and calculate average value for the current day
+        average_load_by_hour_minute = day_rows.groupby(['hour', 'minute'])['Load_kW'].mean()
+        average_load_by_hour_minute.index = [f"{x[0]:02d}:{x[1]:02d}" for x in average_load_by_hour_minute.index]
+        average_load_by_hour_minute.name=day_names[day]
+        print(average_load_by_hour_minute)
+        # Append the Series to the list
+        daily_load_series_list.append(average_load_by_hour_minute)
+    plot_series(daily_load_series_list,display_time='hour',title='Hourly load consumption for each weekday',xlabel='Hour',ylabel='Power [kW]')
+
+# Return key figures
+print_key_figures=False
+if print_key_figures:
+    print("the total power consumption is:",irradiance_pd_S_30)
+
 
 # Plot average 15min load consumption
 
