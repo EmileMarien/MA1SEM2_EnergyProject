@@ -9,7 +9,7 @@ from visualisations.visualisations import plot_dataframe
 import powercalculations.powercalculations as pc
 import gridcost.gridcost as gc
 
-def electricity_cost(solar_panel_count: int=1, panel_surface:int= 1.6,annual_degradation: float=0.004, panel_efficiency: int= 0.2253, temperature_coefficient: float=-0.0026, inverter_size_AC: int = 5, inverter_maxsolar_DC: int = 8, inverter_maxbattery_DC: int=5,tilt_angle:int=-1, Orientation:str="S", battery_capacity: float= 8, battery_count: int=1,tariff: str='DualTariff'):
+def electricity_cost(solar_panel_count: int=1, panel_surface:int= 1.6,annual_degradation: float=0.004, panel_efficiency: int= 0.2253, temperature_coefficient: float=-0.0026, inverter_size_AC: int = 5, inverter_maxsolar_DC: int = 8, inverter_maxbattery_DC: int=5,tilt_angle:int=-1, Orientation:str="S", battery_capacity: float= 8, battery_count: int=1,tariff: str='DualTariff',add_EV:bool=True):
     """
     Calculate the electricity cost for a given solar panel configuration and tariff.
 
@@ -67,8 +67,11 @@ def electricity_cost(solar_panel_count: int=1, panel_surface:int= 1.6,annual_deg
         file.close()
         
     print("2.1/4: Direct irradiance calculated")
+    if add_EV:
+        irradiance.add_EV_load() #filepath="data/EV_load.xlsx"
+
     irradiance.PV_generated_power(panel_count=solar_panel_count, cell_area=panel_surface, efficiency_max=panel_efficiency*(1-annual_degradation),Temp_coeff=temperature_coefficient)
-    print("2.2/4: PV generated power calculated")
+    print("2.2/4: PV generated power & EV load calculated")
     irradiance.power_flow(max_charge=battery_capacity*battery_count, max_AC_power_output = inverter_size_AC, max_PV_input = inverter_maxsolar_DC, max_DC_batterypower = inverter_maxbattery_DC)
     print("2.3/4: Powerflows calculated")
     print("3/4: start cost calculations")
@@ -120,7 +123,7 @@ def electricity_cost(solar_panel_count: int=1, panel_surface:int= 1.6,annual_deg
 
     return cost
 
-print(electricity_cost(Orientation='S',tilt_angle=30, tariff='DynamicTariff',solar_panel_count=10))
+print(electricity_cost(Orientation='S',tilt_angle=30, tariff='DynamicTariff',solar_panel_count=14))
 #print(electricity_cost(Orientation='S',tilt_angle=30, tariff='DynamicTariff',solar_panel_count=0))
 #print(electricity_cost(Orientation='S',tilt_angle=30, tariff='DualTariff',solar_panel_count=10))
 #print(electricity_cost(Orientation='S',tilt_angle=30, tariff='DualTariff',solar_panel_count=30))

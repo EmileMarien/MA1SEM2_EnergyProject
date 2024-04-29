@@ -94,3 +94,5 @@ class PowerCalculations():
     from ._getters import get_average_per_minute_day
 
     from ._export import export_dataframe_to_excel
+
+    from ._EVload import add_EV_load

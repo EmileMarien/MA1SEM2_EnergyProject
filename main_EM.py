@@ -122,7 +122,7 @@ if plot_comparison_irradiance:
     plot_series(hourly_series)
 
 # Plot minutely nettoproduction per day for the S 30 scenario
-plot_minutely_nettoproduction=False
+plot_minutely_nettoproduction=True
 if plot_minutely_nettoproduction:
     irradiance_pd_S_30.filter_data_by_date_interval('2018-06-01 1:00','2018-09-30 23:00',interval_str='1min')
     minutely_nettoproduction_pd_S_30=irradiance_pd_S_30.get_average_per_minute_day('NettoProduction')
