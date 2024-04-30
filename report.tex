@@ -5,16 +5,88 @@ The total energy bill for a year is made up of the energy cost, network rates an
 
 \subsection{dual day-night tariff}
 \label{sec:dual-day-night}
-The dual day-night tariff is a tariff that is based on the time of the day and day of the week and consists of two parts, being the day- and night tariff. Throughout the working week and from 7:00 to 22:00, the day tariff, with a price of 0.25 \euro/kWh in our case is active. Outside those hours and through the weekend, the night tariff, with a price of 0.15 \euro/kWh in our case is valid. This was historically introduced to stimulate the use of electricity during the night and weekends, when the demand is lower. With the introduction of renewable energy sources, this tariff is controversial, as the production of energy became higher during the day and lower during the night, going into the goal of the tariff.
+The dual day-night tariff is a tariff that is based on the time of the day and day of the week and consists of two parts, being the day- and night tariff. Throughout the working week and from 7:00 to 22:00, the day tariff, with a price of 0.171 \euro/kWh in our case is active. Outside those hours and through the weekend, the night tariff, with a price of 0.153 \euro/kWh in our case is valid. This was historically introduced to stimulate the use of electricity during the night and weekends, when the demand is lower. With the introduction of renewable energy sources, this tariff is controversial, as the production of energy became higher during the day and lower during the night, going into the goal of the tariff.
 \\ \\
 The energy cost is calculated by multiplying the energy consumption from the grid with the corresponding tariff. This consumption value is the net positive power flow from the grid, meaning that the energy produced by the PV panels and coming from the battery is subtracted from the total consumption.
 \\ \\
-Next to the variable tariff, a tariff undependent of the night or day is added. 
+Next to the variable tariff, a tariff undependent of the night or day is added. this is related to the cost of the green energy and CHP used to produce the electricity and has a rate of 0.0156 \euro/kWh.
+\\ \\
+In case of an additional PV installation, the excess energy produced by the PV panels that is not consumed by the load or battery, is sold back to the grid at a fixed price of 0.03 \euro/kWh. This is subtracted from the total energy bill.
+
+\subsection{Capacity Tariff}
+\label{sec:capacity-tariff}
+The capacity tariff is part of the network costs and a fixed cost that is calculated based on the maximum power that is drawn from the grid at any given time. This to encourage the consumer to have a more stable power consumption instead of peaks for which a higher system infrastructure capacity is needed.
+\\ \\
+It is calculated by taking the maximum power drawn from the grid in a 15 minute interval for each month, averaging these and multiplying with the capacity tariff, set at 0.5 \euro/kW. Table \ref{tab:capacity-tariff} shows the peak power drawn from the grid for each month and the corresponding final total capacity tariff cost.
+
+\begin{table}[H]
+\centering
+\begin{tabular}{|c|c|c|}
+\hline
+Month & Peak Power [kW] & Capacity Tariff [€] \\ \hline
+January & 0.5 & 0.25 \\ \hline
+February & 0.5 & 0.25 \\ \hline
+March & 0.5 & 0.25 \\ \hline
+April & 0.5 & 0.25 \\ \hline
+May & 0.5 & 0.25 \\ \hline
+June & 0.5 & 0.25 \\ \hline
+July & 0.5 & 0.25 \\ \hline
+August & 0.5 & 0.25 \\ \hline
+September & 0.5 & 0.25 \\ \hline
+October & 0.5 & 0.25 \\ \hline
+November & 0.5 & 0.25 \\ \hline
+December & 0.5 & 0.25 \\ \hline
+\end{tabular}
+\caption{Capacity Tariff}
+\label{tab:capacity-tariff}
+\end{table}
+
+\subsection{Consumption costs}
+\label{sec:consumption-costs}
+Another part of the network costs are the consumption costs. These are attributed to the distribution of the energy and the maintenance of the grid and dependent on the province, Limburg in this case, of the household. These are calculated by taking the total energy consumption from the grid and multiplying it with the consumption tariff, set at 0.02 \euro/kWh. The same happens for injection with a tariff of 0.02 \euro/kWh. 
+
+\subsection{Levies}
+\label{sec:levies}
+Lastly, the levies are added to the total energy bill. These are costs that are used to finance the renewable energy production and the energy efficiency programs. The levies are calculated by taking the total energy consumption from the grid and multiplying it with the levy tariff, set at 0.05 \euro/kWh. 
+
+\subsection{Total Energy Bill}
+\label{sec:total-energy-bill}
+The total energy bill is the sum of the energy cost, capacity tariff, consumption costs and levies. The chosen rates and an example for our house with 14 PV panels, of which the power flow to the grid is given in table \ref{tab:power-flow-to-grid}, are shown in table \ref{tab:total-energy-bill_dual}. With everything except the energy cost being equal for the dynamic tariff, the total energy bill for the dynamic tariff is ... euro.
 
 
-The network rates and levies are the same for both tariffs. The total energy bill is calculated by summing the energy cost, network rates and levies. 
 
-The day tariff is 0.25 \euro/kWh. The night tariff is active from 22:00 to 7:00 and during the weekend. The night tariff is 0.15 \euro/kWh. The energy cost is calculated by multiplying the energy consumption with the corresponding tariff. The network rates and levies are the same for both tariffs. The total energy bill is calculated by summing the energy cost, network rates and levies.
+\begin{table}[H]
+    \centering
+    \begin{tabular}{|c|c|c|}
+    \hline
+     & \textbf{Peak} & \textbf{Off-peak} \\ \hline
+    \textbf{Injection} & 1000 & 0 \\ \hline
+    \textbf{Consumption} & 1000 & 0 \\ \hline
+    \end{tabular}
+    \caption{Power flow to the grid}
+    \label{tab:power-flow-to-grid}
+\end{table}
+
+\begin{table}[H]
+\centering
+\begin{tabular}{|c|c|c|}
+\hline
+\textbf{Component} & \textbf{Rate} & \textbf{Cost} \ \hline
+\textbf{Energy cost} & & \ \hline
+Energy Cost Day & 0.171 \euro/kWh & 0.171 \euro/kWh \\ \hline
+Energy Cost Night & 0.153 \euro/kWh & 0.153 \euro/kWh \\ \hline
+Energy Injection & 0.03 \euro/kWh & 0.03 \euro/kWh \\ \hline
+Green Energy Cost & 0.0156 \euro/kWh & 0.0156 \euro/kWh \\ \hline
+\textbf{Network rates} & & \ \hline
+Injection Tariff & 0.03 \euro/kWh & 0.03 \euro/kWh \\ \hline
+Capacity Tariff & 0.5 \euro/kW & 3 \euro \\ \hline
+Consumption Tariff & 0.02 \euro/kWh & 0.02 \euro/kWh \\ \hline
+\textbf{Levies} & & \ \hline
+Levy Tariff & 0.05 \euro/kWh & 0.05 \euro/kWh \\ \hline
+\end{tabular}
+\end{table}
 
 
-The energy cost is divided into two parts, being the day and night tariff. The day tariff is higher than the night tariff. The day tariff is active from 7:00 to 22:00, while the night tariff is active from 22:00 to 7:00. The day tariff is 0.25 \euro/kWh, while the night tariff is 0.15 \euro/kWh. The energy cost is calculated by multiplying the energy consumption with the corresponding tariff. The network rates and levies are the same for both tariffs. The total energy bill is calculated by summing the energy cost, network rates and levies.
+
+
+

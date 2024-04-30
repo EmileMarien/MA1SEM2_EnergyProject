@@ -1,3 +1,6 @@
+import pandas as pd
+
+
 def power_flow(self, max_charge: int = 8, max_AC_power_output: int = 2, max_DC_batterypower: int = 2, max_PV_input: int = 10):
     """
     Calculates power flows, how much is going to and from the battery and how much is being tapped from the grid
@@ -95,4 +98,10 @@ def nettoProduction(self):
     assert 'Load_kW' in self.pd.columns, 'The column Load_kW is missing'
 
     self.pd['NettoProduction'] = self.pd['PV_generated_power'] - self.pd['Load_kW']
+    return None
+
+def optimized_charging(time:pd.DatetimeIndex, max_charge: int = 8, max_AC_power_output: int = 2, max_DC_batterypower: int = 2, max_PV_input: int = 10):
+    """
+    Calculates power flows, how much is going to and from the battery and how much is being tapped from the grid
+    """
     return None

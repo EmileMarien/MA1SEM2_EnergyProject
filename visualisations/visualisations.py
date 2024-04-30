@@ -5,6 +5,8 @@ from typing import List
 from matplotlib import pyplot as plt
 import pandas as pd
 import scienceplots
+import re
+import sys
 """
 
 def plot_columns(column_names: List[str]):
@@ -76,9 +78,11 @@ def plot_series(series:List[pd.Series]=[pd.Series], title:str='Series', xlabel:s
         secondary_series (List[pd.Series]): The secondary Series to plot on a secondary axis.
     """
     # Create the plot
-    fig, ax = plt.subplots()
+    #plt.rcParams['text.usetex'] = True
+    fontsize=20
+    fig, ax = plt.subplots(figsize=(6, 4), tight_layout=True)
     lns=[]
-    line_styles=['-', '--', '-.', 'dashdot', ':', 'dotted', '', ' ', 'solid', 'dashed']
+    line_styles=['-', '--', '-.', ':', '', ' ', 'solid', 'dashdot', 'dotted', 'dashed']
     line_colors=['b', 'r', 'c', 'm', 'y', 'k', 'g','w']
     # Plot the primary Series
     for i in range(len(series)):
@@ -93,17 +97,16 @@ def plot_series(series:List[pd.Series]=[pd.Series], title:str='Series', xlabel:s
     length=series[0].shape[0]
     if display_time=='hour':
         ax.set_xticks(range(0, length, length//24))
-
     # Add labels and title
-    ax.set_xlabel(xlabel)
-    ax.set_ylabel(ylabel)
+    ax.set_xlabel(xlabel,fontsize=fontsize)
+    ax.set_ylabel(ylabel,fontsize=fontsize)
     if 'ax2' in locals():
         ax2.set_ylabel(ylabel2)
     
     # add legend
     labs = [l.get_label() for l in lns]
-    ax.legend(lns, labs, loc=0)
-    ax.set_title(title)
+    ax.legend(lns, labs, loc=0,fontsize=fontsize)
+    ax.set_title(title,fontsize=fontsize)
     #plt.style.use(['science','ieee'])
     #if selected_format!=None:
     #    ax.xaxis.set_major_formatter(selected_format)
