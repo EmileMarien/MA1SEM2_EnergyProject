@@ -125,7 +125,7 @@ def electricity_cost(solar_panel_count: int=10, panel_surface:int= 2,annual_degr
 
     return cost
 
-print(electricity_cost(Orientation='S',tilt_angle=30, tariff='DualTariff',solar_panel_count=20))
+print(electricity_cost(Orientation='S',tilt_angle=30, tariff='DynamicTariff',solar_panel_count=10))
 #print(electricity_cost(Orientation='S',tilt_angle=30, tariff='DynamicTariff',solar_panel_count=0))
 #print(electricity_cost(Orientation='S',tilt_angle=30, tariff='DualTariff',solar_panel_count=10))
 #print(electricity_cost(Orientation='S',tilt_angle=30, tariff='DualTariff',solar_panel_count=30))
