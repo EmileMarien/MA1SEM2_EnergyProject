@@ -14,7 +14,6 @@ file=open('data/initialized_dataframes/pd_S_30','rb')
 data=pickle.load(file)
 file.close()
 #data.filter_data_by_date_interval('2018-01-01','2018-12-31',interval_str='1min')
-
 # Set coordinates of PV installation (GENk)
 latitude=50.99461 # [degrees]
 longitude=5.53972 # [degrees]
@@ -27,15 +26,16 @@ longitude=5.53972 # [degrees]
 findAngle=True
 if findAngle:
     
-    orientations=["EW"]
-    tiltAngles=[i for i in range(30,50,1)]
-
+    orientations=["S"]
+    tiltAngles=[i for i in range(20,50,1)]
+    data.filter_data_by_date_interval('2018-01-01','2018-12-31',interval_str='15min')
+    data.interpolate_columns(interval='15min')
     temperature = 10
     for orientation in orientations:
         optimalAngle=(-1,0) #(angle, total directIrradiance at that angle)
 
         for tiltAngle in tiltAngles:
-            data.calculate_direct_irradiance(latitude=latitude, tilt_angle=tiltAngle,longitude=longitude,temperature=temperature,orientation=orientation)
+            data.calculate_direct_irradiance(tilt_angle=tiltAngle,orientation=orientation)
             totalIrradiance=data.get_direct_irradiance().sum()
             print("irradiance:",totalIrradiance,"tiltangle:",tiltAngle)
             if totalIrradiance>optimalAngle[1]:

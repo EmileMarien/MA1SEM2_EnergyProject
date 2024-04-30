@@ -81,7 +81,7 @@ def get_columns(self,columns:List[str]):
     """
     Returns the dataset with the specific columns
     """
-
+    assert all(isinstance(col, str) for col in columns), 'The columns must be strings'
     assert all(col in self.pd.columns for col in columns), 'The columns must be present in the DataFrame'
 
     return self.pd[columns]
@@ -118,7 +118,7 @@ def get_average_per_minute_day(self,column_name:str='Load_kW'):
 
     # Group by hour and minute and calculate average value
     avg_by_time = self.pd.groupby([self.pd.index.hour, self.pd.index.minute])[column_name].mean()        
-    avg_by_time.index = pd.to_datetime(avg_by_time.index.map(lambda x: f"2024-01-01 {x[0]:02d}:{x[1]:02d}"))
+    avg_by_time.index = [f"{x[0]:02d}:{x[1]:02d}" for x in avg_by_time.index]
     print(avg_by_time)
 
     return avg_by_time
