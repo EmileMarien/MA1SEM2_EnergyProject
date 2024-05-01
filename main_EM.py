@@ -197,7 +197,7 @@ if plot_comparison_irradiance:
     plot_series(hourly_series,title='Comparison of the different irradiances during summer',xlabel='Time',ylabel='Power $[\mathrm{\\frac{W}{m^2}}]$',display_time='hour')
 
 # Plot minutely nettoproduction per day for the S 30 scenario
-plot_minutely_nettoproduction=True
+plot_minutely_nettoproduction=False
 if plot_minutely_nettoproduction:
     irradiance_pd_S_30.filter_data_by_date_interval('2018-01-01 1:00','2018-12-30 23:00',interval_str='1min')
     minutely_nettoproduction_pd_S_30=irradiance_pd_S_30.get_average_per_minute_day('NettoProduction')
@@ -227,7 +227,7 @@ if plot_average_load_consumption:
     plot_series(hourly_series)
 
 # Plot hourly load consumption for each day of the weak on one graph
-plot_weekly_load_consumption=True #OK
+plot_weekly_load_consumption=False #OK
 if plot_weekly_load_consumption:
 
     #irradiance_pd_S_30.filter_data_by_date_interval('2018-06-01 1:00','2018-09-30 23:00',interval_str='1min')
@@ -244,7 +244,7 @@ if plot_weekly_load_consumption:
     day_names = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
 
     # Iterate over the days of the week
-    for day in [5,6]:  # 0 represents Monday, 1 represents Tuesday, ..., 6 represents Sunday
+    for day in range(5):  # 0 represents Monday, 1 represents Tuesday, ..., 6 represents Sunday
         # Filter rows where the DateTimeIndex corresponds to the current day
         day_rows = hourly_load_pd_S_30[hourly_load_pd_S_30.index.dayofweek == day]
         

@@ -74,3 +74,4 @@ def add_EV_load(self,type:str='smart'):
     self.pd['Load_house_kW']=self.pd['Load_kW']
     self.pd['Load_kW'] = self.pd['Load_house_kW'] + self.pd['Load_EV_kW']
     return None
+
