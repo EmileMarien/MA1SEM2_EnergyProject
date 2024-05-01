@@ -23,7 +23,7 @@ file.close()
 panel_count=6
 print('start calculations')
 irradiance_pd_S_30.PV_generated_power(panel_count=panel_count)
-
+financials=GridCost(irradiance_pd_S_30.get_grid_power()[0],file_path_BelpexFilter="data/BelpexFilter.xlsx")
 # calculate the power flow
 max_charge= 8 #kWh
 max_AC_power_output= 5
@@ -197,13 +197,13 @@ if plot_comparison_irradiance:
     plot_series(hourly_series,title='Comparison of the different irradiances during summer',xlabel='Time',ylabel='Power $[\mathrm{\\frac{W}{m^2}}]$',display_time='hour')
 
 # Plot minutely nettoproduction per day for the S 30 scenario
-plot_minutely_nettoproduction=False
+plot_minutely_nettoproduction=True
 if plot_minutely_nettoproduction:
     irradiance_pd_S_30.filter_data_by_date_interval('2018-01-01 1:00','2018-12-30 23:00',interval_str='1min')
     minutely_nettoproduction_pd_S_30=irradiance_pd_S_30.get_average_per_minute_day('NettoProduction')
     hourly_battery_charge_pd_S_30 = irradiance_pd_S_30.get_average_per_minute_day('BatteryCharge')
     minutely_series=[minutely_nettoproduction_pd_S_30]
-    plot_series(series=minutely_series,title='Minutely average netto production for S 30 scenario',secondary_series=[hourly_battery_charge_pd_S_30],xlabel='Time',ylabel='Power [kWh]',ylabel2='Battery charge (kWh)')
+    plot_series(series=minutely_series,title='Minutely average netto production for S 30 scenario')#,secondary_series=[hourly_battery_charge_pd_S_30],xlabel='Time',ylabel='Power [kWh]',ylabel2='Battery charge (kWh)')
 
 # Plot hourly flows (pv-load) 
 plot_hourly_flows=False
@@ -373,7 +373,6 @@ print("angles calculated")
 
 #plot_dataframe(irradiance_pd_S_30.get_columns(['PV_generated_power','Load_kW','NettoProduction','BatteryCharge','GridFlow']))
 
-financials=GridCost(irradiance_pd_S_30.get_grid_power()[0],file_path_BelpexFilter="data/BelpexFilter.xlsx")
 financials.dynamic_tariff()
 financials.dual_tariff()
 #plot_dataframe(financials.get_dataset())
