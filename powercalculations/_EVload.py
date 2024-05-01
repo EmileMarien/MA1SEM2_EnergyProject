@@ -4,15 +4,14 @@ import pandas as pd
 
 from visualisations.visualisations import plot_series
 
-def EV_load(self,smart:bool=False):
-    if smart:
-        self.add_EV_load(smart=True)
 
-def add_EV_load(self,smart:bool=False):
+
+def add_EV_load(self,type:str='smart'):
     """
     Add electric vehicle (EV) load data to the DataFrame.
     The EV load data is read from an Excel file and interpolated to match the time index of the DataFrame.
     The EV load is added to the 'Load_kW' column of the DataFrame.
+    type: str
     """
     filepath='data/EV Calculation.xlsx'
 
@@ -26,12 +25,20 @@ def add_EV_load(self,smart:bool=False):
     assert 'Correction_factor' in df1.columns, "The EV load file does not contain the column 'Correction_factor'."
 
     # Create dataframe with the EV load data for the first week
-    if smart:
+    if type=='B2G':
+        return None
+            
+
+
+
+    elif type=='smart':
         week_values=df1[['Datetime','Load_EV_kW_with_SC']]
         week_values.rename(columns={'Load_EV_kW_with_SC':'Load_EV_kW'},inplace=True)
-    else:
+    elif type=='dumb':
         week_values=df1[['Datetime','Load_EV_kW_no_SC']]
         week_values.rename(columns={'Load_EV_kW_no_SC':'Load_EV_kW'},inplace=True)
+    else:
+        raise ValueError("The type must be either 'smart', 'B2G' or 'dumb'.")
     week_values.set_index('Datetime',inplace=True)
     week_values.index = pd.to_datetime(week_values.index).round('T')
     frequence=self.pd.index.freq
