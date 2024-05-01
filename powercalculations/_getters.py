@@ -119,7 +119,6 @@ def get_average_per_minute_day(self,column_name:str='Load_kW'):
     # Group by hour and minute and calculate average value
     avg_by_time = self.pd.groupby([self.pd.index.hour, self.pd.index.minute])[column_name].mean()        
     avg_by_time.index = [f"{x[0]:02d}:{x[1]:02d}" for x in avg_by_time.index]
-    print(avg_by_time)
 
     return avg_by_time
 

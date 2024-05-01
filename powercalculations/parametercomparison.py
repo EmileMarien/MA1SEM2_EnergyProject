@@ -27,7 +27,7 @@ findAngle=True
 if findAngle:
     
     orientations=["S"]
-    tiltAngles=[i for i in range(20,50,1)]
+    tiltAngles=[i/2 for i in range(50, 90)]  # Modify the range values to integers
     data.filter_data_by_date_interval('2018-01-01','2018-12-31',interval_str='15min')
     data.interpolate_columns(interval='15min')
     temperature = 10
@@ -36,7 +36,7 @@ if findAngle:
 
         for tiltAngle in tiltAngles:
             data.calculate_direct_irradiance(tilt_angle=tiltAngle,orientation=orientation)
-            totalIrradiance=data.get_direct_irradiance().sum()
+            totalIrradiance=data.get_direct_irradiance().mean()
             print("irradiance:",totalIrradiance,"tiltangle:",tiltAngle)
             if totalIrradiance>optimalAngle[1]:
                 optimalAngle=(tiltAngle,totalIrradiance)

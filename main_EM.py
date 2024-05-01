@@ -30,9 +30,10 @@ max_AC_power_output= 5
 max_DC_batterypower_output= 5
 irradiance_pd_S_30.power_flow(max_charge, max_AC_power_output, max_DC_batterypower_output)
 irradiance_pd_S_30.nettoProduction()
+financials=GridCost(irradiance_pd_S_30.get_grid_power()[0],file_path_BelpexFilter="data/BelpexFilter.xlsx")
 
 ### Calculations for the other scenarios
-calculate_others=True
+calculate_others=False
 if calculate_others:
     file = open('data/initialized_dataframes/pd_EW_30','rb')
     irradiance_pd_EW_30=pickle.load(file)
@@ -95,7 +96,7 @@ if calculate_others:
 #### Plots underneath
 print('start plots')
 # Plot hourly direct irradiance for the different orientations and 30 degree angles
-plot_hourly_direct_irradiance=True #Already calculated
+plot_hourly_direct_irradiance=False #OK
 if plot_hourly_direct_irradiance:
     #irradiance_pd_EW_30=irradiance_pd_EW_30.calculate_direct_irradiance(tilt_angle=30,orientation='EW')
     hourly_irradiance_pd_EW_30=irradiance_pd_EW_30.get_average_per_minute_day('DirectIrradiance') #30 degrees tilt angle
@@ -113,36 +114,87 @@ if plot_hourly_direct_irradiance:
     #hourly_irradiance_pd_EW_opt=irradiance_pd_EW_opt.get_average_per_hour('DirectIrradiance') #optimal tilt angle
     #hourly_irradiance_pd_S_opt=irradiance_pd_S_opt.get_average_per_hour('DirectIrradiance') #optimal tilt angle
     #hourly_series_opt=[hourly_irradiance_pd_EW_opt,hourly_irradiance_pd_S_opt]
-    plot_series(hourly_series_30,title='Hourly average incident irradiance for the household under study, 30 degrees tilt angle for different orientations',xlabel="Time",ylabel='$Power [\mathrm{\\frac{kW}{m^2}}]$',display_time='hour')
+    plot_series(hourly_series_30,title='Hourly average incident irradiance for the household under study, 30 degrees tilt angle for different orientations',xlabel="Time",ylabel='Power $[\mathrm{\\frac{W}{m^2}}]$',display_time='hour')
+
+# Plot direct irradiance of 30, Z
+plot_direct_irradiance_30=False
+if plot_direct_irradiance_30:
+    hourly_direct_irradiance_pd_S_30=irradiance_pd_S_30.get_columns(['DirectIrradiance']).squeeze() 
+    hourly_direct_irradiance_pd_S_30.name='S 30 degrees'
+    plot_series([hourly_direct_irradiance_pd_S_30],title='Hourly average incident irradiance for the household under study, 30 degrees tilt angle for the South orientation',xlabel="Day",ylabel='Power $[\mathrm{\\frac{W}{m^2}}]$',display_time='yearly')
+
+# Plot the load for the period of december to show the difference between the reference and predicted load
+plot_load_dec=False #OK
+if plot_load_dec:
+    irradiance_pd_S_30.filter_data_by_date_interval('2018-12-01 0:00','2018-12-31 23:00',interval_str='1h')
+    hourly_load_nov_dec = irradiance_pd_S_30.get_columns(['Load_kW']).squeeze()
+
+    # Split the series into two parts based on the date
+    before_dec_17 = hourly_load_nov_dec.loc[:'2018-12-17 00:00']
+    before_dec_17.name='Reference load'
+    after_dec_17 = hourly_load_nov_dec.loc['2018-12-17 01:00':]
+    after_dec_17.name='Predicted load'
+
+    plot_series([before_dec_17,after_dec_17],display_time='yearly',title='Comparison of the referenced and predicted load',xlabel='Day',ylabel='Power [kW]')
+
+# PLot the GHI and GDI for feb-march to show the difference between the reference and predicted load
+plot_GHI_GDI=False #OK
+if plot_GHI_GDI:
+    irradiance_pd_S_30.filter_data_by_date_interval('2018-02-01 0:00','2018-03-31 23:00',interval_str='1h')
+    hourly_GHI_feb_march = irradiance_pd_S_30.get_columns(['GlobRad']).squeeze()
+    hourly_GDI_feb_march = irradiance_pd_S_30.get_columns(['DiffRad']).squeeze()
+
+    # Split the series into two parts based on the date
+    GHI_feb = hourly_GHI_feb_march.loc[:'2018-03-13 00:00':]
+    GHI_feb.name='Global horizontal irradiance, reference'
+    GHI_march = hourly_GHI_feb_march.loc['2018-03-13 01:00':]
+    GHI_march.name='Global horizontal irradiance, external data'
+
+    GDI_feb = hourly_GDI_feb_march.loc[:'2018-03-13 00:00':]
+    GDI_feb.name='Diffuse horizontal irradiance, reference'
+    GDI_march = hourly_GDI_feb_march.loc['2018-03-13 01:00':]
+    GDI_march.name='Diffuse horizontal irradiance, external data'
+
+    hourly_series=[GHI_feb,GHI_march,GDI_feb,GDI_march]
+
+    
+
+    plot_series(hourly_series,display_time='yearly',title='Global and diffuse horizontal irradiance for the first irradiance gap',xlabel='Day',ylabel='Power $[\mathrm{\\frac{W}{m^2}}]$')
 
 # Plot hourly direct irradiance for the different orientations and optimal tilt angles
-plot_hourly_direct_irradiance=True
+plot_hourly_direct_irradiance=False #OK
 if plot_hourly_direct_irradiance:
-    irradiance_pd_EW_opt=irradiance_pd_EW_30.calculate_direct_irradiance(tilt_angle=32,orientation='EW')
-    hourly_irradiance_pd_EW_opt=irradiance_pd_EW_opt.get_average_per_minute_day('DirectIrradiance') #30 degrees tilt angle
+    #irradiance_pd_EW_30.calculate_direct_irradiance(tilt_angle=30,orientation='EW')
+    hourly_irradiance_pd_EW_opt=irradiance_pd_EW_opt.get_average_per_minute_day('DirectIrradiance') 
+    #30 degrees tilt angle
     hourly_irradiance_pd_EW_opt.name='EW optimal'
+
+
     #irradiance_pd_S_30=irradiance_pd_S_30.calculate_direct_irradiance(tilt_angle=30,orientation='S')
     hourly_irradiance_pd_S_opt=irradiance_pd_S_opt.get_average_per_minute_day('DirectIrradiance') #30 degrees tilt angle
     hourly_irradiance_pd_S_opt.name='S optimal'
     hourly_series_opt=[hourly_irradiance_pd_EW_opt,hourly_irradiance_pd_S_opt]
-    plot_series(hourly_series_opt,title='Hourly average incident irradiance for the household under study, optimal tilt angle for different orientations',xlabel="Time",ylabel='$Power [\mathrm{\\frac{kW}{m^2}}]$',display_time='hour')
+
+    plot_series(hourly_series_opt,title='Hourly average incident irradiance for the household under study, optimal tilt angle for different orientations',xlabel="Time",ylabel='Power $[\mathrm{\\frac{W}{m^2}}]$',display_time='hour')
 
 # Print average net load consumption for the different orientations and tilt angles
 
 # Plot comparison of direct, global and diffuse irradiance for S 30 scenario, winter 
 ## Mean irradiance during summer and winter (GHI, DHI, DNI)
-
-plot_comparison_irradiance=True
+plot_comparison_irradiance=False #OK
 if plot_comparison_irradiance:
-    irradiance_pd_S_30.filter_data_by_date_interval('2018-06-21 0:00','2018-09-20 23:00',interval_str='1min') #Summer
+    irradiance_pd_S_30.filter_data_by_date_interval('2018-06-21 0:00','2018-09-20 23:00',interval_str='1min') #Summer OK
     #irradiance_pd_S_30.filter_data_by_date_interval('2018-12-21 0:00','2019-03-20 23:00',interval_str='1min') #Winter
     irradiance_pd_S_30.calculate_direct_irradiance(tilt_angle=30,orientation='S')
     hourly_d_irradiance_pd_S_30=irradiance_pd_S_30.get_average_per_minute_day('DNI')
+    hourly_d_irradiance_pd_S_30.name='Direct normal irradiance'
     hourly_global_irradiance_pd_S_30=irradiance_pd_S_30.get_average_per_minute_day('GlobRad')
+    hourly_global_irradiance_pd_S_30.name='Global horizontal irradiance'
     hourly_diffuse_irradiance_pd_S_30=irradiance_pd_S_30.get_average_per_minute_day('DiffRad')
+    hourly_diffuse_irradiance_pd_S_30.name='Diffuse horizontal irradiance'
     #hourly_direct_irradiance_pd_S_30=irradiance_pd_S_30.get_average_per_minute_day('DirectIrradiance')
     hourly_series=[hourly_d_irradiance_pd_S_30,hourly_global_irradiance_pd_S_30,hourly_diffuse_irradiance_pd_S_30,]
-    plot_series(hourly_series,title='Comparison of direct, global and diffuse irradiance for the household under study, during summer',xlabel='Time',ylabel='$Power [\mathrm{\\frac{kW}{m^2}}]$',display_time='hour')
+    plot_series(hourly_series,title='Comparison of the different irradiances during summer',xlabel='Time',ylabel='Power $[\mathrm{\\frac{W}{m^2}}]$',display_time='hour')
 
 # Plot minutely nettoproduction per day for the S 30 scenario
 plot_minutely_nettoproduction=False
@@ -153,19 +205,18 @@ if plot_minutely_nettoproduction:
     minutely_series=[minutely_nettoproduction_pd_S_30]
     plot_series(series=minutely_series,title='Minutely average netto production for S 30 scenario',secondary_series=[hourly_battery_charge_pd_S_30],xlabel='Time',ylabel='Power [kWh]',ylabel2='Battery charge (kWh)')
 
-
 # Plot hourly flows (pv-load) 
 plot_hourly_flows=False
 if plot_hourly_flows:
     irradiance_pd_S_30.filter_data_by_date_interval('2018-06-01 1:00','2018-09-30 23:00',interval_str='1min')
-    hourly_pv_generated_power_pd_S_30=irradiance_pd_S_30.get_average_per_hour('PV_generated_power')
-    hourly_load_pd_S_30=irradiance_pd_S_30.get_average_per_hour('Load_kW')
-    hourly_netto_production_pd_S_30=irradiance_pd_S_30.get_average_per_hour('NettoProduction')
-    hourly_battery_charge_pd_S_30=irradiance_pd_S_30.get_average_per_hour('BatteryCharge')
-    hourly_grid_flow_pd_S_30=irradiance_pd_S_30.get_average_per_hour('GridFlow')
-    hourly_battery_flow_pd_S_30=irradiance_pd_S_30.get_average_per_hour('BatteryFlow')
+    hourly_pv_generated_power_pd_S_30=irradiance_pd_S_30.get_average_per_minute_day('PV_generated_power')
+    hourly_load_pd_S_30=irradiance_pd_S_30.get_average_per_minute_day('Load_kW')
+    hourly_netto_production_pd_S_30=irradiance_pd_S_30.get_average_per_minute_day('NettoProduction')
+    hourly_battery_charge_pd_S_30=irradiance_pd_S_30.get_average_per_minute_day('BatteryCharge')
+    hourly_grid_flow_pd_S_30=irradiance_pd_S_30.get_average_per_minute_day('GridFlow')
+    hourly_battery_flow_pd_S_30=irradiance_pd_S_30.get_average_per_minute_day('BatteryFlow')
     hourly_series=[hourly_netto_production_pd_S_30, hourly_pv_generated_power_pd_S_30, hourly_load_pd_S_30, hourly_grid_flow_pd_S_30, hourly_battery_flow_pd_S_30]
-    plot_series(series=hourly_series,title='Hourly average power flows for S 30 scenario, summer',secondary_series=[hourly_battery_charge_pd_S_30],xlabel='hours',ylabel='Power [kWh]',ylabel2='Battery charge (kWh)',display_time='hour')
+    plot_series(series=hourly_series,title='Hourly average power flows for S 30 scenario, summer',secondary_series=[hourly_battery_charge_pd_S_30],xlabel='hours',ylabel='Power [kW]',ylabel2='Battery charge (kWh)',display_time='hour')
 
 # Plot average hourly load consumption for winter and summer
 plot_average_load_consumption=False
@@ -176,7 +227,7 @@ if plot_average_load_consumption:
     plot_series(hourly_series)
 
 # Plot hourly load consumption for each day of the weak on one graph
-plot_weekly_load_consumption=False
+plot_weekly_load_consumption=True #OK
 if plot_weekly_load_consumption:
 
     #irradiance_pd_S_30.filter_data_by_date_interval('2018-06-01 1:00','2018-09-30 23:00',interval_str='1min')
@@ -193,7 +244,7 @@ if plot_weekly_load_consumption:
     day_names = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
 
     # Iterate over the days of the week
-    for day in range(5):  # 0 represents Monday, 1 represents Tuesday, ..., 6 represents Sunday
+    for day in [5,6]:  # 0 represents Monday, 1 represents Tuesday, ..., 6 represents Sunday
         # Filter rows where the DateTimeIndex corresponds to the current day
         day_rows = hourly_load_pd_S_30[hourly_load_pd_S_30.index.dayofweek == day]
         
@@ -205,6 +256,88 @@ if plot_weekly_load_consumption:
         # Append the Series to the list
         daily_load_series_list.append(average_load_by_hour_minute)
     plot_series(daily_load_series_list,display_time='hour',title='Hourly load consumption for each weekday',xlabel='Hour of the day',ylabel='Power [kW]')
+
+# Plot hourly belpex for the week
+plot_weekly_load_consumption=True #OK
+if plot_weekly_load_consumption:
+
+    #irradiance_pd_S_30.filter_data_by_date_interval('2018-06-01 1:00','2018-09-30 23:00',interval_str='1min')
+    hourly_belpex=financials.get_columns(['BelpexFilter'])
+
+    # Extract hour and minute from DateTimeIndex
+    hourly_belpex['hour'] = hourly_belpex.index.hour
+    hourly_belpex['minute'] = hourly_belpex.index.minute
+
+    daily_load_series_list = []
+    # List of day names
+    day_names = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
+
+    # Filter rows where the DateTimeIndex corresponds to a weekday
+    weekday_rows = hourly_belpex[(hourly_belpex.index.dayofweek >= 0) & (hourly_belpex.index.dayofweek <= 4)]
+    #weekendday_rows = hourly_belpex[(hourly_belpex.index.dayofweek >= 5) & (hourly_belpex.index.dayofweek <= 6)]
+
+    # Group by hour and minute and calculate average value for the current day
+    average_weekdayprice_by_hour_minute = weekday_rows.groupby(['hour', 'minute'])['BelpexFilter'].mean()
+    average_weekdayprice_by_hour_minute.index = [f"{x[0]:02d}:{x[1]:02d}" for x in average_weekdayprice_by_hour_minute.index]
+    average_weekdayprice_by_hour_minute.name='Average weekday belpexprice'
+    print(average_weekdayprice_by_hour_minute)
+    # Append the Series to the list
+    daily_load_series_list.append(average_weekdayprice_by_hour_minute)
+
+    # Filter rows where the DateTimeIndex corresponds to a weekendday
+    weekendday_rows = hourly_belpex[(hourly_belpex.index.dayofweek >= 5) & (hourly_belpex.index.dayofweek <= 6)]
+    # Group by hour and minute and calculate average value for the current day
+    average_weekenddayprice_by_hour_minute = weekendday_rows.groupby(['hour', 'minute'])['BelpexFilter'].mean()
+    average_weekenddayprice_by_hour_minute.index = [f"{x[0]:02d}:{x[1]:02d}" for x in average_weekenddayprice_by_hour_minute.index]
+    average_weekenddayprice_by_hour_minute.name='Average weekend belpexprice'
+    print(average_weekenddayprice_by_hour_minute)
+    # Append the Series to the list
+    daily_load_series_list.append(average_weekenddayprice_by_hour_minute)
+
+    plot_series(daily_load_series_list,display_time='hour',title='Average hourly belpex price for weekdays',xlabel='Hour of the day',ylabel='Price [€/MWh]')
+
+# Plot the total irradiance for the S orientations and iterate over the different tilt angles
+plot_total_irradiance=False #OK
+if plot_total_irradiance:
+    # Define the tilt angles
+    indices=['20.0', '20.5', '21.0', '21.5', '22.0', '22.5', '23.0', '23.5', '24.0', '24.5', '25.0', '25.5', '26.0', '26.5', '27.0', '27.5', '28.0', '28.5', '29.0', '29.5', '30.0', '30.5', '31.0', '31.5', '32.0', '32.5', '33.0', '33.5', '34.0', '34.5', '35.0', '35.5', '36.0', '36.5', '37.0', '37.5', '38.0', '38.5', '39.0', '39.5', '40.0', '40.5', '41.0', '41.5', '42.0', '42.5', '43.0', '43.5', '44.0', '44.5', '45.0', '45.5', '46.0', '46.5', '47.0', '47.5', '48.0', '48.5', '49.0', '49.5', '50.0']
+    # Create a series with the total irradiance for S and different tilt angles:
+    tilt_angles_S={'20.0': 134.6733500664645, '20.5': 134.86101097040967, '21.0': 135.04351846662593, '21.5': 135.22085814248638, '22.0': 135.3929828524523, '22.5': 135.559873823752, '23.0': 135.7215118370833, '23.5': 135.8778181342936, '24.0': 136.02889510319514, '24.5':136.17488445770132,'25.0': 136.31571925627287,
+    '25.5': 136.4513030275388,
+    '26.0': 136.5814943216128,
+    '26.5': 136.70627636033257,
+    '27.0': 136.8256328248779,
+    '27.5': 136.93956628714298,
+    '28.0': 137.0480302471163,
+    '28.5': 137.15103627540202,
+    '29.0': 137.24868006677346,
+    '29.5': 137.3409980045969,
+    '30.0': 137.42792135645485,
+    '30.5': 137.50944092988402,
+    '31.0': 137.58554643926908,
+    '31.5': 137.65625904757252,
+    '32.0': 137.72166906030182,
+    '32.5': 137.78182065294712,
+    '33.0': 137.83660712044198,
+    '33.5': 137.88587443813057,
+    '34.0': 137.92967057507997,
+    '34.5': 137.96793489637463,
+    '35.0': 138.00066586914687,
+    '35.5': 138.02789518181137,
+    '36.0': 138.04965075338473,
+    '36.5': 138.06597153487738,
+    '37.0': 138.07681383460672,
+    '37.5': 138.08223921791262,
+    '38.0': 138.08216450380328,'38.5': 138.07656378165458, '39.0': 138.06549048166548, '39.5': 138.04902631848418, '40.0': 138.02714842539928, '40.5': 137.99978490817443, '41.0': 137.96724181156893, '41.5': 137.92949917526514, '42.0': 137.88629628974223}
+
+    irradiances_S = pd.Series(data=tilt_angles_S, index=indices)
+    irradiances_S.name = 'Mean incident irradiance'
+
+    # Plot the total irradiance for the different orientations and tilt angles
+    plot_series([irradiances_S], title='Mean yearly incident irradiance for the S orientation and different tilt angles', xlabel='Tilt angle [degrees]', ylabel='Power $[\mathrm{\\frac{W}{m^2}}]$')
+    
+
+
 
 # Return key figures
 print_key_figures=False
@@ -257,24 +390,13 @@ if print_figures:
 #print('the total peak energy taken from the grid is:',irradiance_pd_S_30.get_energy_TOT(column_name='GridFlow',peak="peak"))
 
 #print(financials.capacity_tariff())
-print(irradiance_pd_S_30.get_monthly_peaks(column_name='GridFlow'))
+#print(irradiance_pd_S_30.get_monthly_peaks(column_name='GridFlow'))
 #plot_dataframe(irradiance_pd_S_30.get_columns(['SolarZenithAngle','SolarAzimuthAngle']))
 
 #irradiance_pd_S_30.filter_data_by_date_interval('2018-01-01 1:00','2018-12-31 23:00',interval_str='1h')
 #plot_dataframe(irradiance_pd_S_30.get_columns(['DirectIrradiance']))
 
 #plot_series(load_df)
-"""
-print('end plots')
-tilt_angle=30
-solar_zenith_angles= [i for i in range(85,90)]
-solar_azimuth_angle=242
-surface_azimuth_angle=180
-AOI=[]
-for solar_zenith_angle in solar_zenith_angles:
-    AOI.append(math.degrees(math.acos(
-                math.cos(math.radians(tilt_angle)) * math.cos(math.radians(solar_zenith_angle)) +
-                math.sin(math.radians(tilt_angle)) * math.sin(math.radians(solar_zenith_angle)) * math.cos(math.radians(solar_azimuth_angle - surface_azimuth_angle)))))
 
-print(AOI)
-"""
+print('end plots')
+

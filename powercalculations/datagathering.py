@@ -24,7 +24,7 @@ irradiance=pickle.load(file)
 file.close()
 #irradiance.plot_columns(["DirectIrradiance","GlobRad","DiffRad"])
 print('start')
-
+"""
 irradiance.calculate_direct_irradiance(tilt_angle=30,orientation='EW')
 file=open('data/initialized_dataframes/pd_EW_30','wb')
 pickle.dump(irradiance,file)
@@ -37,12 +37,14 @@ pickle.dump(irradiance,file)
 file.close()
 print('upload 3 finished')
 
-irradiance.calculate_direct_irradiance(tilt_angle=37.5,orientation='EW')
+"""
+
+irradiance.calculate_direct_irradiance(tilt_angle=37.5,orientation='S')
 file=open('data/initialized_dataframes/pd_S_opt_37.5','wb')
 pickle.dump(irradiance,file)
 file.close()
 print('upload 4 finished')
-
+"""
 irradiance.calculate_direct_irradiance(tilt_angle=30,orientation='E')
 file=open('data/initialized_dataframes/pd_E_30','wb')
 pickle.dump(irradiance,file)
@@ -60,5 +62,8 @@ file=open('data/initialized_dataframes/pd_S_30','wb')
 pickle.dump(irradiance,file)
 file.close()
 print('upload 7 finished')
+
+"""
+
 
 

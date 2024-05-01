@@ -105,3 +105,43 @@ def optimized_charging(time:pd.DatetimeIndex, max_charge: int = 8, max_AC_power_
     Calculates power flows, how much is going to and from the battery and how much is being tapped from the grid
     """
     return None
+
+"""
+import numpy as np
+from scipy.optimize import minimize
+
+def objective_function(X, B):
+    return -np.dot(X, B)  # Maximizing X * B is equivalent to minimizing -X * B
+
+def constraint(X, total_sum):
+    return np.sum(X) - total_sum  # Constraint on the total sum of X
+
+# Initial guess for vector X
+initial_guess_X = np.zeros_like(B)
+
+# Total sum constraint for vector X
+total_sum_constraint = 10  # Change this value to your desired total sum
+
+# Bounds for each element of vector X
+bounds = [(0, None) for _ in range(len(B))]  # Each element of X should be non-negative
+
+# Define the optimization problem
+problem = {
+    'fun': objective_function,
+    'x0': initial_guess_X,
+    'args': (B,),
+    'constraints': {'type': 'eq', 'fun': constraint, 'args': (total_sum_constraint,)},
+    'bounds': bounds
+}
+
+# Solve the optimization problem
+result = minimize(**problem)
+
+# Extract the optimized vector X
+optimized_X = result.x
+
+print("Optimized vector X:", optimized_X)
+print("Maximum value of X * B:", -result.fun)  # Since we were minimizing -X * B
+
+
+"""

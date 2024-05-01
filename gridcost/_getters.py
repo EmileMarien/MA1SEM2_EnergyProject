@@ -57,7 +57,21 @@ def get_total_energy_from_grid(self):
     """
     return sum(self.pd['GridFlow'])
 
+def get_average_per_minute_day(self,column_name:str='Load_kW'):
+    """
+    Calculates the average load per minute for each day of the year based on the entire year in the DataFrame. in kW
 
+    Returns:
+        pandas.Series: A Series containing the average 'Load_kW' for each minute of the day.
+        The index of the Series is the minute of the day (0-1439).
+    """
+
+
+    # Group by hour and minute and calculate average value
+    avg_by_time = self.pd.groupby([self.pd.index.hour, self.pd.index.minute])[column_name].mean()        
+    avg_by_time.index = [f"{x[0]:02d}:{x[1]:02d}" for x in avg_by_time.index]
+
+    return avg_by_time
 def get_total_energy_to_grid(self):
     """
     Returns the total energy in kWh sent to the grid

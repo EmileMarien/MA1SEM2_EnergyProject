@@ -73,6 +73,7 @@ class GridCost():
     from ._getters import get_grid_cost_total
     from ._getters import get_total_energy_from_grid
     from ._getters import get_columns
+    from ._getters import get_average_per_minute_day
 
 
     from ._export import export_dataframe_to_excel

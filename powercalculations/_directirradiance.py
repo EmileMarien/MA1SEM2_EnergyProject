@@ -104,7 +104,7 @@ def calculate_direct_irradiance(self, tilt_angle:int=0, orientation:str='S'):
         lambda row: calculate_irradiance_row(row=row, tilt_angle=tilt_angle, surface_azimuth_angle=surface_azimuth_angle),
         axis=1
     )
-
+    self.pd['DNI']=0
     # Assign irradiance values to new columns
     self.pd[['DirectIrradiance', 'DNI']] = irradiance_values.apply(lambda x: pd.Series({'DirectIrradiance': x[0], 'DNI': x[1]}))
 

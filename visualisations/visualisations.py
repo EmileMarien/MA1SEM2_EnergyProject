@@ -79,10 +79,10 @@ def plot_series(series:List[pd.Series]=[pd.Series], title:str='Series', xlabel:s
     """
     # Create the plot
     #plt.rcParams['text.usetex'] = True
-    fontsize=20
+    fontsize=15
     fig, ax = plt.subplots(figsize=(6, 4), tight_layout=True)
     lns=[]
-    line_styles=['-', '--', '-.', ':', '', ' ', 'solid', 'dashdot', 'dotted', 'dashed']
+    line_styles=['-', '--', '-.', ':', 'solid', 'dashdot', 'dotted', 'dashed']
     line_colors=['b', 'r', 'c', 'm', 'y', 'k', 'g','w']
     # Plot the primary Series
     for i in range(len(series)):
