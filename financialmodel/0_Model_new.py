@@ -218,7 +218,7 @@ battery_types = {
 }
 
 # Choose battery type:
-chosen_battery_type = "LG RESU Prime S" # Change this to switch between different types
+chosen_battery_type = "no battery" # Change this to switch between different types
 chosen_battery = battery_types[chosen_battery_type]
 print(f"Total cost for {chosen_battery_type}: {chosen_battery.battery_cost}")
 battery_cost = chosen_battery.battery_cost
