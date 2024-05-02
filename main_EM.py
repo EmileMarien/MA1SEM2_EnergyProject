@@ -244,7 +244,7 @@ if plot_weekly_load_consumption:
     day_names = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
 
     # Iterate over the days of the week
-    for day in [5,6]:  # 0 represents Monday, 1 represents Tuesday, ..., 6 represents Sunday
+    for day in range(5):  # 0 represents Monday, 1 represents Tuesday, ..., 6 represents Sunday
         # Filter rows where the DateTimeIndex corresponds to the current day
         day_rows = hourly_load_pd_S_30[hourly_load_pd_S_30.index.dayofweek == day]
         
