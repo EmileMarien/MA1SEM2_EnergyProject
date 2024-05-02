@@ -144,7 +144,7 @@ battery_types = {
         battery_Degradation= 0, 
         battery_count = 0
     ),    
-    "LG RESU Prime S": BatteryType(
+    "c": BatteryType(
         battery_inverter = 1,
         battery_cost=6497*1.25,         #in Eur, times for installation cost       
         battery_lifetime=10,         #in years 
@@ -218,7 +218,7 @@ battery_types = {
 }
 
 # Choose battery type:
-chosen_battery_type = "no battery" # Change this to switch between different types
+chosen_battery_type = "LG RESU Prime S" # Change this to switch between different types
 chosen_battery = battery_types[chosen_battery_type]
 print(f"Total cost for {chosen_battery_type}: {chosen_battery.battery_cost}")
 battery_cost = chosen_battery.battery_cost
