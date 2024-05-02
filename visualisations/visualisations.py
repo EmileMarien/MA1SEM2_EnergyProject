@@ -90,9 +90,10 @@ def plot_series(series:List[pd.Series]=[pd.Series], title:str='Series', xlabel:s
         lns+=ax.plot(serie.index, serie,label=serie.name,linestyle=line_styles[i],color=line_colors[i])
 
     # Plot the secondary Series on a secondary axis
-    for secondary_serie in secondary_series:
+    for j in range(len(secondary_series)):
+        secondary_serie=secondary_series[j]
         ax2 = ax.twinx()
-        lns+=ax2.plot(secondary_serie.index, secondary_serie,label=secondary_serie.name)
+        lns+=ax2.plot(secondary_serie.index, secondary_serie,label=secondary_serie.name, color=line_colors[j+2],linestyle=line_styles[j+2])
 
     length=series[0].shape[0]
     if display_time=='hour':
