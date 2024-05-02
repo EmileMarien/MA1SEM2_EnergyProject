@@ -1,7 +1,7 @@
 import pandas as pd
 
 
-def power_flow(self, max_charge: int = 8, max_AC_power_output: int = 2, max_DC_batterypower: int = 2, max_PV_input: int = 10, max_EV_power: int = 3.7, max_EV_charge=82.3):
+def power_flow_old(self, max_charge: int = 8, max_AC_power_output: int = 2, max_DC_batterypower: int = 2, max_PV_input: int = 10, max_EV_power: int = 3.7, max_EV_charge=82.3):
     """
     Calculates power flows, how much is going to and from the battery and how much is being tapped from the grid
     #TODO: add units, PV_generated_power and Load_kW are both in kW. Depending on the frequency of this data, a different amount is subtracted from the battery charge (in kWh?) (e.g. if 1h freq, the load of each line can be subtracted directly since 1kW*1h=1kWh. If in minutes, then 1kW*1min=1/60kWh) 
@@ -87,7 +87,7 @@ def power_flow(self, max_charge: int = 8, max_AC_power_output: int = 2, max_DC_b
     return None
 
 
-def power_flow_v2(self, max_charge: int = 8, max_AC_power_output: int = 2, max_DC_batterypower: int = 2, max_PV_input: int = 10, max_EV_power: int = 3.7, max_EV_charge=82.3,EV_type:str='B2G'):
+def power_flow(self, max_charge: int = 8, max_AC_power_output: int = 2, max_DC_batterypower: int = 2, max_PV_input: int = 10, max_EV_power: int = 3.7, max_EV_charge=82.3,EV_type:str='no_EV'):
     """
     Calculates power flows, how much is going to and from the battery and how much is being tapped from the grid
     #TODO: add units, PV_generated_power and Load_kW are both in kW. Depending on the frequency of this data, a different amount is subtracted from the battery charge (in kWh?) (e.g. if 1h freq, the load of each line can be subtracted directly since 1kW*1h=1kWh. If in minutes, then 1kW*1min=1/60kWh) 
@@ -103,16 +103,24 @@ def power_flow_v2(self, max_charge: int = 8, max_AC_power_output: int = 2, max_D
     Returns:
         None
     """ 
+    # convert charges to unit of frequency of the data
+    interval = 3600/pd.Timedelta(self.pd.index.freq).total_seconds() # hours to seconds
+    max_charge = max_charge*interval
+    max_EV_charge = max_EV_charge*interval
+
     # Initialize variables
     previous_charge_battery = 0  # Initialize as integer
     previous_charge_EV = 0  # Initialize as integer
 
-
+    # Initialize counters
+    length=self.pd.shape[0]
+    counter=0
     # Iterate over DataFrame rows
     for _, row in self.pd.iterrows():
+        print(f"Calculating power flows for row {counter}/{length}", end="\r")
+        counter+=1
         PV_power = min(row['PV_generated_power'], max_PV_input) #power_loss = row['PV_generated_power'] - PV_power
         load = -row['Load_kW']
-
         """
         # Calculate battery charge and grid flow
         if load > max_AC_power_output:  # Load too high for inverter, switch to grid-tie to avoid overloading of inverter #TODO: everything until max_AC_power is still gotten from the PV
@@ -122,36 +130,34 @@ def power_flow_v2(self, max_charge: int = 8, max_AC_power_output: int = 2, max_D
             grid_flow = load + load_from_battery
         """
  
-        
         excess_load=-min(0,-load+max_AC_power_output) #load that is immediately sent to the grid
-        load=load+excess_load #load that is left after the excess load is sent to the grid #TODO: - or +??
-        
+        load=load+excess_load #load that is left after the excess load is sent to the grid 
         
         load_to_EV =PV_power+load
         load_to_battery, new_charge_EV= EV(row=row,load_to_EV=load_to_EV,old_capacity=previous_charge_EV,EV_type=EV_type)
-        load_from_battery, new_charge_battery = battery(load_to_battery, previous_charge_battery)
+        load_from_battery, new_charge_battery = battery(load_to_battery, previous_charge_battery,max_charge=max_charge,max_DC_batterypower=max_DC_batterypower)
         grid_flow = load_from_battery + excess_load
         
         grid_flow = min(grid_flow, max_AC_power_output) # Limit grid flow to max AC power output
         previous_charge_battery=new_charge_battery
         previous_charge_EV=new_charge_EV
 
-        row['BatteryCharge'] = new_charge_battery/60
+        row['BatteryCharge'] = new_charge_battery/interval
         row['GridFlow'] = grid_flow
         #row['PowerLoss'] = power_loss
         row['BatteryFlow'] = load_to_battery-load_from_battery
-        row['EVCharge'] = new_charge_EV
+        row['EVCharge'] = new_charge_EV/interval
         row['EVFlow'] = load_to_EV-load_to_battery
     return None
 
-def battery(self,load_to_battery:float,old_capacity:float)-> tuple[float,float]:
+def battery(load_to_battery:float,old_capacity:float,max_charge: int = 8, max_DC_batterypower: int = 2)-> tuple[float,float]:
     """
     Calculate load after the battery and the new battery capacity using the old capacity and load
     """
     #power_loss=0
-    min_capacity=40
-    max_capacity=60
-    max_DC_batterypower=2
+    min_capacity=max_charge*0.1
+    max_capacity=max_charge*0.9
+    max_DC_batterypower=max_DC_batterypower
     if load_to_battery > 0:  # Excess power from PV
         max_input=min(max_capacity-old_capacity,load_to_battery,max_DC_batterypower) #TODO: add function that it can be better to charge at a later time and move more to the grid now
         load_from_battery=load_to_battery-max_input
@@ -170,52 +176,72 @@ def battery(self,load_to_battery:float,old_capacity:float)-> tuple[float,float]:
 
     return load_from_battery,new_capacity
 
-def EV(self,row,load_to_EV:float,old_capacity:float,EV_type:str='B2G')-> tuple[float,float]:
+def EV(row,load_to_EV:float,old_capacity:float,EV_type:str='B2G',max_EV_power: int = 3.7, max_EV_charge=82.3)-> tuple[float,float]:
     """
-    Calculate the EV load for a bidirectional charging strategy. Based on the time of the week, it returns the total load consumed (by the EV and household) and the new battery charge of the EV. It gets as parameter the charge that is requested to be added or removed from the battery by the household and the old battery capacity of the EV.
+    Calculate load after the EV and the new EV capacity using the old capacity and load
+    
+    Args:
+        row (pd.Series): The row of the DataFrame
+        load_to_EV (float): The load that is sent to the EV
+        old_capacity (float): The old capacity of the EV
+        EV_type (str): The type of EV, either 'B2G', 'with_SC', 'no_SC' or 'no_EV'
+        max_EV_power (int, optional): The maximum power that can be sent to the EV in kW. Defaults to 3.7.
+        max_EV_charge (int, optional): The maximum charge capacity of the EV in kWh. Defaults to 82.3.
+        
+    Returns:
+        tuple[float,float]: The load that is sent from the EV and the new EV capacity
     """
-    max_input_power=3.7
-    max_output_power=3.7
-    min_capacity_morning=40
-    min_capacity_evening=20
+    max_EV_charge=max_EV_charge*60 #kWmin
+    max_input_power=max_EV_power
+    max_output_power=max_EV_power
+    min_capacity_evening=max_EV_charge*0.2
+
+    min_capacity_morning=min_capacity_evening+20
     max_capacity=60
     if EV_type=='B2G':
         # During the weekdays
-        if row.index.weekday<5:
+        if row.name.weekday()<5:
             # During the weekdays, from 9:00 to 17:00, the load of the EV is zero so it returns the same load as the household, but the EV battery decreases by 0.2 kWh per hour
-            if row.index.hour>=9 and row.index.hour<17:
+            if row.name.hour>=9 and row.name.hour<17:
                 load_from_EV=load_to_EV
                 new_capacity=old_capacity-2/60
             # During the weekdays in the morning, from 7:00 to 9:00, and evening, from 17:00 to 19:00, the EV is uncharging, reducing the household load and the battery capacity as long as the battery capacity is greater than 40 kWh in the morning and 20kWh at 19:00
-            elif (row.index.hour>=7 and row.index.hour<9) or (row.index.hour>=17 and row.index.hour<19):
-                min_capacity= min_capacity_morning if self.pd.index.hour<9 else min_capacity_evening # minimal capacity of the battery
-                max_output=min(max_output_power,old_capacity-min_capacity,load_to_EV)
-                load_from_EV=load_to_EV-max_output
+            elif (row.name.hour>=7 and row.name.hour<9) or (row.name.hour>=17 and row.name.hour<19):
+                min_capacity= min_capacity_morning if row.name.hour<9 else min_capacity_evening # minimal capacity of the battery
+                max_output=min(max_output_power,old_capacity-min_capacity,-load_to_EV)
+                load_from_EV=load_to_EV+max_output
                 new_capacity=old_capacity-max_output 
             
             # During the weekdays in the rest of the hours, the EV is charging, increasing the household load and the battery capacity as long as the battery capacity is less than 60 kWh
             else:
-                max_input=min(max_input_power,max_capacity-old_capacity,load_to_EV)
-                load_from_EV=load_to_EV+max_input
-                new_capacity=min(max_capacity,old_capacity+max_input_power)
+                max_input=min(max_input_power,max_capacity-old_capacity)
+                load_from_EV=load_to_EV-max_input
+                new_capacity=old_capacity+max_input
             
         # During the weekends
-        if row.index.weekday>=5:
-            # During the weekends, from 9:00 to 17:00, 
-            if row.index.hour>=9 and row.index.hour<17:
+        if row.name.weekday()>=5:
+            # During the weekends, from 9:00 to 17:00, the car is charged using the solar energy 
+            if row.name.hour>=9 and row.name.hour<17:
                 load_from_EV=load_to_EV
                 new_capacity=old_capacity-0.2
             # During the weekends in the morning, from 7:00 to 9:00, and evening, from 17:00 to 19:00, the EV is uncharging, reducing the household load and the battery capacity as long as the battery capacity is greater than 40 kWh in the morning and 20kWh at 19:00
-            elif (self.pd.index.hour>=7 and self.pd.index.hour<9) or (self.pd.index.hour>=17 and self.pd.index.hour<19):
-                min_capacity= min_capacity_morning if self.pd.index.hour<9 else min_capacity_evening
+            elif (row.name.hour>=7 and row.name.hour<9) or (row.name.hour>=17 and row.name.hour<19):
+                min_capacity= min_capacity_morning if row.name.hour<9 else min_capacity_evening
+            load_from_EV=load_to_EV #TODO: add the rest of the code
+            new_capacity=old_capacity
         
         #TODO: finish this part, check if to be charged the whole night
-    elif EV_type=='smart':
+    elif EV_type=='with_SC':
         load_from_EV=load_to_EV-row['Load_EV_kW_with_SC']
         new_capacity=0
-    elif EV_type=='dumb':
+    elif EV_type=='no_SC':
         load_from_EV=load_to_EV-row['Load_EV_kW_no_SC']
         new_capacity=0
+    elif EV_type=='no_EV':
+        load_from_EV=load_to_EV
+        new_capacity=0
+    else:
+        raise ValueError('EV_type should be either B2G, with_SC, no_SC or no_EV')
     return load_from_EV,new_capacity    
 
 def nettoProduction(self):

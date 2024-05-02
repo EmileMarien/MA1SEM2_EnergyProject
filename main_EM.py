@@ -351,7 +351,22 @@ if plot_total_irradiance:
     plot_series([irradiances_S], title='Mean yearly incident irradiance for the S orientation and different tilt angles', xlabel='Tilt angle [degrees]', ylabel='Power $[\mathrm{\\frac{W}{m^2}}]$')
     
 
+# Print the influence of the EV load on the grid flow
+print_EV_influence=True
+if print_EV_influence:
+    irradiance_pd_S_30.add_EV_load()
+    irradiance_pd_S_30.filter_data_by_date_interval('2018-06-01 22:00','2018-06-2 8:00',interval_str='1min')
+    print(irradiance_pd_S_30.get_columns(['Load_EV_kW_with_SC','NettoProduction','GridFlow']))
+    irradiance_pd_S_30.power_flow(max_charge=0, max_AC_power_output=max_AC_power_output, max_DC_batterypower=max_DC_batterypower_output,EV_type='with_SC')
+    irradiances_S_30_EV=irradiance_pd_S_30.get_columns(['GridFlow']).squeeze()
+    irradiances_S_30_EV.name='GridFLow'
+    irradiance_pd_S_30.nettoProduction()
+    irradiance_S_30_load=irradiance_pd_S_30.get_columns(['NettoProduction']).squeeze()
+    print(irradiance_pd_S_30.get_columns(['Load_EV_kW_with_SC','NettoProduction','GridFlow']))
 
+    print(irradiance_pd_S_30.get_columns(['Load_EV_kW_with_SC','Load_EV_kW_no_SC']))
+
+    plot_series([irradiances_S_30_EV,irradiance_S_30_load],title='Influence of the EV load on the grid flow',xlabel='Time',ylabel='Power [kW]',display_time='yearly')
 
 # Return key figures
 print_key_figures=False
@@ -360,7 +375,7 @@ if print_key_figures:
 
 
 # Print the total solar energy generated from 50 solar panels to see why load still exists when the solar panels are generating MUCH power
-print_total_solar_energy=True
+print_total_solar_energy=False
 if print_total_solar_energy:
     irradiance_pd_S_30.PV_generated_power(panel_count=1)
     irradiance_pd_S_30.nettoProduction()

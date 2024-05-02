@@ -27,10 +27,10 @@ def add_EV_load_type(self,type:str='Load_EV_kW_with_SC'):
     # Create dataframe with the EV load data for the first week
     if type=='Load_EV_kW_with_SC':
         week_values=df1[['Datetime','Load_EV_kW_with_SC']]
-        week_values.rename(columns={'Load_EV_kW_with_SC':'Load_EV_kW'},inplace=True)
+        #week_values.rename(columns={'Load_EV_kW_with_SC':'Load_EV_kW'},inplace=True)
     elif type=='Load_EV_kW_no_SC':
         week_values=df1[['Datetime','Load_EV_kW_no_SC']]
-        week_values.rename(columns={'Load_EV_kW_no_SC':'Load_EV_kW'},inplace=True)
+        #week_values.rename(columns={'Load_EV_kW_no_SC':'Load_EV_kW'},inplace=True)
     else:
         raise ValueError("The type must be either 'smart', 'B2G' or 'dumb'.")
     week_values.set_index('Datetime',inplace=True)
@@ -63,8 +63,7 @@ def add_EV_load_type(self,type:str='Load_EV_kW_with_SC'):
         print(self.pd.loc[week_start_date:end_date, type])
 
     
-    plot_series([self.pd[type]], title='EV Load', xlabel='Datetime', ylabel='Load [kW]', display_time='year')
-    #self.pd['Load_EV_kW'] = self.pd['Load_EV_kW'].interpolate(method='linear')
+    #plot_series([self.pd[type]], title='EV Load', xlabel='Datetime', ylabel='Load [kW]', display_time='year')
 
     return None
 
