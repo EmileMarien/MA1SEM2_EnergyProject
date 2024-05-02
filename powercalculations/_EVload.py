@@ -6,7 +6,7 @@ from visualisations.visualisations import plot_series
 
 
 
-def add_EV_load(self,type:str='smart'):
+def add_EV_load_type(self,type:str='Load_EV_kW_with_SC'):
     """
     Add electric vehicle (EV) load data to the DataFrame.
     The EV load data is read from an Excel file and interpolated to match the time index of the DataFrame.
@@ -25,16 +25,10 @@ def add_EV_load(self,type:str='smart'):
     assert 'Correction_factor' in df1.columns, "The EV load file does not contain the column 'Correction_factor'."
 
     # Create dataframe with the EV load data for the first week
-    if type=='B2G':
-        return None
-            
-
-
-
-    elif type=='smart':
+    if type=='Load_EV_kW_with_SC':
         week_values=df1[['Datetime','Load_EV_kW_with_SC']]
         week_values.rename(columns={'Load_EV_kW_with_SC':'Load_EV_kW'},inplace=True)
-    elif type=='dumb':
+    elif type=='Load_EV_kW_no_SC':
         week_values=df1[['Datetime','Load_EV_kW_no_SC']]
         week_values.rename(columns={'Load_EV_kW_no_SC':'Load_EV_kW'},inplace=True)
     else:
@@ -75,3 +69,7 @@ def add_EV_load(self,type:str='smart'):
     self.pd['Load_kW'] = self.pd['Load_house_kW'] + self.pd['Load_EV_kW']
     return None
 
+
+def add_EV_load(self):
+    add_EV_load_type(self,type='Load_EV_kW_with_SC')
+    add_EV_load_type(self,type='Load_EV_kW_no_SC')
