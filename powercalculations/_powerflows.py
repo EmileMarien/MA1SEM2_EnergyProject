@@ -205,7 +205,11 @@ def EV(self,row,load_to_EV:float,old_capacity:float,EV_type:str='B2G')-> tuple[f
         
         #TODO: finish this part, check if to be charged the whole night
     elif EV_type=='smart':
-        load_from_EV=load_to_EV-row['Load_EV_kW']
+        load_from_EV=load_to_EV-row['Load_EV_kW_with_SC']
+        new_capacity=0
+    elif EV_type=='dumb':
+        load_from_EV=load_to_EV-row['Load_EV_kW_no_SC']
+        new_capacity=0
     return load_from_EV,new_capacity    
 
 def nettoProduction(self):
