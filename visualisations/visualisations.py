@@ -66,7 +66,7 @@ def plot_dataframe(df:pd.DataFrame=pd.DataFrame):
     # Show the plot
     plt.show()
 
-def plot_series(series:List[pd.Series]=[pd.Series], title:str='Series', xlabel:str='Datetime', ylabel:str='Value', secondary_series:List[pd.Series]=[],ylabel2:str='Value',selected_format:str=None,display_time:str='hour'):
+def plot_series(series:List[pd.Series]=[pd.Series], title:str='Series', xlabel:str='Datetime', ylabel:str='Value', secondary_series:List[pd.Series]=[],ylabel2:str='Value',selected_format:str=None,display_time = None):
     """
     Plots a given Series with a datetime index.
 

@@ -123,13 +123,17 @@ def electricity_cost(solar_panel_count: int=20, panel_surface:int= 2,annual_degr
     print("Capacity cost:", capacity_cost)
     print("Levy cost:", levy_cost)
     print("Total cost:", cost)
-    print("Total production:",irradiance.get_PV_generated_power().sum()/60)
+    print("Total production:",irradiance.get_energy_TOT(column_name='PV_generated_power'))
     print("Total injection: peak:", irradiance.get_total_injection_and_consumption()[0],"offpeak:",irradiance.get_total_injection_and_consumption()[1])    
     print("Total consumption: peak:", irradiance.get_total_injection_and_consumption()[2],"offpeak:",irradiance.get_total_injection_and_consumption()[3])
 
     return cost
 
-print(electricity_cost(Orientation='S',tilt_angle=30, tariff='DynamicTariff',solar_panel_count=10))
+print(electricity_cost(Orientation='S',tilt_angle=30, tariff='DynamicTariff',solar_panel_count=1))
+print(electricity_cost(Orientation='S',tilt_angle=30, tariff='DualTariff',solar_panel_count=50))
+print(electricity_cost(Orientation='S',tilt_angle=30, tariff='DynamicTariff',solar_panel_count=50))
+print(electricity_cost(Orientation='S',tilt_angle=30, tariff='DynamicTariff',solar_panel_count=51))
+
 #print(electricity_cost(Orientation='S',tilt_angle=30, tariff='DynamicTariff',solar_panel_count=0))
 #print(electricity_cost(Orientation='S',tilt_angle=30, tariff='DualTariff',solar_panel_count=10))
 #print(electricity_cost(Orientation='S',tilt_angle=30, tariff='DualTariff',solar_panel_count=30))
