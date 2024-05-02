@@ -34,7 +34,7 @@ def get_PV_generated_power(self):
     """
     return self.pd['PV_generated_power']
 
-def get_energy_TOT(self,column_name:str='Load_kW',peak:str='peak'):
+def get_energy_TOT(self,column_name:str='Load_kW',peak:str='all'):
     """
     Calculates the total energy in kWh for the entire year in the DataFrame. The energy is calculated for the specified power values and peak or offpeak period.
 
@@ -63,6 +63,8 @@ def get_energy_TOT(self,column_name:str='Load_kW',peak:str='peak'):
     elif peak=='offpeak':
         # Select data outside 8:00 and 18:00 for the entire year
         df_filtered = df_load[((df_load.index.hour < 8) | (df_load.index.hour >= 18)) & (df_load.index.weekday < 5) | (df_load.index.weekday >= 5)]
+    elif peak=='all':
+        df_filtered = df_load
     else:
         AssertionError('The peak must be either peak or offpeak')
 

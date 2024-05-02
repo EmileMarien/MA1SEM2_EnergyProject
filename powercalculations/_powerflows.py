@@ -113,18 +113,24 @@ def power_flow_v2(self, max_charge: int = 8, max_AC_power_output: int = 2, max_D
         PV_power = min(row['PV_generated_power'], max_PV_input) #power_loss = row['PV_generated_power'] - PV_power
         load = -row['Load_kW']
 
+        """
         # Calculate battery charge and grid flow
-        if load > max_AC_power_output:  # Load too high for inverter, switch to grid-tie to avoid overloading of inverter
+        if load > max_AC_power_output:  # Load too high for inverter, switch to grid-tie to avoid overloading of inverter #TODO: everything until max_AC_power is still gotten from the PV
             load_to_EV = PV_power
             load_to_battery, new_charge_EV= EV(row=row,load_to_EV=load_to_EV,old_capacity=previous_charge_EV,EV_type=EV_type)
             load_from_battery, new_charge_battery = battery(load_to_battery, previous_charge_battery)
             grid_flow = load + load_from_battery
-
-        else:
-            load_to_EV =PV_power+load
-            load_to_battery, new_charge_EV= EV(row=row,load_to_EV=load_to_EV,old_capacity=previous_charge_EV,EV_type=EV_type)
-            load_from_battery, new_charge_battery = battery(load_to_battery, previous_charge_battery)
-            grid_flow = load_from_battery
+        """
+ 
+        
+        excess_load=-min(0,-load+max_AC_power_output) #load that is immediately sent to the grid
+        load=load+excess_load #load that is left after the excess load is sent to the grid #TODO: - or +??
+        
+        
+        load_to_EV =PV_power+load
+        load_to_battery, new_charge_EV= EV(row=row,load_to_EV=load_to_EV,old_capacity=previous_charge_EV,EV_type=EV_type)
+        load_from_battery, new_charge_battery = battery(load_to_battery, previous_charge_battery)
+        grid_flow = load_from_battery + excess_load
         
         grid_flow = min(grid_flow, max_AC_power_output) # Limit grid flow to max AC power output
         previous_charge_battery=new_charge_battery
@@ -179,7 +185,7 @@ def EV(self,row,load_to_EV:float,old_capacity:float,EV_type:str='B2G')-> tuple[f
             # During the weekdays, from 9:00 to 17:00, the load of the EV is zero so it returns the same load as the household, but the EV battery decreases by 0.2 kWh per hour
             if row.index.hour>=9 and row.index.hour<17:
                 load_from_EV=load_to_EV
-                new_capacity=old_capacity-0.2
+                new_capacity=old_capacity-2/60
             # During the weekdays in the morning, from 7:00 to 9:00, and evening, from 17:00 to 19:00, the EV is uncharging, reducing the household load and the battery capacity as long as the battery capacity is greater than 40 kWh in the morning and 20kWh at 19:00
             elif (row.index.hour>=7 and row.index.hour<9) or (row.index.hour>=17 and row.index.hour<19):
                 min_capacity= min_capacity_morning if self.pd.index.hour<9 else min_capacity_evening # minimal capacity of the battery
