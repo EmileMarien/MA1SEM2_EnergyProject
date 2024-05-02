@@ -260,20 +260,22 @@ if plot_weekly_load_consumption:
 # Plot hourly belpex for the week
 plot_weekly_load_consumption=False #OK
 if plot_weekly_load_consumption:
-
+    irradiance_pd_S_30.filter_data_by_date_interval('2018-01-01 1:00','2018-12-31 23:00',interval_str='1h')
     #irradiance_pd_S_30.filter_data_by_date_interval('2018-06-01 1:00','2018-09-30 23:00',interval_str='1min')
     hourly_belpex=financials.get_columns(['BelpexFilter'])
-
+    hourly_nettoproduction = irradiance_pd_S_30.get_columns(['NettoProduction'])
     # Extract hour and minute from DateTimeIndex
     hourly_belpex['hour'] = hourly_belpex.index.hour
     hourly_belpex['minute'] = hourly_belpex.index.minute
+    hourly_nettoproduction['hour'] = hourly_nettoproduction.index.hour
+    hourly_nettoproduction['minute'] = hourly_nettoproduction.index.minute
 
+    daily_price_series_list= []
     daily_load_series_list = []
-    # List of day names
-    day_names = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
 
     # Filter rows where the DateTimeIndex corresponds to a weekday
     weekday_rows = hourly_belpex[(hourly_belpex.index.dayofweek >= 0) & (hourly_belpex.index.dayofweek <= 4)]
+    weekday_nettoproduction_rows = hourly_nettoproduction[(hourly_nettoproduction.index.dayofweek >= 0) & (hourly_nettoproduction.index.dayofweek <= 4)]
     #weekendday_rows = hourly_belpex[(hourly_belpex.index.dayofweek >= 5) & (hourly_belpex.index.dayofweek <= 6)]
 
     # Group by hour and minute and calculate average value for the current day
@@ -281,20 +283,32 @@ if plot_weekly_load_consumption:
     average_weekdayprice_by_hour_minute.index = [f"{x[0]:02d}:{x[1]:02d}" for x in average_weekdayprice_by_hour_minute.index]
     average_weekdayprice_by_hour_minute.name='Average weekday belpexprice'
     print(average_weekdayprice_by_hour_minute)
+    average_weekday_production_by_hour_minute = weekday_nettoproduction_rows.groupby(['hour','minute'])['NettoProduction'].mean()
+    average_weekday_production_by_hour_minute.index = [f"{x[0]:02d}:{x[1]:02d}" for x in average_weekday_production_by_hour_minute.index]
+    average_weekday_production_by_hour_minute.name='Average weekday netto production'
+    print(average_weekday_production_by_hour_minute)
     # Append the Series to the list
-    daily_load_series_list.append(average_weekdayprice_by_hour_minute)
+    daily_price_series_list.append(average_weekdayprice_by_hour_minute)
+    daily_load_series_list.append(average_weekday_production_by_hour_minute)
 
     # Filter rows where the DateTimeIndex corresponds to a weekendday
     weekendday_rows = hourly_belpex[(hourly_belpex.index.dayofweek >= 5) & (hourly_belpex.index.dayofweek <= 6)]
+    weekendday_production_rows = hourly_nettoproduction[(hourly_nettoproduction.index.dayofweek >= 5) & (hourly_nettoproduction.index.dayofweek <= 6)]
+
     # Group by hour and minute and calculate average value for the current day
     average_weekenddayprice_by_hour_minute = weekendday_rows.groupby(['hour', 'minute'])['BelpexFilter'].mean()
     average_weekenddayprice_by_hour_minute.index = [f"{x[0]:02d}:{x[1]:02d}" for x in average_weekenddayprice_by_hour_minute.index]
     average_weekenddayprice_by_hour_minute.name='Average weekend belpexprice'
     print(average_weekenddayprice_by_hour_minute)
+    average_weekendday_production_by_hour_minute = weekendday_production_rows.groupby(['hour', 'minute'])['NettoProduction'].mean()
+    average_weekendday_production_by_hour_minute.index = [f"{x[0]:02d}:{x[1]:02d}" for x in average_weekendday_production_by_hour_minute.index]
+    average_weekendday_production_by_hour_minute.name = 'Average weekend netto production'
     # Append the Series to the list
-    daily_load_series_list.append(average_weekenddayprice_by_hour_minute)
+    daily_price_series_list.append(average_weekenddayprice_by_hour_minute)
+    daily_load_series_list.append(average_weekendday_production_by_hour_minute)
 
-    plot_series(daily_load_series_list,display_time='hour',title='Average hourly belpex price for weekdays',xlabel='Hour of the day',ylabel='Price [€/MWh]')
+
+    plot_series(daily_load_series_list,display_time='hour',title='Average hourly belpex price and netto production',xlabel='Hour of the day',ylabel2='Price [€/MWh]',secondary_series=daily_price_series_list, ylabel='Netto production [kW]')
 
 # Plot the total irradiance for the S orientations and iterate over the different tilt angles
 plot_total_irradiance=False #OK
