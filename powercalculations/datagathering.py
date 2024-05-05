@@ -19,9 +19,12 @@ longitude=5.53972 # [degrees]
 
 
 print('start')
-
+file = open('data/initialized_dataframes/pd_S_30','rb')
+irradiance_pd_S_30=pickle.load(file)
+file.close()    
+irradiance_pd_S_30.get_columns(['Load_EV_kW_with_SC'])
 # Add Load_EV_kW_no_SC & Load_EV_kW_with_SC columns to each dataset
-add_EV_load=True
+add_EV_load=False
 if add_EV_load:
     file = open('data/initialized_dataframes/pd_S_30','rb')
     irradiance_pd_S_30=pickle.load(file)
