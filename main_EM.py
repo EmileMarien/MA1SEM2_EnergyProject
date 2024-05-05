@@ -28,7 +28,7 @@ financials=GridCost(irradiance_pd_S_30.get_grid_power()[0],file_path_BelpexFilte
 max_charge= 8 #kWh
 max_AC_power_output= 5
 max_DC_batterypower_output= 5
-irradiance_pd_S_30.power_flow(max_charge, max_AC_power_output, max_DC_batterypower_output)
+#irradiance_pd_S_30.power_flow(max_charge, max_AC_power_output, max_DC_batterypower_output)
 irradiance_pd_S_30.nettoProduction()
 financials=GridCost(irradiance_pd_S_30.get_grid_power()[0],file_path_BelpexFilter="data/BelpexFilter.xlsx")
 
@@ -354,19 +354,23 @@ if plot_total_irradiance:
 # Print the influence of the EV load on the grid flow
 print_EV_influence=True
 if print_EV_influence:
-    irradiance_pd_S_30.add_EV_load()
-    irradiance_pd_S_30.filter_data_by_date_interval('2018-06-01 22:00','2018-06-2 8:00',interval_str='1min')
-    print(irradiance_pd_S_30.get_columns(['Load_EV_kW_with_SC','NettoProduction','GridFlow']))
-    irradiance_pd_S_30.power_flow(max_charge=0, max_AC_power_output=max_AC_power_output, max_DC_batterypower=max_DC_batterypower_output,EV_type='with_SC')
+    irradiance_pd_S_30.filter_data_by_date_interval('2018-01-01 1:00','2018-01-07 11:00',interval_str='1min')
+    irradiance_pd_S_30.power_flow(max_charge=0, max_AC_power_output=max_AC_power_output, max_DC_batterypower=max_DC_batterypower_output,EV_type='B2G') # other EV types: 'no_EV', 'with_SC', 'no_SC', 'B2G
     irradiances_S_30_EV=irradiance_pd_S_30.get_columns(['GridFlow']).squeeze()
     irradiances_S_30_EV.name='GridFLow'
     irradiance_pd_S_30.nettoProduction()
     irradiance_S_30_load=irradiance_pd_S_30.get_columns(['NettoProduction']).squeeze()
-    print(irradiance_pd_S_30.get_columns(['Load_EV_kW_with_SC','NettoProduction','GridFlow']))
+    irradiance_S_30_load.name='NettoProduction'
 
-    print(irradiance_pd_S_30.get_columns(['Load_EV_kW_with_SC','Load_EV_kW_no_SC']))
+    irradiance_S_30_EV=irradiance_pd_S_30.get_columns(['EVFlow']).squeeze()
+    irradiance_S_30_EV_cap=irradiance_pd_S_30.get_columns(['EVCharge']).squeeze()
+    formatter = pd.option_context('display.max_rows', None, 'display.max_columns', None)
+    #with formatter:
+     #   print(irradiance_pd_S_30.get_columns(['NettoProduction','GridFlow','EVFlow','EVCharge']))
 
-    plot_series([irradiances_S_30_EV,irradiance_S_30_load],title='Influence of the EV load on the grid flow',xlabel='Time',ylabel='Power [kW]',display_time='yearly')
+    #print(irradiance_pd_S_30.get_columns(['Load_EV_kW_with_SC','Load_EV_kW_no_SC']))
+
+    plot_series([irradiances_S_30_EV,irradiance_S_30_load,irradiance_S_30_EV],title='Influence of the EV load on the grid flow',xlabel='Time',ylabel='Power [kW]',display_time='yearly',secondary_series=[irradiance_S_30_EV_cap],ylabel2='EV charge [kW]')
 
 # Return key figures
 print_key_figures=False

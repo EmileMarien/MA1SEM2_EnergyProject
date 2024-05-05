@@ -79,6 +79,7 @@ class PowerCalculations():
 
     from ._powerflows import power_flow_old
     from ._powerflows import nettoProduction
+    from ._powerflows import power_flow_old
     
     from ._getters import get_dataset
     from ._getters import get_irradiance
