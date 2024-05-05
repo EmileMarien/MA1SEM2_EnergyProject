@@ -69,7 +69,7 @@ class PowerCalculations():
     from ._datacleaning import update_column
 
     from ._pvpower import PV_generated_power
-    
+
     from ._visualisations import plot_columns
     from ._visualisations import plot_dataframe
     from ._visualisations import plot_series
@@ -77,7 +77,7 @@ class PowerCalculations():
     from ._directirradiance import calculate_direct_irradiance
     from ._directirradiance import calculate_solar_angles
 
-    from ._powerflows import power_flow
+    from ._powerflows import power_flow_old
     from ._powerflows import nettoProduction
     
     from ._getters import get_dataset

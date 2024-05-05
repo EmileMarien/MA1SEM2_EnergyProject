@@ -76,7 +76,7 @@ def electricity_cost(solar_panel_count: int=20, panel_surface:int= 2,annual_degr
 
     irradiance.PV_generated_power(panel_count=solar_panel_count, cell_area=panel_surface, efficiency_max=panel_efficiency*(1-annual_degradation),Temp_coeff=temperature_coefficient)
     print("2.2/4: PV generated power & EV load calculated")
-    irradiance.power_flow(max_charge=battery_capacity*battery_count, max_AC_power_output = inverter_size_AC, max_PV_input = inverter_maxsolar_DC, max_DC_batterypower = inverter_maxbattery_DC)
+    irradiance.power_flow_old(max_charge=battery_capacity*battery_count, max_AC_power_output = inverter_size_AC, max_PV_input = inverter_maxsolar_DC, max_DC_batterypower = inverter_maxbattery_DC)
     print("2.3/4: Powerflows calculated")
     print("3/4: start cost calculations")
     #plot_dataframe(irradiance.get_columns(["Load_kW", "PV_generated_power", "GridFlow", "BatteryFlow", "BatteryCharge", "PowerLoss"]))

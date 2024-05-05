@@ -86,9 +86,9 @@ def power_flow_old(self, max_charge: int = 8, max_AC_power_output: int = 2, max_
 
     return None
 
-
+"""
 def power_flow(self, max_charge: int = 8, max_AC_power_output: int = 2, max_DC_batterypower: int = 2, max_PV_input: int = 10, max_EV_power: int = 3.7, max_EV_charge=82.3,EV_type:str='no_EV'):
-    """
+    
     Calculates power flows, how much is going to and from the battery and how much is being tapped from the grid
     #TODO: add units, PV_generated_power and Load_kW are both in kW. Depending on the frequency of this data, a different amount is subtracted from the battery charge (in kWh?) (e.g. if 1h freq, the load of each line can be subtracted directly since 1kW*1h=1kWh. If in minutes, then 1kW*1min=1/60kWh) 
     ADD BATTERY DEGRADATION
@@ -102,7 +102,7 @@ def power_flow(self, max_charge: int = 8, max_AC_power_output: int = 2, max_DC_b
         max_EV_charge (int, optional): Maximum charge capacity of the EV in kWh. Defaults to 82.3.
     Returns:
         None
-    """ 
+    
     # convert charges to unit of frequency of the data
     interval = 3600/pd.Timedelta(self.pd.index.freq).total_seconds() # hours to seconds
     max_charge = max_charge*interval
@@ -121,14 +121,14 @@ def power_flow(self, max_charge: int = 8, max_AC_power_output: int = 2, max_DC_b
         counter+=1
         PV_power = min(row['PV_generated_power'], max_PV_input) #power_loss = row['PV_generated_power'] - PV_power
         load = -row['Load_kW']
-        """
+        
         # Calculate battery charge and grid flow
         if load > max_AC_power_output:  # Load too high for inverter, switch to grid-tie to avoid overloading of inverter #TODO: everything until max_AC_power is still gotten from the PV
             load_to_EV = PV_power
             load_to_battery, new_charge_EV= EV(row=row,load_to_EV=load_to_EV,old_capacity=previous_charge_EV,EV_type=EV_type)
             load_from_battery, new_charge_battery = battery(load_to_battery, previous_charge_battery)
             grid_flow = load + load_from_battery
-        """
+        
  
         excess_load=-min(0,-load+max_AC_power_output) #load that is immediately sent to the grid
         load=load+excess_load #load that is left after the excess load is sent to the grid 
@@ -151,9 +151,9 @@ def power_flow(self, max_charge: int = 8, max_AC_power_output: int = 2, max_DC_b
     return None
 
 def battery(load_to_battery:float,old_capacity:float,max_charge: int = 8, max_DC_batterypower: int = 2)-> tuple[float,float]:
-    """
+    
     Calculate load after the battery and the new battery capacity using the old capacity and load
-    """
+    
     #power_loss=0
     min_capacity=max_charge*0.1
     max_capacity=max_charge*0.9
@@ -177,7 +177,7 @@ def battery(load_to_battery:float,old_capacity:float,max_charge: int = 8, max_DC
     return load_from_battery,new_capacity
 
 def EV(row,load_to_EV:float,old_capacity:float,EV_type:str='B2G',max_EV_power: int = 3.7, max_EV_charge=82.3)-> tuple[float,float]:
-    """
+    
     Calculate load after the EV and the new EV capacity using the old capacity and load
     
     Args:
@@ -190,7 +190,6 @@ def EV(row,load_to_EV:float,old_capacity:float,EV_type:str='B2G',max_EV_power: i
         
     Returns:
         tuple[float,float]: The load that is sent from the EV and the new EV capacity
-    """
     max_EV_charge=max_EV_charge*60 #kWmin
     max_input_power=max_EV_power
     max_output_power=max_EV_power
@@ -243,7 +242,7 @@ def EV(row,load_to_EV:float,old_capacity:float,EV_type:str='B2G',max_EV_power: i
     else:
         raise ValueError('EV_type should be either B2G, with_SC, no_SC or no_EV')
     return load_from_EV,new_capacity    
-
+"""
 def nettoProduction(self):
     """
     Calculates the netto production by subtracting the load from the PV generated power
