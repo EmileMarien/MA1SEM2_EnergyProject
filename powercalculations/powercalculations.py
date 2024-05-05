@@ -77,9 +77,8 @@ class PowerCalculations():
     from ._directirradiance import calculate_direct_irradiance
     from ._directirradiance import calculate_solar_angles
 
-    from ._powerflows import power_flow_old
+    from ._powerflows import power_flow
     from ._powerflows import nettoProduction
-    from ._powerflows import power_flow_old
     
     from ._getters import get_dataset
     from ._getters import get_irradiance
