@@ -27,17 +27,17 @@ def add_EV_load_type(self,type:str='Load_EV_kW_with_SC'):
     # Create dataframe with the EV load data for the first week
     if type=='Load_EV_kW_with_SC':
         week_values=df1[['Datetime','Load_EV_kW_with_SC']]
-        week_values.rename(columns={'Load_EV_kW_with_SC':'Load_EV_kW'},inplace=True)
+        #week_values.rename(columns={'Load_EV_kW_with_SC':'Load_EV_kW'},inplace=True)
     elif type=='Load_EV_kW_no_SC':
         week_values=df1[['Datetime','Load_EV_kW_no_SC']]
-        week_values.rename(columns={'Load_EV_kW_no_SC':'Load_EV_kW'},inplace=True)
+        #week_values.rename(columns={'Load_EV_kW_no_SC':'Load_EV_kW'},inplace=True)
     else:
         raise ValueError("The type must be either 'smart', 'B2G' or 'dumb'.")
     week_values.set_index('Datetime',inplace=True)
     week_values.index = pd.to_datetime(week_values.index).round('T')
     frequence=self.pd.index.freq
     week_values=week_values.asfreq(freq=frequence, method='bfill')
-    print(week_values)
+    #print(week_values)
     week_values.reset_index(drop=True, inplace=True)  # Reset the index of values
 
     # Create a DataFrame with the weekly correction factors
@@ -51,7 +51,7 @@ def add_EV_load_type(self,type:str='Load_EV_kW_with_SC'):
 
     for i in range(len(date_range_year)):
         week_start_date = date_range_year[i]
-        print(week_start_date)
+        #print(week_start_date)
         values=week_values*correction_factors[i]
         
         # Calculate the end date, 
@@ -59,12 +59,13 @@ def add_EV_load_type(self,type:str='Load_EV_kW_with_SC'):
 
         values=values.head(int((end_date-week_start_date).total_seconds()/60+1)).set_index(self.pd.loc[week_start_date:end_date, type].index)
 
-        self.pd.loc[week_start_date:end_date].update(values)
-        print(self.pd.loc[week_start_date:end_date, type])
+        #self.pd.loc[week_start_date:end_date].update(values)
+        self.pd.update(values, overwrite=True)
+
+        #print(self.pd.loc[week_start_date:end_date, type])
 
     
-    plot_series([self.pd[type]], title='EV Load', xlabel='Datetime', ylabel='Load [kW]', display_time='year')
-    #self.pd['Load_EV_kW'] = self.pd['Load_EV_kW'].interpolate(method='linear')
+    #plot_series([self.pd[type]], title='EV Load', xlabel='Datetime', ylabel='Load [kW]', display_time='year')
 
     return None
 

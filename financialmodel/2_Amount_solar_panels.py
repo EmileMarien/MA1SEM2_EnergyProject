@@ -124,71 +124,49 @@ battery_types = {
         battery_Roundtrip_Efficiency= 0,  
         battery_PeakPower= 0,  
         battery_Degradation= 0, 
+        battery_count = 0
     ),    
-    "LG RESU Prime S": BatteryType(
+     "LG RESU Prime 2.9": BatteryType(
+        battery_inverter = 1,
+        battery_cost=2349*1.25,                
+        battery_lifetime=10,         
+        battery_capacity=2.9,
+        battery_Roundtrip_Efficiency=95,  
+        battery_PeakPower=3.3,  
+        battery_Degradation=4,   
+        battery_count = 1  
+    ),
+    "LG RESU Prime 5.9": BatteryType(
+        battery_inverter = 1,
+        battery_cost=3327.5*1.25,                
+        battery_lifetime=10,         
+        battery_capacity=5.9,
+        battery_Roundtrip_Efficiency=95,  
+        battery_PeakPower=4.6,  
+        battery_Degradation=4,   
+        battery_count = 1  
+    ),
+    "LG RESU Prime 9.6": BatteryType(
         battery_inverter = 1,
         battery_cost=6497*1.25,         #in Eur, times for installation cost       
         battery_lifetime=10,         #in years 
-        battery_capacity=9600,#in Wh 
+        battery_capacity=9.6,#in kWh 
         battery_Roundtrip_Efficiency=97.5, #in procent 
-        battery_PeakPower=7000,  #in W
+        battery_PeakPower=7,  #in kW
         battery_Degradation=3,   #in procent per year 
+        battery_count = 1
     ),
-    "LG RESU Prime L": BatteryType(
+    "LG RESU Prime 16": BatteryType(
         battery_inverter = 1,
         battery_cost=8987*1.25,                
         battery_lifetime=10,         
-        battery_capacity=16000,
+        battery_capacity=16,
         battery_Roundtrip_Efficiency=97.5,  
-        battery_PeakPower=11000,  
-        battery_Degradation=3,     
+        battery_PeakPower=11,  
+        battery_Degradation=3,   
+        battery_count = 1  
     ),
-    "tesla Powerwall 3": BatteryType(
-        battery_inverter = 0,
-        battery_cost=6945*1.25,                
-        battery_lifetime=10,         
-        battery_capacity=13500,
-        battery_Roundtrip_Efficiency=97.5,  
-        battery_PeakPower=11500,  
-        battery_Degradation=3,     
-    ),
-    "Generac PWRcell 3": BatteryType(
-        battery_inverter = 1,
-        battery_cost=9417*1.25*0.94,                
-        battery_lifetime=10,         
-        battery_capacity=9000,
-        battery_Roundtrip_Efficiency=96.5,  
-        battery_PeakPower=6000,  
-        battery_Degradation=3,     
-    ),
-    "Generac PWRcell 4": BatteryType(
-        battery_inverter = 1,
-        battery_cost=11406*1.25*0.94,                
-        battery_lifetime=10,         
-        battery_capacity=12000,
-        battery_Roundtrip_Efficiency=96.5,  
-        battery_PeakPower=6000,  
-        battery_Degradation=3,     
-    ),
-    "Generac PWRcell 5": BatteryType(
-        battery_inverter = 1,
-        battery_cost=13395*1.25*0.94,                
-        battery_lifetime=10,         
-        battery_capacity=15000,
-        battery_Roundtrip_Efficiency=96.5,  
-        battery_PeakPower=6000,  
-        battery_Degradation=3,     
-    ),
-    "Generac PWRcell 6": BatteryType(
-        battery_inverter = 1,
-        battery_cost=15384*1.25*0.94,                
-        battery_lifetime=10,         
-        battery_capacity=18000,
-        battery_Roundtrip_Efficiency=96.5,  
-        battery_PeakPower=6000,  
-        battery_Degradation=3,     
-    ),
-    # Define more types as needed
+    
 }
 
 

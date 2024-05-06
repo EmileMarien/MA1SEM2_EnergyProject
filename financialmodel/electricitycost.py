@@ -9,11 +9,12 @@ from visualisations.visualisations import plot_dataframe
 import powercalculations.powercalculations as pc
 import gridcost.gridcost as gc
 
-def electricity_cost(solar_panel_count: int=20, panel_surface:int= 2,annual_degradation: float=0.000, panel_efficiency: int= 0.2253, temperature_coefficient: float=-0.0026, inverter_size_AC: int = 5, inverter_maxsolar_DC: int = 8, inverter_maxbattery_DC: int=5,tilt_angle:int=-1, Orientation:str="S", battery_capacity: float= 0, battery_count: int=0,tariff: str='DualTariff',add_EV:bool=False):
+def electricity_cost(solar_panel_count: int=20, panel_surface:int= 2,annual_degradation: float=0.000, panel_efficiency: int= 0.2253, temperature_coefficient: float=-0.0026, inverter_size_AC: int = 5, inverter_maxsolar_DC: int = 8, inverter_maxbattery_DC: int=5,tilt_angle:int=-1, Orientation:str="S", battery_capacity: float= 0, battery_count: int=0,tariff: str='DualTariff', battery_roundtrip_efficiency:float=97.5, battery_PeakPower:int=11, battery_Degradation:int=3,EV_type:str='no_EV'):
     """
     Calculate the electricity cost for a given solar panel configuration and tariff.
 
     Args:
+    EV_type: The type of EV, either 'B2G', 'with_SC', 'no_SC' or 'no_EV'
     solar_panel_count (int): The number of solar panels.
     panel_surface (float): The surface area of a single solar panel in m^2.
     annual_degradation (float): The annual degradation rate of the solar panels (%, geef kommagetal).
@@ -56,7 +57,7 @@ def electricity_cost(solar_panel_count: int=20, panel_surface:int= 2,annual_degr
     irradiance=pickle.load(file)
     file.close()
     print("1/4: file opened")
-    irradiance.filter_data_by_date_interval(start_date="2018-1-1 00:00",end_date="2018-12-31 23:00",interval_str="20min")
+    irradiance.filter_data_by_date_interval(start_date="2018-1-1 00:00",end_date="2018-12-31 23:00",interval_str="10min")
     print("2/4: start calculations")
     
     if notYetCalculated:
@@ -71,12 +72,12 @@ def electricity_cost(solar_panel_count: int=20, panel_surface:int= 2,annual_degr
         file.close()
         
     print("2.1/4: Direct irradiance calculated")
-    if add_EV:
+    if irradiance.get_columns(['Load_EV_kW_with_SC']) is None:
         irradiance.add_EV_load() #filepath="data/EV_load.xlsx"
 
     irradiance.PV_generated_power(panel_count=solar_panel_count, cell_area=panel_surface, efficiency_max=panel_efficiency*(1-annual_degradation),Temp_coeff=temperature_coefficient)
     print("2.2/4: PV generated power & EV load calculated")
-    irradiance.power_flow(max_charge=battery_capacity*battery_count, max_AC_power_output = inverter_size_AC, max_PV_input = inverter_maxsolar_DC, max_DC_batterypower = inverter_maxbattery_DC)
+    irradiance.power_flow(max_charge=battery_capacity*battery_count*(1-battery_Degradation/100), max_AC_power_output = inverter_size_AC, max_PV_input = inverter_maxsolar_DC, max_DC_batterypower = inverter_maxbattery_DC,battery_roundtrip_efficiency=battery_roundtrip_efficiency, battery_PeakPower=battery_PeakPower,EV_type=EV_type)
     print("2.3/4: Powerflows calculated")
     print("3/4: start cost calculations")
     #plot_dataframe(irradiance.get_columns(["Load_kW", "PV_generated_power", "GridFlow", "BatteryFlow", "BatteryCharge", "PowerLoss"]))
@@ -123,13 +124,18 @@ def electricity_cost(solar_panel_count: int=20, panel_surface:int= 2,annual_degr
     print("Capacity cost:", capacity_cost)
     print("Levy cost:", levy_cost)
     print("Total cost:", cost)
-    print("Total production:",irradiance.get_PV_generated_power().sum()/60)
+    print("Total production:",irradiance.get_energy_TOT(column_name='PV_generated_power'))
     print("Total injection: peak:", irradiance.get_total_injection_and_consumption()[0],"offpeak:",irradiance.get_total_injection_and_consumption()[1])    
     print("Total consumption: peak:", irradiance.get_total_injection_and_consumption()[2],"offpeak:",irradiance.get_total_injection_and_consumption()[3])
 
     return cost
 
-print(electricity_cost(Orientation='S',tilt_angle=30, tariff='DynamicTariff',solar_panel_count=10))
+print(electricity_cost(Orientation='S',tilt_angle=30, tariff='DynamicTariff',solar_panel_count=10,battery_capacity=9.6,battery_count=1,EV_type='B2G',))
+#print(electricity_cost(Orientation='S',tilt_angle=30, tariff='DualTariff',solar_panel_count=50,battery_capacity=9.6,battery_count=1))
+#print(electricity_cost(Orientation='S',tilt_angle=30, tariff='DynamicTariff',solar_panel_count=20,battery_capacity=9.6,battery_count=1))
+#print(electricity_cost(Orientation='S',tilt_angle=30, tariff='DynamicTariff',solar_panel_count=20))
+#print(electricity_cost(Orientation='S',tilt_angle=30, tariff='DynamicTariff',solar_panel_count=51))
+
 #print(electricity_cost(Orientation='S',tilt_angle=30, tariff='DynamicTariff',solar_panel_count=0))
 #print(electricity_cost(Orientation='S',tilt_angle=30, tariff='DualTariff',solar_panel_count=10))
 #print(electricity_cost(Orientation='S',tilt_angle=30, tariff='DualTariff',solar_panel_count=30))

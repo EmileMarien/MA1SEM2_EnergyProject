@@ -66,7 +66,7 @@ def plot_dataframe(df:pd.DataFrame=pd.DataFrame):
     # Show the plot
     plt.show()
 
-def plot_series(series:List[pd.Series]=[pd.Series], title:str='Series', xlabel:str='Datetime', ylabel:str='Value', secondary_series:List[pd.Series]=[],ylabel2:str='Value',selected_format:str=None,display_time:str='hour'):
+def plot_series(series:List[pd.Series]=[pd.Series], title:str='Series', xlabel:str='Datetime', ylabel:str='Value', secondary_series:List[pd.Series]=[],ylabel2:str='Value',selected_format:str=None,display_time = None):
     """
     Plots a given Series with a datetime index.
 
@@ -93,7 +93,7 @@ def plot_series(series:List[pd.Series]=[pd.Series], title:str='Series', xlabel:s
     for j in range(len(secondary_series)):
         secondary_serie=secondary_series[j]
         ax2 = ax.twinx()
-        lns+=ax2.plot(secondary_serie.index, secondary_serie,label=secondary_serie.name, color=line_colors[j+2],linestyle=line_styles[j+2])
+        lns+=ax2.plot(secondary_serie.index, secondary_serie,label=secondary_serie.name, color=line_colors[j+3],linestyle=line_styles[j+2])
 
     length=series[0].shape[0]
     if display_time=='hour':
