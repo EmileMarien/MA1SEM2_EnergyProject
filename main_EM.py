@@ -258,7 +258,7 @@ if plot_weekly_load_consumption:
     plot_series(daily_load_series_list,display_time='hour',title='Hourly load consumption for each weekday',xlabel='Hour of the day',ylabel='Power [kW]')
 
 # Plot hourly belpex for the week
-plot_weekly_load_consumption=False #OK
+plot_weekly_load_consumption=True #OK
 if plot_weekly_load_consumption:
     irradiance_pd_S_30.filter_data_by_date_interval('2018-01-01 1:00','2018-12-31 23:00',interval_str='1h')
     #irradiance_pd_S_30.filter_data_by_date_interval('2018-06-01 1:00','2018-09-30 23:00',interval_str='1min')
@@ -352,7 +352,7 @@ if plot_total_irradiance:
     
 
 # Print the influence of the EV load on the grid flow
-print_EV_influence=True
+print_EV_influence=False
 if print_EV_influence:
     irradiance_pd_S_30.filter_data_by_date_interval('2018-01-01 1:00','2018-01-07 11:00',interval_str='1min')
     irradiance_pd_S_30.power_flow(max_charge=0, max_AC_power_output=max_AC_power_output, max_DC_batterypower=max_DC_batterypower_output,EV_type='B2G') # other EV types: 'no_EV', 'with_SC', 'no_SC', 'B2G
@@ -364,12 +364,10 @@ if print_EV_influence:
 
     irradiance_S_30_EV=irradiance_pd_S_30.get_columns(['EVFlow']).squeeze()
     irradiance_S_30_EV_cap=irradiance_pd_S_30.get_columns(['EVCharge']).squeeze()
-    formatter = pd.option_context('display.max_rows', None, 'display.max_columns', None)
+    # formatter = pd.option_context('display.max_rows', None, 'display.max_columns', None)
     #with formatter:
      #   print(irradiance_pd_S_30.get_columns(['NettoProduction','GridFlow','EVFlow','EVCharge']))
-
     #print(irradiance_pd_S_30.get_columns(['Load_EV_kW_with_SC','Load_EV_kW_no_SC']))
-
     plot_series([irradiances_S_30_EV,irradiance_S_30_load,irradiance_S_30_EV],title='Influence of the EV load on the grid flow',xlabel='Time',ylabel='Power [kW]',display_time='yearly',secondary_series=[irradiance_S_30_EV_cap],ylabel2='EV charge [kW]')
 
 # Return key figures
