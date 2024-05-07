@@ -32,20 +32,33 @@ import gridcost.gridcost as gc
 #irradiance.filter_data_by_date_interval(start_date, end_date, interval)
 #with formatter:
 #print(irradiance.get_dataset())
-file=open('data/initialized_dataframes/pd_S_30','rb')
+file=open('data/initialized_dataframes/pd_E_30','rb')
 powercalculations_test=pickle.load(file)
-powercalculations_test.add_EV_load(smart=False)
+# powercalculations_test.add_EV_load(smart=False)
+#powercalculations_test.calculate_direct_irradiance()
+#powercalculations_test.PV_generated_power()
+#powercalculations_test.power_flow()
+file.close()
+summer_day_power_flow = False
+if summer_day_power_flow:
+    powercalculations_test.filter_data_by_date_interval(start_date="2018-6-20 0:00",end_date="2018-6-21 0:00",interval_str="1min")
+    powercalculations_test.power_flow_old()
+    plot_dataframe(powercalculations_test.get_columns(["Load_kW", "PV_generated_power", "GridFlow", "BatteryFlow","BatteryCharge", "PowerLoss"]))
 
-#powercalculations_test.filter_data_by_date_interval(start_date="2018-9-20 01:00",end_date="2018-9-30 01:00",interval_str="1h")
+winter_day_power_flow = True
+if winter_day_power_flow:
+    powercalculations_test.filter_data_by_date_interval(start_date="2018-12-21 0:00",end_date="2018-12-22 0:00",interval_str="1min")
+    powercalculations_test.power_flow_old()
+    print(powercalculations_test.get_dataset())
+    plot_dataframe(powercalculations_test.get_columns(["Load_kW", "PV_generated_power", "GridFlow", "BatteryFlow","BatteryCharge", "PowerLoss"]))
 #powercalculations_test.PV_generated_power()
 print("1")
 #print("3")
 #powercalculations_test.power_flow()
-file.close()
 #financials=gc.GridCost(powercalculations_test.get_grid_power()[0],file_path_BelpexFilter="data/BelpexFilter.xlsx")
 print("0")
 
-print(powercalculations_test.get_dataset())
+# print(powercalculations_test.get_dataset())
 
 #print("1")
 #powercalculations_test.calculate_direct_irradiance()
