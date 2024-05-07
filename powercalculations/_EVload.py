@@ -13,7 +13,7 @@ def add_EV_load_type(self,type:str='Load_EV_kW_with_SC'):
     The EV load is added to the 'Load_kW' column of the DataFrame.
     type: str
     """
-    filepath='data/EV Calculation.xlsx'
+    filepath='data/EV-Calculation.xlsx'
 
     xls = pd.ExcelFile(filepath)
     df1 = pd.read_excel(xls, 'Sheet1')

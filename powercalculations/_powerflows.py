@@ -24,7 +24,7 @@ def power_flow(self, max_charge: int = 8, max_AC_power_output: int = 5, max_DC_b
     max_EV_charge = max_EV_charge*interval
 
     # Initialize variables
-    previous_charge_battery = 0  # Initialize as integer
+    previous_charge_battery = 0.1*max_charge  # Initialize as integer
     previous_charge_EV = 0.5*max_EV_charge  # Initialize as integer
 
     # Initialize counters
@@ -88,8 +88,8 @@ def battery(load_to_battery:float,old_capacity:float,max_charge: int = 8, max_DC
     Calculate load after the battery and the new battery capacity using the old capacity and load
     """
     #power_loss=0
-    min_capacity=max_charge*0.1
-    max_capacity=max_charge*0.9
+    min_capacity=0#max_charge*0.1
+    max_capacity=max_charge#max_charge*0.9
     max_DC_batterypower=min(max_DC_batterypower,battery_PeakPower)
     if load_to_battery > 0:  # Excess power from PV
         max_input=min(max_capacity-old_capacity,load_to_battery,max_DC_batterypower) #TODO: add function that it can be better to charge at a later time and move more to the grid now
@@ -99,7 +99,7 @@ def battery(load_to_battery:float,old_capacity:float,max_charge: int = 8, max_DC
 
     elif load_to_battery < 0:  # Insufficient PV power, need to draw from battery
         max_output=min(max_DC_batterypower,old_capacity-min_capacity,-load_to_battery)
-        load_from_battery=(load_to_battery-max_output)*battery_roundtrip_efficiency/100
+        load_from_battery=(load_to_battery+max_output)*battery_roundtrip_efficiency/100
         new_capacity=old_capacity-max_output
         #power_loss += old_capacity - min(min_capacity, old_capacity) - max_output
 
