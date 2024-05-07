@@ -350,13 +350,12 @@ if plot_total_irradiance:
 
     # Plot the total irradiance for the different orientations and tilt angles
     plot_series([irradiances_S], title='Mean yearly incident irradiance for the S orientation and different tilt angles', xlabel='Tilt angle [degrees]', ylabel='Power $[\mathrm{\\frac{W}{m^2}}]$')
-    
 
 # Print the influence of the EV load on the grid flow
-print_EV_influence=False
+print_EV_influence=True
 if print_EV_influence:
-    irradiance_pd_S_30.filter_data_by_date_interval('2018-01-02 1:00','2018-01-07 11:00',interval_str='1min')
-    irradiance_pd_S_30.power_flow(max_charge=0, max_AC_power_output=max_AC_power_output, max_DC_batterypower=max_DC_batterypower_output,EV_type='with_SC') # other EV types: 'no_EV', 'with_SC', 'no_SC', 'B2G
+    irradiance_pd_S_30.filter_data_by_date_interval('2018-06-05 18:00','2018-06-08 11:00',interval_str='1min')
+    irradiance_pd_S_30.power_flow(max_charge=5, max_AC_power_output=max_AC_power_output, max_DC_batterypower=2,EV_type='no_SC') # other EV types: 'no_EV', 'with_SC', 'no_SC', 'B2G
     irradiances_S_30_EV=irradiance_pd_S_30.get_columns(['GridFlow']).squeeze()
     irradiances_S_30_EV.name='GridFLow'
     irradiance_pd_S_30.nettoProduction()
@@ -364,8 +363,8 @@ if print_EV_influence:
     irradiance_S_30_load.name='NettoProduction'
 
     irradiance_S_30_EV=irradiance_pd_S_30.get_columns(['EVFlow']).squeeze()
-    print(irradiance_pd_S_30.get_columns(['Load_EV_kW_with_SC']))
-    irradiance_S_30_EV_cap=irradiance_pd_S_30.get_columns(['EVCharge']).squeeze()
+    #print(irradiance_pd_S_30.get_columns(['Load_EV_kW_with_SC']))
+    irradiance_S_30_EV_cap=irradiance_pd_S_30.get_columns(['BatteryCharge']).squeeze()
     # formatter = pd.option_context('display.max_rows', None, 'display.max_columns', None)
     #with formatter:
      #   print(irradiance_pd_S_30.get_columns(['NettoProduction','GridFlow','EVFlow','EVCharge']))
