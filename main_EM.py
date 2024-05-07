@@ -197,13 +197,19 @@ if plot_comparison_irradiance:
     plot_series(hourly_series,title='Comparison of the different irradiances during summer',xlabel='Time',ylabel='Power $[\mathrm{\\frac{W}{m^2}}]$',display_time='hour')
 
 # Plot minutely nettoproduction per day for the S 30 scenario
-plot_minutely_nettoproduction=False
+plot_minutely_nettoproduction=True
 if plot_minutely_nettoproduction:
     irradiance_pd_S_30.filter_data_by_date_interval('2018-01-01 1:00','2018-12-30 23:00',interval_str='1min')
     minutely_nettoproduction_pd_S_30=irradiance_pd_S_30.get_average_per_minute_day('NettoProduction')
     hourly_battery_charge_pd_S_30 = irradiance_pd_S_30.get_average_per_minute_day('BatteryCharge')
     minutely_series=[minutely_nettoproduction_pd_S_30]
     plot_series(series=minutely_series,title='Minutely average netto production for S 30 scenario')#,secondary_series=[hourly_battery_charge_pd_S_30],xlabel='Time',ylabel='Power [kWh]',ylabel2='Battery charge (kWh)')
+
+plot_minutely_power_flows = True
+if plot_minutely_power_flows:
+    summer_day = irradiance_pd_S_30.filter_data_by_date_interval('2018-06-20 0:00','2018-6-21 0:00',interval_str='1min')
+    winter_day = irradiance_pd_S_30.filter_data_by_date_interval('2018-12-21 0:00','2018-12-22 0:00',interval_str='1min')
+    
 
 # Plot hourly flows (pv-load) 
 plot_hourly_flows=False
@@ -353,7 +359,7 @@ if plot_total_irradiance:
     
 
 # Print the influence of the EV load on the grid flow
-print_EV_influence=True
+print_EV_influence=False
 if print_EV_influence:
     irradiance_pd_S_30.filter_data_by_date_interval('2018-01-02 1:00','2018-01-07 11:00',interval_str='1min')
     irradiance_pd_S_30.power_flow(max_charge=0, max_AC_power_output=max_AC_power_output, max_DC_batterypower=max_DC_batterypower_output,EV_type='with_SC') # other EV types: 'no_EV', 'with_SC', 'no_SC', 'B2G
