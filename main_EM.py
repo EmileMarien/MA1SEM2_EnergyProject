@@ -370,6 +370,7 @@ if print_EV_influence:
     irradiance_S_30_load.name='NettoProduction'
 
     irradiance_S_30_EV=irradiance_pd_S_30.get_columns(['EVFlow']).squeeze()
+    print(irradiance_pd_S_30.get_columns(['Load_EV_kW_with_SC']))
     irradiance_S_30_EV_cap=irradiance_pd_S_30.get_columns(['EVCharge']).squeeze()
     # formatter = pd.option_context('display.max_rows', None, 'display.max_columns', None)
     #with formatter:
