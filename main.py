@@ -39,18 +39,7 @@ powercalculations_test=pickle.load(file)
 #powercalculations_test.PV_generated_power()
 #powercalculations_test.power_flow()
 file.close()
-summer_day_power_flow = False
-if summer_day_power_flow:
-    powercalculations_test.filter_data_by_date_interval(start_date="2018-6-20 0:00",end_date="2018-6-21 0:00",interval_str="1min")
-    powercalculations_test.power_flow_old()
-    plot_dataframe(powercalculations_test.get_columns(["Load_kW", "PV_generated_power", "GridFlow", "BatteryFlow","BatteryCharge", "PowerLoss"]))
 
-winter_day_power_flow = True
-if winter_day_power_flow:
-    powercalculations_test.filter_data_by_date_interval(start_date="2018-12-21 0:00",end_date="2018-12-22 0:00",interval_str="1min")
-    powercalculations_test.power_flow_old()
-    print(powercalculations_test.get_dataset())
-    plot_dataframe(powercalculations_test.get_columns(["Load_kW", "PV_generated_power", "GridFlow", "BatteryFlow","BatteryCharge", "PowerLoss"]))
 #powercalculations_test.PV_generated_power()
 print("1")
 #print("3")
