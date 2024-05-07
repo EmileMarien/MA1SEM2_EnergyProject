@@ -67,7 +67,7 @@ if calculate_others:
     #irradiance_winter.filter_data_by_date_interval('2018-12-01','2019-02-28',interval_str='1h')
     # Calculate the netto production
     #irradiance_pd_EW_30.nettoProduction()
-    #irradiance_pd_S_30.nettoProduction()
+    irradiance_pd_S_30.nettoProduction()
     #irradiance_pd_EW_opt.nettoProduction()
     #irradiance_pd_S_opt.nettoProduction()
 
@@ -78,16 +78,16 @@ if calculate_others:
     Temp_coeff=-0.0026
     efficiency_max=0.2
     #irradiance_pd_EW_30.PV_generated_power(cell_area, panel_count, T_STC, Temp_coeff, efficiency_max)
-    #irradiance_pd_S_30.PV_generated_power(cell_area, panel_count, T_STC, Temp_coeff, efficiency_max)
+    irradiance_pd_S_30.PV_generated_power(cell_area, panel_count, T_STC, Temp_coeff, efficiency_max)
     #irradiance_pd_EW_opt.PV_generated_power(cell_area, panel_count, T_STC, Temp_coeff, efficiency_max)
     #irradiance_pd_S_opt.PV_generated_power(cell_area, panel_count, T_STC, Temp_coeff, efficiency_max)
 
     # calculate the power flow
     max_charge= 8
     max_AC_power_output= 5
-    #max_DC_batterypower_output= 5
+    max_DC_batterypower_output= 5
     #irradiance_pd_EW_30.power_flow(max_charge, max_AC_power_output, max_DC_batterypower_output)
-    #irradiance_pd_S_30.power_flow(max_charge, max_AC_power_output, max_DC_batterypower_output)
+    irradiance_pd_S_30.power_flow(max_charge, max_AC_power_output, max_DC_batterypower_output)
     #irradiance_pd_EW_opt.power_flow(max_charge, max_AC_power_output, max_DC_batterypower_output)
     #irradiance_pd_S_opt.power_flow(max_charge, max_AC_power_output, max_DC_batterypower_output)
 
@@ -205,6 +205,12 @@ if plot_minutely_nettoproduction:
     minutely_series=[minutely_nettoproduction_pd_S_30]
     plot_series(series=minutely_series,title='Minutely average netto production for S 30 scenario')#,secondary_series=[hourly_battery_charge_pd_S_30],xlabel='Time',ylabel='Power [kWh]',ylabel2='Battery charge (kWh)')
 
+plot_minutely_power_flows = False
+if plot_minutely_power_flows:
+    summer_day = irradiance_pd_S_30.filter_data_by_date_interval('2018-06-20 0:00','2018-6-21 0:00',interval_str='1min')
+    winter_day = irradiance_pd_S_30.filter_data_by_date_interval('2018-12-21 0:00','2018-12-22 0:00',interval_str='1min')
+    
+
 # Plot hourly flows (pv-load) 
 plot_hourly_flows=False
 if plot_hourly_flows:
@@ -258,8 +264,8 @@ if plot_weekly_load_consumption:
     plot_series(daily_load_series_list,display_time='hour',title='Hourly load consumption for each weekday',xlabel='Hour of the day',ylabel='Power [kW]')
 
 # Plot hourly belpex for the week
-plot_weekly_load_consumption=False #OK
-if plot_weekly_load_consumption:
+plot_weekly_nettoproduction_belpex_consumption=False #OK
+if plot_weekly_nettoproduction_belpex_consumption:
     irradiance_pd_S_30.filter_data_by_date_interval('2018-01-01 1:00','2018-12-31 23:00',interval_str='1h')
     #irradiance_pd_S_30.filter_data_by_date_interval('2018-06-01 1:00','2018-09-30 23:00',interval_str='1min')
     hourly_belpex=financials.get_columns(['BelpexFilter'])
@@ -308,7 +314,8 @@ if plot_weekly_load_consumption:
     daily_load_series_list.append(average_weekendday_production_by_hour_minute)
 
 
-    plot_series(daily_load_series_list,display_time='hour',title='Average hourly belpex price and netto production',xlabel='Hour of the day',ylabel2='Price [€/MWh]',secondary_series=daily_price_series_list, ylabel='Netto production [kW]')
+    plot_series(daily_price_series_list,display_time='hour',title='Average hourly belpex price',xlabel='Hour of the day',ylabel='Price [€/MWh]')
+    plot_series(daily_load_series_list,display_time='hour',title='Average hourly net production',xlabel='Hour of the day',ylabel='Net production [kW]')
 
 # Plot the total irradiance for the S orientations and iterate over the different tilt angles
 plot_total_irradiance=False #OK
@@ -349,13 +356,12 @@ if plot_total_irradiance:
 
     # Plot the total irradiance for the different orientations and tilt angles
     plot_series([irradiances_S], title='Mean yearly incident irradiance for the S orientation and different tilt angles', xlabel='Tilt angle [degrees]', ylabel='Power $[\mathrm{\\frac{W}{m^2}}]$')
-    
 
 # Print the influence of the EV load on the grid flow
 print_EV_influence=True
 if print_EV_influence:
-    irradiance_pd_S_30.filter_data_by_date_interval('2018-01-01 1:00','2018-01-07 11:00',interval_str='1min')
-    irradiance_pd_S_30.power_flow(max_charge=0, max_AC_power_output=max_AC_power_output, max_DC_batterypower=max_DC_batterypower_output,EV_type='B2G') # other EV types: 'no_EV', 'with_SC', 'no_SC', 'B2G
+    irradiance_pd_S_30.filter_data_by_date_interval('2018-06-05 14:00','2018-06-08 11:00',interval_str='1min')
+    irradiance_pd_S_30.power_flow(max_charge=5, max_AC_power_output=max_AC_power_output, max_DC_batterypower=max_DC_batterypower_output,EV_type='no_EV') # other EV types: 'no_EV', 'with_SC', 'no_SC', 'B2G
     irradiances_S_30_EV=irradiance_pd_S_30.get_columns(['GridFlow']).squeeze()
     irradiances_S_30_EV.name='GridFLow'
     irradiance_pd_S_30.nettoProduction()
@@ -363,13 +369,12 @@ if print_EV_influence:
     irradiance_S_30_load.name='NettoProduction'
 
     irradiance_S_30_EV=irradiance_pd_S_30.get_columns(['EVFlow']).squeeze()
-    irradiance_S_30_EV_cap=irradiance_pd_S_30.get_columns(['EVCharge']).squeeze()
-    formatter = pd.option_context('display.max_rows', None, 'display.max_columns', None)
+    #print(irradiance_pd_S_30.get_columns(['Load_EV_kW_with_SC']))
+    irradiance_S_30_EV_cap=irradiance_pd_S_30.get_columns(['BatteryCharge']).squeeze()
+    # formatter = pd.option_context('display.max_rows', None, 'display.max_columns', None)
     #with formatter:
      #   print(irradiance_pd_S_30.get_columns(['NettoProduction','GridFlow','EVFlow','EVCharge']))
-
     #print(irradiance_pd_S_30.get_columns(['Load_EV_kW_with_SC','Load_EV_kW_no_SC']))
-
     plot_series([irradiances_S_30_EV,irradiance_S_30_load,irradiance_S_30_EV],title='Influence of the EV load on the grid flow',xlabel='Time',ylabel='Power [kW]',display_time='yearly',secondary_series=[irradiance_S_30_EV_cap],ylabel2='EV charge [kW]')
 
 # Return key figures

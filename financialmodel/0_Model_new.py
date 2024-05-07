@@ -58,7 +58,7 @@ solar_panel_types = {
     ),
     "Jinko": SolarPanelType(
         solar_panel_cost=105.6,           
-        solar_panel_count=11,           
+        solar_panel_count=10,           
         solar_panel_lifetime=25,        
         panel_surface=1.998,              
         annual_degradation=0.004,         
