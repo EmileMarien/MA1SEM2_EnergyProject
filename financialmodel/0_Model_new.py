@@ -188,7 +188,7 @@ battery_types = {
 }
 
 # Choose battery type:
-chosen_battery_type = "no battery" # Change this to switch between different types
+chosen_battery_type = "LG RESU Prime 2.9" # Change this to switch between different types
 chosen_battery = battery_types[chosen_battery_type]
 print(f"Total cost for {chosen_battery_type}: {chosen_battery.battery_cost}")
 battery_cost = chosen_battery.battery_cost
@@ -350,7 +350,7 @@ inverter_types = {
 }
     # Define more types as needed
 
-chosen_inverter_type = "Sungrow SG5.0RS" # Change this to switch between different types
+chosen_inverter_type = "Sungrow_5" # Change this to switch between different types
 chosen_inverter = inverter_types[chosen_inverter_type]
 inverter_cost = chosen_inverter.inverter_cost
 inverter_maxsolar_DC = chosen_inverter.inverter_maxsolar_DC
