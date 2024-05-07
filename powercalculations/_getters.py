@@ -83,6 +83,12 @@ def get_columns(self,columns:List[str]):
     """
     Returns the dataset with the specific columns
     """
+    if not (isinstance(col, str) for col in columns):
+        return None
+    
+    if not(all(col in self.pd.columns for col in columns)):
+        return None
+    
     assert all(isinstance(col, str) for col in columns), 'The columns must be strings'
     assert all(col in self.pd.columns for col in columns), 'The columns must be present in the DataFrame'
 

@@ -69,7 +69,7 @@ class PowerCalculations():
     from ._datacleaning import update_column
 
     from ._pvpower import PV_generated_power
-    
+
     from ._visualisations import plot_columns
     from ._visualisations import plot_dataframe
     from ._visualisations import plot_series
