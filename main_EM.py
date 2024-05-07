@@ -181,7 +181,7 @@ if plot_hourly_direct_irradiance:
 
 # Plot comparison of direct, global and diffuse irradiance for S 30 scenario, winter 
 ## Mean irradiance during summer and winter (GHI, DHI, DNI)
-plot_comparison_irradiance=False #OK
+plot_comparison_irradiance=True #OK
 if plot_comparison_irradiance:
     irradiance_pd_S_30.filter_data_by_date_interval('2018-06-21 0:00','2018-09-20 23:00',interval_str='1min') #Summer OK
     #irradiance_pd_S_30.filter_data_by_date_interval('2018-12-21 0:00','2019-03-20 23:00',interval_str='1min') #Winter
