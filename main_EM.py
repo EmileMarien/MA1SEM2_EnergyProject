@@ -206,7 +206,7 @@ if plot_minutely_nettoproduction:
     plot_series(series=minutely_series,title='Minutely average netto production for S 30 scenario')#,secondary_series=[hourly_battery_charge_pd_S_30],xlabel='Time',ylabel='Power [kWh]',ylabel2='Battery charge (kWh)')
 
 # Plot hourly flows (pv-load) 
-plot_hourly_flows=True
+plot_hourly_flows=False
 if plot_hourly_flows:
     irradiance_pd_S_30.filter_data_by_date_interval('2018-06-01 1:00','2018-09-30 23:00',interval_str='1min')
     hourly_pv_generated_power_pd_S_30=irradiance_pd_S_30.get_average_per_minute_day('PV_generated_power')
@@ -353,7 +353,7 @@ if plot_total_irradiance:
     
 
 # Print the influence of the EV load on the grid flow
-print_EV_influence=False
+print_EV_influence=True
 if print_EV_influence:
     irradiance_pd_S_30.filter_data_by_date_interval('2018-01-02 1:00','2018-01-07 11:00',interval_str='1min')
     irradiance_pd_S_30.power_flow(max_charge=0, max_AC_power_output=max_AC_power_output, max_DC_batterypower=max_DC_batterypower_output,EV_type='with_SC') # other EV types: 'no_EV', 'with_SC', 'no_SC', 'B2G
