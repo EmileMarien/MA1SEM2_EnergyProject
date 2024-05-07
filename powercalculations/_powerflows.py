@@ -173,10 +173,12 @@ def EV(row,load_to_EV:float,old_capacity:float,EV_type:str='B2G',max_EV_power: i
         
         #TODO: finish this part, check if to be charged the whole night
     elif EV_type=='with_SC':
-        load_from_EV=load_to_EV-row['Load_EV_kW_with_SC']
+        power_to_EV=row['Load_EV_kW_with_SC']
+        load_from_EV=load_to_EV-power_to_EV
         new_capacity=0
     elif EV_type=='no_SC':
-        load_from_EV=load_to_EV-row['Load_EV_kW_no_SC']
+        power_to_EV=row['Load_EV_kW_no_SC']
+        load_from_EV=load_to_EV-power_to_EV
         new_capacity=0
     elif EV_type=='no_EV':
         load_from_EV=load_to_EV
