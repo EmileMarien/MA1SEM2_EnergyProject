@@ -15,6 +15,8 @@ def calculate_npv(battery_cost, total_solar_panel_cost, inverter_cost, discount_
                       (inverter_cost + battery_cost) / pow(1 + discount_rate, 25) 
     print("Investment cost:", investment_cost)
     Year_1_payback = initial_cash_flow/investment_cost
+    payback = 1/Year_1_payback
+    print("payback",payback)
     print("Year 1 payback:", Year_1_payback)
     cost_savings = sum((initial_cash_flow * pow(1 - annual_degradation, t - 1)) / pow(1 + discount_rate, t) for t in range(1, 26))
     print("Total cost savings:", cost_savings)
@@ -188,7 +190,7 @@ battery_types = {
 }
 
 # Choose battery type:
-chosen_battery_type = "LG RESU Prime 2.9" # Change this to switch between different types
+chosen_battery_type = "no battery" # Change this to switch between different types
 chosen_battery = battery_types[chosen_battery_type]
 print(f"Total cost for {chosen_battery_type}: {chosen_battery.battery_cost}")
 battery_cost = chosen_battery.battery_cost
@@ -350,7 +352,7 @@ inverter_types = {
 }
     # Define more types as needed
 
-chosen_inverter_type = "Sungrow_5" # Change this to switch between different types
+chosen_inverter_type = "Sungrow SG3.0RS-S" # Change this to switch between different types
 chosen_inverter = inverter_types[chosen_inverter_type]
 inverter_cost = chosen_inverter.inverter_cost
 inverter_maxsolar_DC = chosen_inverter.inverter_maxsolar_DC
@@ -379,7 +381,7 @@ print(f"Total cost for {chosen_inverter_type}: {chosen_inverter.inverter_cost}")
 
 
 # Set-up
-tilt_angle = -1 #tilt_angle: angle of the solar panel, 
+tilt_angle = 30 #tilt_angle: angle of the solar panel, 
 Orientation = 'S'#Orientation: richting naar waar de zonnepanelen staan N, E, S, W 
 	
 
@@ -387,7 +389,7 @@ Orientation = 'S'#Orientation: richting naar waar de zonnepanelen staan N, E, S,
 
 #Economics
 discount_rate = 0.0658                                      #Discount rate
-tariff = 'DualTariff'
+tariff = 'DynamicTariff'
 
 #Calculations of the cashflows 
 
