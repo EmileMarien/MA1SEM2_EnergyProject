@@ -2,7 +2,7 @@ import pandas as pd
 
 
 
-def power_flow(self, max_charge: int = 8, max_AC_power_output: int = 2, max_DC_batterypower: int = 2, max_PV_input: int = 10, max_EV_power: int = 3.7, max_EV_charge=82.3,EV_type:str='no_EV',battery_roundtrip_efficiency:float=97.5, battery_PeakPower:int=11):
+def power_flow(self, max_charge: int = 8, max_AC_power_output: int = 5, max_DC_batterypower: int = 5, max_PV_input: int = 10, max_EV_power: int = 3.7, max_EV_charge=82.3,EV_type:str='no_EV',battery_roundtrip_efficiency:float=97.5, battery_PeakPower:int=11):
     """
     Calculates power flows, how much is going to and from the battery and how much is being tapped from the grid
     #TODO: add units, PV_generated_power and Load_kW are both in kW. Depending on the frequency of this data, a different amount is subtracted from the battery charge (in kWh?) (e.g. if 1h freq, the load of each line can be subtracted directly since 1kW*1h=1kWh. If in minutes, then 1kW*1min=1/60kWh) 
@@ -173,10 +173,12 @@ def EV(row,load_to_EV:float,old_capacity:float,EV_type:str='B2G',max_EV_power: i
         
         #TODO: finish this part, check if to be charged the whole night
     elif EV_type=='with_SC':
-        load_from_EV=load_to_EV-row['Load_EV_kW_with_SC']
+        power_to_EV=row['Load_EV_kW_with_SC']
+        load_from_EV=load_to_EV-power_to_EV
         new_capacity=0
     elif EV_type=='no_SC':
-        load_from_EV=load_to_EV-row['Load_EV_kW_no_SC']
+        power_to_EV=row['Load_EV_kW_no_SC']
+        load_from_EV=load_to_EV-power_to_EV
         new_capacity=0
     elif EV_type=='no_EV':
         load_from_EV=load_to_EV
