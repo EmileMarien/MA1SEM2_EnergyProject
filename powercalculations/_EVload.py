@@ -16,7 +16,7 @@ def add_EV_load_type(self,type:str='Load_EV_kW_with_SC'):
     filepath='data/EV Calculation.xlsx'
 
     xls = pd.ExcelFile(filepath)
-    df1 = pd.read_excel(xls, 'Weekly load')
+    df1 = pd.read_excel(xls, 'Sheet1')
 
     # Raise error if the EV load file does not contain the required columns (Datetime, Load_EV_kW_no_SC, Load_EV_kW_with_SC, Week & Correction_factor)
     assert 'Datetime' in df1.columns, "The EV load file does not contain the column 'Datetime'."
