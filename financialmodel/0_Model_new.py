@@ -150,7 +150,7 @@ battery_types = {
         battery_lifetime=10,         
         battery_capacity=2.9,
         battery_Roundtrip_Efficiency=95,  
-        battery_PeakPower=3.3,  
+        battery_PeakPower=3,  
         battery_Degradation=4,   
         battery_count = 1  
     ),
@@ -160,7 +160,7 @@ battery_types = {
         battery_lifetime=10,         
         battery_capacity=5.9,
         battery_Roundtrip_Efficiency=95,  
-        battery_PeakPower=4.6,  
+        battery_PeakPower=4.2,  
         battery_Degradation=4,   
         battery_count = 1  
     ),
@@ -170,7 +170,7 @@ battery_types = {
         battery_lifetime=10,         #in years 
         battery_capacity=9.6,#in kWh 
         battery_Roundtrip_Efficiency=97.5, #in procent 
-        battery_PeakPower=7,  #in kW
+        battery_PeakPower=5,  #in kW, rated power
         battery_Degradation=3,   #in procent per year 
         battery_count = 1
     ),
@@ -180,7 +180,7 @@ battery_types = {
         battery_lifetime=10,         
         battery_capacity=16,
         battery_Roundtrip_Efficiency=97.5,  
-        battery_PeakPower=11,  
+        battery_PeakPower=7,  
         battery_Degradation=3,   
         battery_count = 1  
     ),
