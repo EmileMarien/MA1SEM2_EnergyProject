@@ -372,9 +372,9 @@ if plot_total_irradiance:
 print_EV_influence=True
 if print_EV_influence:
     irradiance_pd_S_30.filter_data_by_date_interval('2018-06-05 18:00','2018-06-08 11:00',interval_str='1min')
-    irradiance_pd_S_30.power_flow(max_charge=5, max_AC_power_output=max_AC_power_output, max_DC_batterypower=2,EV_type='with_SC') # other EV types: 'no_EV', 'with_SC', 'no_SC', 'B2G
-    grid_flow=irradiance_pd_S_30.get_columns(['GridFlow']).squeeze()
-    grid_flow.name='GridFlow'
+    irradiance_pd_S_30.power_flow(max_charge=5, max_AC_power_output=max_AC_power_output, max_DC_batterypower=2,EV_type='no_SC') # other EV types: 'no_EV', 'with_SC', 'no_SC', 'B2G
+    irradiances_S_30_EV=irradiance_pd_S_30.get_columns(['GridFlow']).squeeze()
+    irradiances_S_30_EV.name='GridFLow'
     irradiance_pd_S_30.nettoProduction()
     net_production=irradiance_pd_S_30.get_columns(['NettoProduction']).squeeze()
     net_production.name='NettoProduction'
@@ -388,7 +388,7 @@ if print_EV_influence:
     #with formatter:
      #   print(irradiance_pd_S_30.get_columns(['NettoProduction','GridFlow','EVFlow','EVCharge']))
     #print(irradiance_pd_S_30.get_columns(['Load_EV_kW_with_SC','Load_EV_kW_no_SC']))
-    plot_series([grid_flow, net_production, EV_flow],title='Influence of the EV load on the grid flow',xlabel='Time',ylabel='Power [kW]',display_time='yearly',secondary_series=[EV_charge, battery_charge],ylabel2='EV charge [kWh]')
+    plot_series([irradiances_S_30_EV,irradiance_S_30_load,irradiance_S_30_EV],title='Influence of the EV load on the grid flow',xlabel='Time',ylabel='Power [kW]',display_time='yearly',secondary_series=[irradiance_S_30_EV_cap],ylabel2='EV charge [kW]')
 
 # Return key figures
 print_key_figures=False
