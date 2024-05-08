@@ -205,7 +205,7 @@ if plot_minutely_nettoproduction:
     minutely_series=[minutely_nettoproduction_pd_S_30]
     plot_series(series=minutely_series,title='Minutely average netto production for S 30 scenario')#,secondary_series=[hourly_battery_charge_pd_S_30],xlabel='Time',ylabel='Power [kWh]',ylabel2='Battery charge (kWh)')
 
-power_flow_one_day = True
+power_flow_one_day = False
 if power_flow_one_day:
     irradiance_pd_S_30.filter_data_by_date_interval(start_date="2018-8-01 0:00",end_date="2018-8-02 0:00",interval_str="1min")
     # irradiance_pd_S_30.filter_data_by_date_interval(start_date="2018-2-03 0:00",end_date="2018-2-04 0:00",interval_str="1min")
@@ -369,21 +369,21 @@ if plot_total_irradiance:
     plot_series([irradiances_S], title='Mean yearly incident irradiance for the S orientation and different tilt angles', xlabel='Tilt angle [degrees]', ylabel='Power $[\mathrm{\\frac{W}{m^2}}]$')
 
 # Print the influence of the EV load on the grid flow
-print_EV_influence=False
+print_EV_influence=True
 if print_EV_influence:
-    irradiance_pd_S_30.filter_data_by_date_interval('2018-06-02 18:00','2018-06-06 11:00',interval_str='1min')
-    irradiance_pd_S_30.power_flow(max_charge=5, max_AC_power_output=max_AC_power_output, max_DC_batterypower=2,EV_type='B2G') # other EV types: 'no_EV', 'with_SC', 'no_SC', 'B2G
+    irradiance_pd_S_30.filter_data_by_date_interval('2018-06-05 18:00','2018-06-08 11:00',interval_str='1min')
+    irradiance_pd_S_30.power_flow(max_charge=5, max_AC_power_output=max_AC_power_output, max_DC_batterypower=2,EV_type='no_SC') # other EV types: 'no_EV', 'with_SC', 'no_SC', 'B2G
     irradiances_S_30_EV=irradiance_pd_S_30.get_columns(['GridFlow']).squeeze()
     irradiances_S_30_EV.name='GridFLow'
     irradiance_pd_S_30.nettoProduction()
-    irradiance_S_30_load=irradiance_pd_S_30.get_columns(['NettoProduction']).squeeze()
-    irradiance_S_30_load.name='NettoProduction'
+    net_production=irradiance_pd_S_30.get_columns(['NettoProduction']).squeeze()
+    net_production.name='NettoProduction'
 
-    irradiance_S_30_EV=irradiance_pd_S_30.get_columns(['EVFlow']).squeeze()
+    EV_flow=irradiance_pd_S_30.get_columns(['EVFlow']).squeeze()
     #print(irradiance_pd_S_30.get_columns(['Load_EV_kW_with_SC']))
-    irradiance_S_30_bat_cap=irradiance_pd_S_30.get_columns(['BatteryCharge']).squeeze()
-    irradiance_S_30_EV_cap=irradiance_pd_S_30.get_columns(['EVCharge']).squeeze()
-
+    EV_charge=irradiance_pd_S_30.get_columns(['EVCharge']).squeeze()
+    battery_charge=irradiance_pd_S_30.get_columns(['BatteryCharge']).squeeze()
+    battery_flow = irradiance_pd_S_30.get_columns(['BatteryFlow']).squeeze()
     # formatter = pd.option_context('display.max_rows', None, 'display.max_columns', None)
     #with formatter:
      #   print(irradiance_pd_S_30.get_columns(['NettoProduction','GridFlow','EVFlow','EVCharge']))
