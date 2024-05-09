@@ -71,7 +71,7 @@ solar_panel_types = {
     ),
     "Jinko": SolarPanelType(
         solar_panel_cost=105.6,           
-        solar_panel_count=15,           
+        solar_panel_count=10,           
         solar_panel_lifetime=25,        
         panel_surface=1.998,              
         annual_degradation=0.004,         
@@ -555,8 +555,13 @@ print("Net Present Value (NPV):", npv)
 #     inverter_efficiency = chosen_inverter.inverter_efficiency
 #     inverter_maxbattery_DC = chosen_inverter.inverter_maxbattery_DC
 #     # Calculate initial cash flow
+<<<<<<< HEAD
+#     EV_type='B2G'   #    'no_EV'  B2G
+#     cost_grid_with_PV = electricity_cost(solar_panel_count=chosen_panel.solar_panel_count, panel_surface=panel_surface, annual_degradation=annual_degradation, panel_efficiency=panel_efficiency, temperature_coefficient=temperature_coefficient, inverter_size_AC=inverter_size_AC, inverter_maxsolar_DC=inverter_maxsolar_DC, inverter_maxbattery_DC=inverter_maxbattery_DC, tilt_angle=tilt_angle, Orientation=Orientation, battery_capacity=battery_capacity, tariff=tariff, battery_count=battery_count, EV_type=EV_type)
+=======
 #     EV_type='no_EV'     # no_EV B2G
 #     cost_grid_with_PV = electricity_cost(solar_panel_count=chosen_panel.solar_panel_count, panel_surface=panel_surface, annual_degradation=annual_degradation, panel_efficiency=panel_efficiency, temperature_coefficient=temperature_coefficient, inverter_size_AC=inverter_size_AC, inverter_maxsolar_DC=inverter_maxsolar_DC, inverter_maxbattery_DC=inverter_maxbattery_DC, tilt_angle=tilt_angle, Orientation=Orientation, battery_capacity=battery_capacity, tariff=tariff, battery_count=battery_count,EV_type=EV_type)
+>>>>>>> de18ab8e8cb80935fbac367a8445eb87f155eea5
 #     initial_cash_flow = Cost_with_no_PV - cost_grid_with_PV
 #     print("initial_cash_flow =", initial_cash_flow)
 #     print("count of solar panels", chosen_panel.solar_panel_count)
