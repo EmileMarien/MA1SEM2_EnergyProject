@@ -60,7 +60,7 @@ solar_panel_types = {
     ),
     "Jinko": SolarPanelType(
         solar_panel_cost=105.6,           
-        solar_panel_count=10,           
+        solar_panel_count=15,           
         solar_panel_lifetime=25,        
         panel_surface=1.998,              
         annual_degradation=0.004,         
@@ -386,8 +386,8 @@ Orientation = 'S'#Orientation: richting naar waar de zonnepanelen staan N, E, S,
 # non-changeable 
 
 #Economics
-discount_rate = 0.079                                   #Discount rate
-tariff = 'DynamicTariff'
+discount_rate = 0.0658                                   #Discount rate
+tariff = 'DualTariff'
 
 #Calculations of the cashflows 
 
@@ -521,23 +521,23 @@ print("Net Present Value (NPV):", npv)
 #         # If the number of solar panels is less than 6, no inverter is chosen
 #         chosen_inverter_type = "no inverter"
 
-#     # Get the chosen inverter
-#     chosen_inverter = inverter_types[chosen_inverter_type]
-#     inverter_cost = chosen_inverter.inverter_cost
-#     inverter_maxsolar_DC = chosen_inverter.inverter_maxsolar_DC
-#     inverter_size_AC = chosen_inverter.inverter_size_AC
-#     inverter_efficiency = chosen_inverter.inverter_efficiency
-#     inverter_maxbattery_DC = chosen_inverter.inverter_maxbattery_DC
-#     # Calculate initial cash flow
-#     EV_type='no_EV'     # no_EV B2G
-#     cost_grid_with_PV = electricity_cost(solar_panel_count=chosen_panel.solar_panel_count, panel_surface=panel_surface, annual_degradation=annual_degradation, panel_efficiency=panel_efficiency, temperature_coefficient=temperature_coefficient, inverter_size_AC=inverter_size_AC, inverter_maxsolar_DC=inverter_maxsolar_DC, inverter_maxbattery_DC=inverter_maxbattery_DC, tilt_angle=tilt_angle, Orientation=Orientation, battery_capacity=battery_capacity, tariff=tariff, battery_count=battery_count,EV_type=EV_type)
-#     initial_cash_flow = Cost_with_no_PV - cost_grid_with_PV
-#     print("initial_cash_flow =", initial_cash_flow)
-#     print("count of solar panels", chosen_panel.solar_panel_count)
-#     print("chosen_inverter_type", chosen_inverter_type)
-#     # Calculate NPV
-#     npv = calculate_npv(battery_cost, total_solar_panel_cost, chosen_inverter.inverter_cost, discount_rate, initial_cash_flow, chosen_panel.annual_degradation)
-#     print("npv", npv)
+    # Get the chosen inverter
+# chosen_inverter = inverter_types[chosen_inverter_type]
+# inverter_cost = chosen_inverter.inverter_cost
+# inverter_maxsolar_DC = chosen_inverter.inverter_maxsolar_DC
+# inverter_size_AC = chosen_inverter.inverter_size_AC
+# inverter_efficiency = chosen_inverter.inverter_efficiency
+# inverter_maxbattery_DC = chosen_inverter.inverter_maxbattery_DC
+# # Calculate initial cash flow
+# EV_type='B2G'     # no_EV B2G
+# cost_grid_with_PV = electricity_cost(solar_panel_count=chosen_panel.solar_panel_count, panel_surface=panel_surface, annual_degradation=annual_degradation, panel_efficiency=panel_efficiency, temperature_coefficient=temperature_coefficient, inverter_size_AC=inverter_size_AC, inverter_maxsolar_DC=inverter_maxsolar_DC, inverter_maxbattery_DC=inverter_maxbattery_DC, tilt_angle=tilt_angle, Orientation=Orientation, battery_capacity=battery_capacity, tariff=tariff, battery_count=battery_count,EV_type=EV_type)
+# initial_cash_flow = Cost_with_no_PV - cost_grid_with_PV
+# print("initial_cash_flow =", initial_cash_flow)
+# print("count of solar panels", chosen_panel.solar_panel_count)
+# print("chosen_inverter_type", chosen_inverter_type)
+# # Calculate NPV
+# npv = calculate_npv(battery_cost, total_solar_panel_cost, chosen_inverter.inverter_cost, discount_rate, initial_cash_flow, chosen_panel.annual_degradation)
+# print("npv", npv)
 
 #     # Append NPV to list
 #     npv_values.append(npv)
