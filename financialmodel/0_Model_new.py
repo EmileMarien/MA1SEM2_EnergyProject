@@ -15,6 +15,8 @@ def calculate_npv(battery_cost, total_solar_panel_cost, inverter_cost, discount_
                       (inverter_cost + battery_cost) / pow(1 + discount_rate, 25) 
     print("Investment cost:", investment_cost)
     Year_1_payback = initial_cash_flow/investment_cost
+    payback = 1/Year_1_payback
+    print("payback",payback)
     print("Year 1 payback:", Year_1_payback)
     cost_savings = sum((initial_cash_flow * pow(1 - annual_degradation, t - 1)) / pow(1 + discount_rate, t) for t in range(1, 26))
     print("Total cost savings:", cost_savings)
@@ -148,7 +150,7 @@ battery_types = {
         battery_lifetime=10,         
         battery_capacity=2.9,
         battery_Roundtrip_Efficiency=95,  
-        battery_PeakPower=3.3,  
+        battery_PeakPower=3,  
         battery_Degradation=4,   
         battery_count = 1  
     ),
@@ -158,7 +160,7 @@ battery_types = {
         battery_lifetime=10,         
         battery_capacity=5.9,
         battery_Roundtrip_Efficiency=95,  
-        battery_PeakPower=4.6,  
+        battery_PeakPower=4.2,  
         battery_Degradation=4,   
         battery_count = 1  
     ),
@@ -168,7 +170,7 @@ battery_types = {
         battery_lifetime=10,         #in years 
         battery_capacity=9.6,#in kWh 
         battery_Roundtrip_Efficiency=97.5, #in procent 
-        battery_PeakPower=7,  #in kW
+        battery_PeakPower=5,  #in kW, rated power
         battery_Degradation=3,   #in procent per year 
         battery_count = 1
     ),
@@ -178,7 +180,7 @@ battery_types = {
         battery_lifetime=10,         
         battery_capacity=16,
         battery_Roundtrip_Efficiency=97.5,  
-        battery_PeakPower=11,  
+        battery_PeakPower=7,  
         battery_Degradation=3,   
         battery_count = 1  
     ),
@@ -385,7 +387,7 @@ Orientation = 'S'#Orientation: richting naar waar de zonnepanelen staan N, E, S,
 
 #Economics
 discount_rate = 0.0658                                      #Discount rate
-tariff = 'DualTariff'
+tariff = 'DynamicTariff'
 
 #Calculations of the cashflows 
 

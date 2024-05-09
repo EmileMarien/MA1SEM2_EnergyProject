@@ -134,17 +134,24 @@ def EV(row,load_to_EV:float,old_capacity:float,EV_type:str='B2G',max_EV_power: i
     if EV_type=='B2G':
         # During the weekdays
         if row.name.weekday()<5:
-            # During the weekdays, without wednesday, from 9:00 to 17:00, or wednesday from 9-12, the load of the EV is zero so it returns the same load as the household, but the EV battery decreases by 0.2 kWh per hour
+            # During the weekdays, without wednesday, from 9:00 to 17:00, or wednesday from 9-12, the load of the EV is zero so it returns the same load as the household, but the EV battery decreases by 14 kWh per 7 hours
             if (row.name.hour>=9 and row.name.hour<17 and row.name.weekday()!=2) or (row.name.hour>=9 and row.name.hour<13 and row.name.weekday()==2):
                 load_from_EV=load_to_EV
-                new_capacity=old_capacity-2
+                new_capacity=old_capacity-1.5
             
             # During the weekdays in the morning, from 7:00 to 9:00, and evening, from 17:00 to 21:00, or on wednesday from 13:00-17:00, the EV is uncharging, reducing the household load and the battery capacity as long as the battery capacity is greater than 40 kWh in the morning and 20kWh at 19:00
             elif (row.name.hour>=6 and row.name.hour<9) or (row.name.hour>=17 and row.name.hour<22) or (row.name.hour>=13 and row.name.hour<17 and row.name.weekday()==2):
                 min_capacity= min_capacity_morning if row.name.hour<9 else min_capacity_evening # minimal capacity of the battery
-                max_output=min(max_output_power,old_capacity-min_capacity,-load_to_EV)
-                load_from_EV=load_to_EV+max_output
-                new_capacity=old_capacity-max_output 
+                if load_to_EV<0:
+                    max_output=min(max_output_power,old_capacity-min_capacity,-load_to_EV)
+                    max_input=0
+                    load_from_EV=load_to_EV+max_output
+                    new_capacity=old_capacity-max_output
+                else:
+                    max_output=0
+                    max_input=min(max_input_power,max_capacity-old_capacity,load_to_EV) 
+                    load_from_EV=load_to_EV-max_input
+                    new_capacity=old_capacity+max_input
             
             # During the weekdays in the rest of the hours, the EV is charging, increasing the household load and the battery capacity as long as the battery capacity is less than 60 kWh
             else:
@@ -154,7 +161,7 @@ def EV(row,load_to_EV:float,old_capacity:float,EV_type:str='B2G',max_EV_power: i
             
         # During the weekends
         elif row.name.weekday()>=5:
-            # During the weekends, from 9:00 to 17:00, the car is charged using the solar energy 
+            # During the weekends, from 11:00 to 17:00, the car is charged using the solar energy 
             if row.name.hour>=11 and row.name.hour<17:
                 max_input=min(max_input_power,max_capacity-old_capacity)
                 load_from_EV=load_to_EV-max_input
@@ -169,7 +176,7 @@ def EV(row,load_to_EV:float,old_capacity:float,EV_type:str='B2G',max_EV_power: i
             else:
                 # The car is out of the house
                 load_from_EV=load_to_EV
-                new_capacity=old_capacity-2/60
+                new_capacity=old_capacity-1.5
         
         #TODO: finish this part, check if to be charged the whole night
     elif EV_type=='with_SC':
@@ -244,7 +251,7 @@ print("Maximum value of X * B:", -result.fun)  # Since we were minimizing -X * B
 
 """
 
-def power_flow_old(self, max_charge: int = 8, max_AC_power_output: int = 2, max_DC_batterypower: int = 2, max_PV_input: int = 10, max_EV_power: int = 3.7, max_EV_charge=82.3):
+def power_flow_old(self, max_charge: int = 8, max_AC_power_output: int = 5, max_DC_batterypower: int = 5, max_PV_input: int = 10, max_EV_power: int = 3.7, max_EV_charge=82.3):
     """
     Calculates power flows, how much is going to and from the battery and how much is being tapped from the grid
     #TODO: add units, PV_generated_power and Load_kW are both in kW. Depending on the frequency of this data, a different amount is subtracted from the battery charge (in kWh?) (e.g. if 1h freq, the load of each line can be subtracted directly since 1kW*1h=1kWh. If in minutes, then 1kW*1min=1/60kWh) 

@@ -87,6 +87,42 @@ Levy Tariff & 0.05 \euro/kWh & 0.05 \euro/kWh \\ \hline
 \end{table}
 
 
+\section{Impact Assessment of EV}
+\label{Impact Assessment of EV}
+The impact of the addition of an electric vehicle (EV) to the system is assessed 5 years after the installation of the PV system. They are three main aspects which will have an impact on the system. First, the overall energy usage and the capacity of the EV charger are discussed. Then, the charging behavior is discussed and a scenario with and without smart charging is analyzed. 
+\subsection{Energy usage and charger size}
+First, for the overall energy usage of the EV vehicle, certain assumptions need to be made. First, the average Belgian drives $35km$ daily. To take the worst case scenario, assume that the average daily distance driven is $70km$. Further, the chosen car is a Porsche Taycan. This car has a usable battery capacity of $82.3kWh$ and an efficiency of $0.17kWh/km$. With this data an additional yearly energy usage can be calculated which amounts to $4343.5kWh$. Further, the EV has a range of $485km$. Assume the worst case scenario cold temperature and use of air conditioning, This causes the range to drop to $405km$. \\ \\
+Next, there are multiple options considering the type of charger that can be installed. The possibilities are a single-phase $3.7kW$ charger, a single-phase $7.4kW$ charger and a three-phase $11kW$ charger. For this analysis, it is assumed that the charger used to charge the EV is a type 2 single-phase with a charging power of $3.7kW$. 
+\subsection{Charging behavior}
+The last aspect is the charging behavior. For this analysis, it is assumed that the EV can only be charged at home. Further, the EV is never charged past 80\%. This is done because charging efficiency decreases substantially when above this marker, and the long-term health of the EV battery is maintained. The two scenarios that are analyzed are one without smart charging and one with smart charging. 
+\subsubsection{Without smart charging}
+In the scenario without smart charging, the EV is charged at a fixed time every day, independent of what the existing energy production, load, or battery charge is. Further, the EV charger is then used at full capacity. 
+\subsubsection{With smart charging}
+In the next scenario, smart charging is applied. This means that the EV will be charged optimally on moments when there is a combination of a low load with a high PV production. In this way, the EV is not charged from the grid when prices are high. Further, moments when the battery charge is high are also optimal to charge. In the graph below, the yearly average net production, and battery charge for a day are given. 
+\subsubsection{Back to grid charging}
+ In the last scenario, the EV can be used as a battery and thus deliver energy back to the grid. For this scenario, some assumptions for the availability of the EV are made, which are listed in Table \ref{tab:EV-availability}. When the houseowner is out for work or dinner, the EV is not connected to the house and thus cannot function as a battery. Instead its battery is used for driving and reduces with an average of 1.5 kWh each hour. Next, the car only charges when prices are low, being overnight during the workweek and during the day in the weekend. Outside those periods, the car can deliver electricity to the house while it is guaranteed that the car has enough energy to drive during the next period. A typical flow of energy to the EV and variation of the battery charge is given in Figure \ref{fig:EV-availability}.
+
+\begin{table}[H]
+\centering
+\begin{tabular}{|c|c|}
+\hline
+\textbf{Availability} & \textbf{Value} \\ \hline
+Max charging power & 3.7 kW \\ \hline
+Max discharging power & 3.7 kW \\ \hline
+Battery capacity & 82.3 kWh \\ \hline
+Battery usage when not connected & 1.5 kWh/h \\ \hline
+\end{tabular}
+\caption{EV availability}
+\label{tab:EV-availability}
+\end{table}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\textwidth]{images/EV-availability.png}
+    \caption{Energy flow to the EV and battery charge}
+    \label{fig:EV-availability}
+\end{figure}
+
 
 
 
