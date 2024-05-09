@@ -95,6 +95,7 @@ def plot_series(series:List[pd.Series]=[pd.Series], title:str='Series', xlabel:s
         secondary_serie=secondary_series[j]
         ax2 = ax.twinx()
         lns+=ax2.plot(secondary_serie.index, secondary_serie,label=secondary_serie.name, color=line_colors[j+3],linestyle=line_styles[j+2])
+        
 
     length=series[0].shape[0]
     if display_time=='hour':
@@ -103,7 +104,7 @@ def plot_series(series:List[pd.Series]=[pd.Series], title:str='Series', xlabel:s
     ax.set_xlabel(xlabel,fontsize=fontsize)
     ax.set_ylabel(ylabel,fontsize=fontsize)
     if 'ax2' in locals():
-        ax2.set_ylabel(ylabel2)
+        ax2.set_ylabel(ylabel2,fontsize=fontsize)
     
     # add legend
     labs = [l.get_label() for l in lns]

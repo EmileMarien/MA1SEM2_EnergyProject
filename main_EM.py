@@ -207,18 +207,25 @@ if plot_minutely_nettoproduction:
 
 power_flow_one_day = True
 if power_flow_one_day:
-    irradiance_pd_S_30.filter_data_by_date_interval(start_date="2018-6-5 0:00",end_date="2018-6-7 23:00",interval_str="1min")
+    irradiance_pd_S_30.filter_data_by_date_interval(start_date="2018-7-04 0:00",end_date="2018-7-7 3:00",interval_str="10min")
     # irradiance_pd_S_30.filter_data_by_date_interval(start_date="2018-2-03 0:00",end_date="2018-2-04 0:00",interval_str="1min")
-    irradiance_pd_S_30.power_flow_old()
-    load = irradiance_pd_S_30.get_columns(["Load_kW"]).squeeze()
-    PV_generated_power = irradiance_pd_S_30.get_columns(["PV_generated_power"]).squeeze()
-    grid_flow = irradiance_pd_S_30.get_columns(["GridFlow"]).squeeze()
-    battery_flow = irradiance_pd_S_30.get_columns(["BatteryFlow"]).squeeze()
-    power_loss = irradiance_pd_S_30.get_columns(["PowerLoss"]).squeeze()
-    battery_charge = irradiance_pd_S_30.get_columns(["BatteryCharge"]).squeeze()
-    series_flows = [load, PV_generated_power, grid_flow, battery_flow, power_loss]
+    irradiance_pd_S_30.PV_generated_power(panel_count=10, cell_area=1.998, efficiency_max= 0.2253, Temp_coeff=-0.0026)
+    irradiance_pd_S_30.power_flow(EV_type='no_EV', max_charge=5.9, max_AC_power_output=2.5, max_DC_batterypower=2.5, max_PV_input=3.75, max_EV_power=3.7, max_EV_charge=82.3, battery_roundtrip_efficiency=97.5, battery_PeakPower=4.2)
+
+    load = irradiance_pd_S_30.get_columns(["Load_kW"]).squeeze().rename("Load")
+    load.rename("Load")
+    PV_generated_power = irradiance_pd_S_30.get_columns(["PV_generated_power"]).squeeze().rename("PV power")
+    PV_generated_power.rename("PV power")
+    grid_flow = irradiance_pd_S_30.get_columns(["GridFlow"]).squeeze().rename("Grid flow")
+    grid_flow.rename("Grid flow")
+    battery_flow = irradiance_pd_S_30.get_columns(["BatteryFlow"]).squeeze().rename("Battery Flow")
+    battery_flow.rename("Battery flow")
+    #power_loss = irradiance_pd_S_30.get_columns(["PowerLoss"]).squeeze()
+    battery_charge = irradiance_pd_S_30.get_columns(["BatteryCharge"]).squeeze().rename("Battery charge")
+    battery_charge.rename("Battery charge")
+    series_flows = [load, PV_generated_power, grid_flow, battery_flow]
     series_battery = [battery_charge]
-    plot_series(series=series_flows,title='Power flows and battery charge for a summer day',secondary_series=series_battery,xlabel='Time',ylabel='Power plow [kW]',ylabel2='Battery charge [kWh]')
+    plot_series(series=series_flows, title='Power flows and battery charge for a summer day', secondary_series=series_battery, xlabel='Time', ylabel='Power flow [kW]', ylabel2='Battery charge [kWh]')
 
 # Plot hourly flows (pv-load) 
 plot_minutely_flows=False
