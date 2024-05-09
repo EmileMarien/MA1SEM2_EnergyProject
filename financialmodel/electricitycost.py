@@ -135,13 +135,12 @@ print(electricity_cost(Orientation='S',tilt_angle=30, tariff='DynamicTariff',sol
 print(electricity_cost(Orientation='S',tilt_angle=30, tariff='DualTariff',solar_panel_count=0,battery_capacity=9.6,battery_count=0,EV_type='no_EV',))
 
 
-<<<<<<< HEAD
 print(electricity_cost(Orientation='S',tilt_angle=30, tariff='DynamicTariff',solar_panel_count=10,battery_capacity=3,battery_count=1,EV_type='no_EV',))
 
 print(electricity_cost(Orientation='S',tilt_angle=30, tariff='DynamicTariff',solar_panel_count=10,battery_capacity=3,battery_count=0,EV_type='no_EV',))
 
 # print(electricity_cost(Orientation='S',tilt_angle=30, tariff='DynamicTariff',solar_panel_count=10,battery_capacity=3,battery_count=1,EV_type='B2G'))
-=======
+
 print(electricity_cost(Orientation='S',tilt_angle=30, tariff='DynamicTariff',solar_panel_count=10,battery_capacity=9.6,battery_count=1,EV_type='no_EV',))
 print(electricity_cost(Orientation='S',tilt_angle=30, tariff='DynamicTariff',solar_panel_count=10,battery_capacity=9.6,battery_count=0,EV_type='no_EV',))
 
