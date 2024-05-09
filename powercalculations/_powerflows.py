@@ -38,11 +38,14 @@ def power_flow(self, max_charge: int = 8, max_AC_power_output: int = 5, max_DC_b
     battery_flow_list = [] # List to store flow to and from the battery
     EV_charge_list = [] # List to store calculated EV charges
     EV_flow_list = [] # List to store flow to and from the EV
+    PV_power=[]
+    loss=[]
     # Iterate over DataFrame rows
     for _, row in self.pd.iterrows():
         print(f"Calculating power flows for row {counter}/{length}", end="\r")
         counter+=1
         PV_power = min(row['PV_generated_power'], max_PV_input) #power_loss = row['PV_generated_power'] - PV_power
+        loss+=row['PV_generated_power'] - PV_power
         load = -row['Load_kW']
         """
         # Calculate battery charge and grid flow
@@ -55,10 +58,9 @@ def power_flow(self, max_charge: int = 8, max_AC_power_output: int = 5, max_DC_b
  
         excess_load=-max(0,-load-max_AC_power_output) #load that is immediately sent to the grid
         load=load-excess_load #load that is left after the excess load is sent to the grid 
-        
         load_to_EV =PV_power+load
         load_to_battery, new_charge_EV= EV(row=row,load_to_EV=load_to_EV,old_capacity=previous_charge_EV,EV_type=EV_type,max_EV_charge=max_EV_charge,max_EV_power=max_EV_power,freq=interval)
-        load_from_battery, new_charge_battery = battery(load_to_battery, previous_charge_battery,max_charge=max_charge,max_DC_batterypower=max_DC_batterypower,battery_PeakPower=battery_PeakPower,battery_roundtrip_efficiency=battery_roundtrip_efficiency)
+        load_from_battery, new_charge_battery = battery(row,load_to_battery, previous_charge_battery,max_charge=max_charge,max_DC_batterypower=max_DC_batterypower,battery_PeakPower=battery_PeakPower,battery_roundtrip_efficiency=battery_roundtrip_efficiency)
         grid_flow = load_from_battery
         
         grid_flow = min(grid_flow, max_AC_power_output) # Limit positive grid flow to max AC power output
@@ -83,7 +85,7 @@ def power_flow(self, max_charge: int = 8, max_AC_power_output: int = 5, max_DC_b
     self.pd['EVFlow'] = EV_flow_list
     return None
 
-def battery(load_to_battery:float,old_capacity:float,max_charge: int = 8, max_DC_batterypower: int = 2,battery_roundtrip_efficiency:float=97.5, battery_PeakPower:int=11):
+def battery(row,load_to_battery:float,old_capacity:float,max_charge: int = 8, max_DC_batterypower: int = 2,battery_roundtrip_efficiency:float=97.5, battery_PeakPower:int=11):
     """
     Calculate load after the battery and the new battery capacity using the old capacity and load
     """
@@ -96,8 +98,9 @@ def battery(load_to_battery:float,old_capacity:float,max_charge: int = 8, max_DC
         load_from_battery=load_to_battery-max_input
         new_capacity=old_capacity+max_input
         #power_loss += min(max_capacity-old_capacity, load) - max_input
-
-    elif load_to_battery < 0:  # Insufficient PV power, need to draw from battery
+    
+    # Insufficient PV power, need to draw from battery and not between 22:00 and 6:00
+    elif (load_to_battery < 0) and (row.name.hour>=4 and row.name.hour<23):
         max_output=min(max_DC_batterypower,old_capacity-min_capacity,-load_to_battery)
         load_from_battery=(load_to_battery+max_output)*battery_roundtrip_efficiency/100
         new_capacity=old_capacity-max_output
@@ -137,7 +140,7 @@ def EV(row,load_to_EV:float,old_capacity:float,EV_type:str='B2G',max_EV_power: i
             # During the weekdays, without wednesday, from 9:00 to 17:00, or wednesday from 9-12, the load of the EV is zero so it returns the same load as the household, but the EV battery decreases by 14 kWh per 7 hours
             if (row.name.hour>=9 and row.name.hour<17 and row.name.weekday()!=2) or (row.name.hour>=9 and row.name.hour<13 and row.name.weekday()==2):
                 load_from_EV=load_to_EV
-                new_capacity=old_capacity-1.5
+                new_capacity=old_capacity-1.3
             
             # During the weekdays in the morning, from 7:00 to 9:00, and evening, from 17:00 to 21:00, or on wednesday from 13:00-17:00, the EV is uncharging, reducing the household load and the battery capacity as long as the battery capacity is greater than 40 kWh in the morning and 20kWh at 19:00
             elif (row.name.hour>=6 and row.name.hour<9) or (row.name.hour>=17 and row.name.hour<22) or (row.name.hour>=13 and row.name.hour<17 and row.name.weekday()==2):
