@@ -205,7 +205,7 @@ if plot_minutely_nettoproduction:
     minutely_series=[minutely_nettoproduction_pd_S_30]
     plot_series(series=minutely_series,title='Minutely average netto production for S 30 scenario')#,secondary_series=[hourly_battery_charge_pd_S_30],xlabel='Time',ylabel='Power [kWh]',ylabel2='Battery charge (kWh)')
 
-power_flow_one_day = False #OK
+power_flow_one_day = False
 if power_flow_one_day:
     irradiance_pd_S_30.filter_data_by_date_interval(start_date="2018-7-5 0:00",end_date="2018-7-7 23:00",interval_str="10min")
     # irradiance_pd_S_30.filter_data_by_date_interval(start_date="2018-2-03 0:00",end_date="2018-2-04 0:00",interval_str="1min")
@@ -255,7 +255,7 @@ if plot_average_load_consumption:
     plot_series(hourly_series)
 
 # Plot hourly load consumption for each day of the weak on one graph
-plot_weekly_load_consumption=False #OK
+plot_weekly_load_consumption=True #OK
 if plot_weekly_load_consumption:
 
     #irradiance_pd_S_30.filter_data_by_date_interval('2018-06-01 1:00','2018-09-30 23:00',interval_str='1min')
@@ -272,7 +272,7 @@ if plot_weekly_load_consumption:
     day_names = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
 
     # Iterate over the days of the week
-    for day in range(5):  # 0 represents Monday, 1 represents Tuesday, ..., 6 represents Sunday
+    for day in range(7):  # 0 represents Monday, 1 represents Tuesday, ..., 6 represents Sunday
         # Filter rows where the DateTimeIndex corresponds to the current day
         day_rows = hourly_load_pd_S_30[hourly_load_pd_S_30.index.dayofweek == day]
         

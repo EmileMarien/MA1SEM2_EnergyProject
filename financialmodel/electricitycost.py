@@ -9,7 +9,7 @@ from visualisations.visualisations import plot_dataframe
 import powercalculations.powercalculations as pc
 import gridcost.gridcost as gc
 
-def electricity_cost(solar_panel_count: int=10, panel_surface:int= 1.9,annual_degradation: float=0.000, panel_efficiency: int= 0.2253, temperature_coefficient: float=-0.0026, inverter_size_AC: int = 5, inverter_maxsolar_DC: int = 8, inverter_maxbattery_DC: int=5,tilt_angle:int=-1, Orientation:str="S", battery_capacity: float= 0, battery_count: int=0,tariff: str='DualTariff', battery_roundtrip_efficiency:float=97.5, battery_PeakPower:int=11, battery_Degradation:int=3,EV_type:str='no_EV'):
+def electricity_cost(solar_panel_count: int=10, panel_surface:int= 1.9,annual_degradation: float=0.000, panel_efficiency: int= 0.2253, temperature_coefficient: float=-0.0026, inverter_size_AC: int = 5, inverter_maxsolar_DC: int = 8, inverter_maxbattery_DC: int=5,tilt_angle:int=-1, Orientation:str="S", battery_capacity: float= 0, battery_count: int=0,tariff: str='DynamicTariff', battery_roundtrip_efficiency:float=97.5, battery_PeakPower:int=11, battery_Degradation:int=3,EV_type:str='B2G'):
     """
     Calculate the electricity cost for a given solar panel configuration and tariff.
 
@@ -132,7 +132,12 @@ def electricity_cost(solar_panel_count: int=10, panel_surface:int= 1.9,annual_de
 
 print(electricity_cost(Orientation='S',tilt_angle=30, tariff='DualTariff',solar_panel_count=0,battery_capacity=9.6,battery_count=0,EV_type='no_EV'))
 
+<<<<<<< HEAD
+
+print(electricity_cost(Orientation='S',tilt_angle=30, tariff='DynamicTariff',solar_panel_count=10,battery_capacity=3,battery_count=1,EV_type='no_EV',))
+=======
 #print(electricity_cost(Orientation='S',tilt_angle=30, tariff='DualTariff',solar_panel_count=0,battery_capacity=9.6,battery_count=0,EV_type='no_EV',))
+>>>>>>> de18ab8e8cb80935fbac367a8445eb87f155eea5
 
 
 #print(electricity_cost(Orientation='S',tilt_angle=30, tariff='DynamicTariff',solar_panel_count=10,battery_capacity=3,battery_count=1,EV_type='no_EV',))
@@ -140,13 +145,23 @@ print(electricity_cost(Orientation='S',tilt_angle=30, tariff='DualTariff',solar_
 #print(electricity_cost(Orientation='S',tilt_angle=30, tariff='DynamicTariff',solar_panel_count=10,battery_capacity=3,battery_count=0,EV_type='no_EV',))
 
 # print(electricity_cost(Orientation='S',tilt_angle=30, tariff='DynamicTariff',solar_panel_count=10,battery_capacity=3,battery_count=1,EV_type='B2G'))
+<<<<<<< HEAD
+
+print(electricity_cost(Orientation='S',tilt_angle=30, tariff='DynamicTariff',solar_panel_count=10,battery_capacity=9.6,battery_count=1,EV_type='no_EV',))
+=======
+>>>>>>> de18ab8e8cb80935fbac367a8445eb87f155eea5
 
 #print(electricity_cost(Orientation='S',tilt_angle=30, tariff='DynamicTariff',solar_panel_count=10,battery_capacity=9.6,battery_count=1,EV_type='no_EV',))
 #print(electricity_cost(Orientation='S',tilt_angle=30, tariff='DynamicTariff',solar_panel_count=10,battery_capacity=9.6,battery_count=0,EV_type='no_EV',))
 
+<<<<<<< HEAD
+print(electricity_cost(Orientation='S',tilt_angle=30, tariff='DynamicTariff',solar_panel_count=0,battery_capacity=9.6,battery_count=0,EV_type='B2G'))
+
+=======
 #print(electricity_cost(Orientation='S',tilt_angle=30, tariff='DualTariff',solar_panel_count=10,battery_capacity=9.6,battery_count=0,EV_type='B2G',))
 
 #print(electricity_cost(Orientation='S',tilt_angle=30, tariff='DualTariff',solar_panel_count=10,battery_capacity=9.6,battery_count=1,EV_type='B2G'))
+>>>>>>> de18ab8e8cb80935fbac367a8445eb87f155eea5
 
 #print(electricity_cost(Orientation='S',tilt_angle=30, tariff='DualTariff',solar_panel_count=50,battery_capacity=9.6,battery_count=1))
 #print(electricity_cost(Orientation='S',tilt_angle=30, tariff='DynamicTariff',solar_panel_count=20,battery_capacity=9.6,battery_count=1))
