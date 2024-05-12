@@ -16,6 +16,19 @@ file= open('data/initialized_dataframes/pd_S_30','rb')
 irradiance_pd_S_30=pickle.load(file)
 file.close()
 
+file = open('data/initialized_dataframes/pd_S_opt_37.5','rb')
+irradiance_pd_S_opt=pickle.load(file)
+file.close()
+
+file = open('data/initialized_dataframes/pd_EW_30','rb')
+irradiance_pd_EW_30=pickle.load(file)
+file.close()
+
+file = open('data/initialized_dataframes/pd_EW_opt_32','rb')
+irradiance_pd_EW_opt=pickle.load(file)
+file.close()
+
+
 ### Calculations for the S 30 scenario
 #irradiance_pd_S_30.nettoProduction()
 # Calculate the PV power output
@@ -178,6 +191,22 @@ if plot_hourly_direct_irradiance:
     plot_series(hourly_series_opt,title='Hourly average incident irradiance for the household under study, optimal tilt angle for different orientations',xlabel="Time",ylabel='Power $[\mathrm{\\frac{W}{m^2}}]$',display_time='hour')
 
 # Print average net load consumption for the different orientations and tilt angles
+plot_PVproduction_all_scenarios = True
+if plot_PVproduction_all_scenarios:
+    hourly_PV_pd_EW_opt=irradiance_pd_EW_opt.get_average_per_minute_day('PV_generated_power') 
+    hourly_PV_pd_EW_opt.name='EW optimal'
+
+    hourly_PV_pd_EW_30=irradiance_pd_EW_30.get_average_per_minute_day('PV_generated_power') 
+    hourly_PV_pd_EW_30.name='EW 30'
+
+    hourly_PV_pd_S_30=irradiance_pd_S_30.get_average_per_minute_day('PV_generated_power') 
+    hourly_PV_pd_S_30.name='S 30'
+
+    hourly_PV_pd_S_opt=irradiance_pd_S_opt.get_average_per_minute_day('PV_generated_power') #30 degrees tilt angle
+    hourly_PV_pd_S_opt.name='S optimal'
+    hourly_series_opt=[hourly_PV_pd_EW_opt, hourly_PV_pd_EW_30, hourly_PV_pd_S_30, hourly_PV_pd_S_opt]
+
+    plot_series(hourly_series_opt,title='Hourly average PV power production for different scenarios',xlabel="Time",ylabel='Power',display_time='hour')
 
 # Plot comparison of direct, global and diffuse irradiance for S 30 scenario, winter 
 ## Mean irradiance during summer and winter (GHI, DHI, DNI)
@@ -255,7 +284,7 @@ if plot_average_load_consumption:
     plot_series(hourly_series)
 
 # Plot hourly load consumption for each day of the weak on one graph
-plot_weekly_load_consumption=True #OK
+plot_weekly_load_consumption=False #OK
 if plot_weekly_load_consumption:
 
     #irradiance_pd_S_30.filter_data_by_date_interval('2018-06-01 1:00','2018-09-30 23:00',interval_str='1min')
@@ -380,7 +409,7 @@ if plot_total_irradiance:
     plot_series([irradiances_S], title='Mean yearly incident irradiance for the S orientation and different tilt angles', xlabel='Tilt angle [degrees]', ylabel='Power $[\mathrm{\\frac{W}{m^2}}]$')
 
 # Print the influence of the EV load on the grid flow
-print_EV_influence=True
+print_EV_influence=False
 if print_EV_influence:
     irradiance_pd_S_30.filter_data_by_date_interval('2018-06-05 0:00','2018-06-11 23:00',interval_str='1min')
     irradiance_pd_S_30.power_flow(max_charge=5, max_AC_power_output=max_AC_power_output, max_DC_batterypower=5,EV_type='BSG') # other EV types: 'no_EV', 'with_SC', 'no_SC', 'B2G'
