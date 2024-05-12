@@ -205,9 +205,9 @@ if plot_minutely_nettoproduction:
     minutely_series=[minutely_nettoproduction_pd_S_30]
     plot_series(series=minutely_series,title='Minutely average netto production for S 30 scenario')#,secondary_series=[hourly_battery_charge_pd_S_30],xlabel='Time',ylabel='Power [kWh]',ylabel2='Battery charge (kWh)')
 
-power_flow_one_day = True
+power_flow_one_day = False #OK
 if power_flow_one_day:
-    irradiance_pd_S_30.filter_data_by_date_interval(start_date="2018-7-04 0:00",end_date="2018-7-7 3:00",interval_str="10min")
+    irradiance_pd_S_30.filter_data_by_date_interval(start_date="2018-7-5 0:00",end_date="2018-7-7 23:00",interval_str="10min")
     # irradiance_pd_S_30.filter_data_by_date_interval(start_date="2018-2-03 0:00",end_date="2018-2-04 0:00",interval_str="1min")
     irradiance_pd_S_30.PV_generated_power(panel_count=10, cell_area=1.998, efficiency_max= 0.2253, Temp_coeff=-0.0026)
     irradiance_pd_S_30.power_flow(EV_type='no_EV', max_charge=5.9, max_AC_power_output=2.5, max_DC_batterypower=2.5, max_PV_input=3.75, max_EV_power=3.7, max_EV_charge=82.3, battery_roundtrip_efficiency=97.5, battery_PeakPower=4.2)
@@ -228,25 +228,29 @@ if power_flow_one_day:
     plot_series(series=series_flows, title='Power flows and battery charge for a summer day', secondary_series=series_battery, xlabel='Time', ylabel='Power flow [kW]', ylabel2='Battery charge [kWh]')
 
 # Plot hourly flows (pv-load) 
-plot_minutely_flows=False
+plot_minutely_flows=False #OK 
 if plot_minutely_flows:
-    irradiance_pd_S_30.filter_data_by_date_interval('2018-08-01 0:00','2018-09-01 0:00',interval_str='1min')
-    # irradiance_pd_S_30.filter_data_by_date_interval('2018-01-01 0:00','2018-02-01 0:00',interval_str='1min')
-    irradiance_pd_S_30.power_flow_old()
+    #irradiance_pd_S_30.filter_data_by_date_interval('2018-08-01 0:00','2018-09-01 0:00',interval_str='1min')
+    irradiance_pd_S_30.filter_data_by_date_interval('2018-01-01 0:00','2018-02-01 0:00',interval_str='1min')
+    irradiance_pd_S_30.power_flow(EV_type='no_EV', max_charge=0, max_AC_power_output=2.5, max_DC_batterypower=2.5, max_PV_input=3.75, max_EV_power=3.7, max_EV_charge=82.3, battery_roundtrip_efficiency=97.5, battery_PeakPower=4.2)
     hourly_pv_generated_power_pd_S_30=irradiance_pd_S_30.get_average_per_minute_day('PV_generated_power')
     hourly_load_pd_S_30=irradiance_pd_S_30.get_average_per_minute_day('Load_kW')
     hourly_netto_production_pd_S_30=irradiance_pd_S_30.get_average_per_minute_day('NettoProduction')
     hourly_battery_charge_pd_S_30=irradiance_pd_S_30.get_average_per_minute_day('BatteryCharge')
     hourly_grid_flow_pd_S_30=irradiance_pd_S_30.get_average_per_minute_day('GridFlow')
     hourly_battery_flow_pd_S_30=irradiance_pd_S_30.get_average_per_minute_day('BatteryFlow')
-    hourly_series=[hourly_netto_production_pd_S_30, hourly_pv_generated_power_pd_S_30, hourly_load_pd_S_30, hourly_grid_flow_pd_S_30, hourly_battery_flow_pd_S_30]
-    plot_series(series=hourly_series,title='Hourly average power flows for S 30 scenario, summer',secondary_series=[hourly_battery_charge_pd_S_30],xlabel='hours',ylabel='Power [kW]',ylabel2='Battery charge (kWh)',display_time='hour')
+    hourly_series=[hourly_netto_production_pd_S_30, hourly_pv_generated_power_pd_S_30, hourly_load_pd_S_30, hourly_grid_flow_pd_S_30]#, hourly_battery_flow_pd_S_30]
+    # plot_series(series=hourly_series,title='Average power flows for S 30 scenario, winter',secondary_series=[hourly_battery_charge_pd_S_30],xlabel='hours',ylabel='Power [kW]',ylabel2='Battery charge (kWh)',display_time='hour')
+    plot_series(series=hourly_series,title='Average power flows for S 30 scenario, winter',xlabel='hours',ylabel='Power [kW]',display_time='hour')
+
 
 # Plot average hourly load consumption for winter and summer
 plot_average_load_consumption=False
 if plot_average_load_consumption:
     hourly_load_summer=irradiance_summer.get_average_per_hour('Load_kW').rename('Summer')
     hourly_load_winter=irradiance_winter.get_average_per_hour('Load_kW').rename('Winter')
+    #hourly_production_summer = irradiance_summer.get_average_per_hour('PV_generated_power')
+    #elhourly_production_winter = irradiance_winter.get_average_per_hour('PV_generated_power')
     hourly_series=[hourly_load_summer,hourly_load_winter]
     plot_series(hourly_series)
 
@@ -284,7 +288,7 @@ if plot_weekly_load_consumption:
 # Plot hourly belpex for the week
 plot_weekly_nettoproduction_belpex_consumption=False #OK
 if plot_weekly_nettoproduction_belpex_consumption:
-    irradiance_pd_S_30.filter_data_by_date_interval('2018-01-01 1:00','2018-12-31 23:00',interval_str='1h')
+    irradiance_pd_S_30.filter_data_by_date_interval('2018-01-01 1:00','2018-12-31 23:00',interval_str='10min')
     #irradiance_pd_S_30.filter_data_by_date_interval('2018-06-01 1:00','2018-09-30 23:00',interval_str='1min')
     hourly_belpex=financials.get_columns(['BelpexFilter'])
     hourly_nettoproduction = irradiance_pd_S_30.get_columns(['NettoProduction'])
@@ -376,12 +380,12 @@ if plot_total_irradiance:
     plot_series([irradiances_S], title='Mean yearly incident irradiance for the S orientation and different tilt angles', xlabel='Tilt angle [degrees]', ylabel='Power $[\mathrm{\\frac{W}{m^2}}]$')
 
 # Print the influence of the EV load on the grid flow
-print_EV_influence=False
+print_EV_influence=True
 if print_EV_influence:
     irradiance_pd_S_30.filter_data_by_date_interval('2018-06-05 0:00','2018-06-11 23:00',interval_str='1min')
-    irradiance_pd_S_30.power_flow(max_charge=5, max_AC_power_output=max_AC_power_output, max_DC_batterypower=2,EV_type='no_SC') # other EV types: 'no_EV', 'with_SC', 'no_SC', 'B2G
+    irradiance_pd_S_30.power_flow(max_charge=5, max_AC_power_output=max_AC_power_output, max_DC_batterypower=5,EV_type='BSG') # other EV types: 'no_EV', 'with_SC', 'no_SC', 'B2G'
     irradiances_S_30_EV=irradiance_pd_S_30.get_columns(['GridFlow']).squeeze()
-    irradiances_S_30_EV.name='GridFLow'
+    irradiances_S_30_EV.name='GridFlow'
     irradiance_pd_S_30.nettoProduction()
     net_production=irradiance_pd_S_30.get_columns(['NettoProduction']).squeeze()
     net_production.name='NettoProduction'
@@ -395,7 +399,7 @@ if print_EV_influence:
     #with formatter:
      #   print(irradiance_pd_S_30.get_columns(['NettoProduction','GridFlow','EVFlow','EVCharge']))
     #print(irradiance_pd_S_30.get_columns(['Load_EV_kW_with_SC','Load_EV_kW_no_SC']))
-    plot_series([EV_flow],title='Influence of the EV load on the grid flow',xlabel='Time',ylabel='Power [kW]',display_time='yearly',secondary_series=[EV_charge],ylabel2='EV charge [kW]')
+    plot_series([EV_flow],title='Influence of the EV load on the grid flow',xlabel='Time',ylabel='Power [kW]',display_time='yearly')#,secondary_series=[EV_charge],ylabel2='EV charge [kW]')
 
 # Return key figures
 print_key_figures=False
