@@ -26,8 +26,8 @@ longitude=5.53972 # [degrees]
 findAngle=True
 if findAngle:
     
-    orientations=["S"]
-    tiltAngles=[i/2 for i in range(50, 90)]  # Modify the range values to integers
+    orientations=["EW"]
+    tiltAngles=[i/2 for i in range(20, 90)]  # Modify the range values to integers
     data.filter_data_by_date_interval('2018-01-01','2018-12-31',interval_str='15min')
     data.interpolate_columns(interval='15min')
     temperature = 10

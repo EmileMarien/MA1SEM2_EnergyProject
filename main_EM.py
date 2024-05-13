@@ -227,6 +227,22 @@ if power_flow_one_day:
     series_battery = [battery_charge]
     plot_series(series=series_flows, title='Power flows and battery charge for a summer day', secondary_series=series_battery, xlabel='Time', ylabel='Power flow [kW]', ylabel2='Battery charge [kWh]')
 
+# Plot hourly flows (pv-load)
+power_flow_one_day = False
+if power_flow_one_day:
+    irradiance_pd_S_30.filter_data_by_date_interval(start_date="2018-7-04 0:00",end_date="2018-7-7 3:00",interval_str="10min")
+    # irradiance_pd_S_30.filter_data_by_date_interval(start_date="2018-2-03 0:00",end_date="2018-2-04 0:00",interval_str="1min")
+    irradiance_pd_S_30.PV_generated_power(panel_count=10, cell_area=1.998, efficiency_max= 0.2253, Temp_coeff=-0.0026)
+    irradiance_pd_S_30.power_flow(EV_type='no_EV', max_charge=5.9, max_AC_power_output=2.5, max_DC_batterypower=2.5, max_PV_input=3.75, max_EV_power=3.7, max_EV_charge=82.3, battery_roundtrip_efficiency=97.5, battery_PeakPower=4.2)
+    
+    load = irradiance_pd_S_30.get_columns(["Load_kW"]).squeeze().rename("Load")
+    load.rename("Load")
+    PV_generated_power = irradiance_pd_S_30.get_columns(["PV_generated_power"]).squeeze().rename("PV power")
+    PV_generated_power.rename("PV power")
+
+    series_flows = [load, PV_generated_power]
+    plot_series(series=series_flows, title='PV generation and household consumption for a summer day', xlabel='Time', ylabel='Power flow [kW]')
+
 # Plot hourly flows (pv-load) 
 plot_minutely_flows=False
 if plot_minutely_flows:
@@ -251,7 +267,7 @@ if plot_average_load_consumption:
     plot_series(hourly_series)
 
 # Plot hourly load consumption for each day of the weak on one graph
-plot_weekly_load_consumption=True #OK
+plot_weekly_load_consumption=False #OK
 if plot_weekly_load_consumption:
 
     #irradiance_pd_S_30.filter_data_by_date_interval('2018-06-01 1:00','2018-09-30 23:00',interval_str='1min')
@@ -336,7 +352,7 @@ if plot_weekly_nettoproduction_belpex_consumption:
     plot_series(daily_load_series_list,display_time='hour',title='Average hourly net production',xlabel='Hour of the day',ylabel='Net production [kW]')
 
 # Plot the total irradiance for the S orientations and iterate over the different tilt angles
-plot_total_irradiance=False #OK
+plot_total_irradiance=True #OK
 if plot_total_irradiance:
     # Define the tilt angles
     indices=['20.0', '20.5', '21.0', '21.5', '22.0', '22.5', '23.0', '23.5', '24.0', '24.5', '25.0', '25.5', '26.0', '26.5', '27.0', '27.5', '28.0', '28.5', '29.0', '29.5', '30.0', '30.5', '31.0', '31.5', '32.0', '32.5', '33.0', '33.5', '34.0', '34.5', '35.0', '35.5', '36.0', '36.5', '37.0', '37.5', '38.0', '38.5', '39.0', '39.5', '40.0', '40.5', '41.0', '41.5', '42.0', '42.5', '43.0', '43.5', '44.0', '44.5', '45.0', '45.5', '46.0', '46.5', '47.0', '47.5', '48.0', '48.5', '49.0', '49.5', '50.0']
@@ -369,11 +385,18 @@ if plot_total_irradiance:
     '37.5': 138.08223921791262,
     '38.0': 138.08216450380328,'38.5': 138.07656378165458, '39.0': 138.06549048166548, '39.5': 138.04902631848418, '40.0': 138.02714842539928, '40.5': 137.99978490817443, '41.0': 137.96724181156893, '41.5': 137.92949917526514, '42.0': 137.88629628974223}
 
+    tilt_angles_EW ={
+
+    }
+
     irradiances_S = pd.Series(data=tilt_angles_S, index=indices)
-    irradiances_S.name = 'Mean incident irradiance'
+    irradiances_S.name = 'Mean incident irradiance south orientation'
+
+    irradiances_EW = pd.Series(data=tilt_angles_EW, index=indices)
+    irradiances_EW.name = 'Mean incident irradiance east-west orientation'
 
     # Plot the total irradiance for the different orientations and tilt angles
-    plot_series([irradiances_S], title='Mean yearly incident irradiance for the S orientation and different tilt angles', xlabel='Tilt angle [degrees]', ylabel='Power $[\mathrm{\\frac{W}{m^2}}]$')
+    plot_series([irradiances_S], title='Mean yearly incident irradiance for different tilt angles', xlabel='Tilt angle [degrees]', ylabel='Power $[\mathrm{\\frac{W}{m^2}}]$')
 
 # Print the influence of the EV load on the grid flow
 print_EV_influence=False
@@ -396,6 +419,20 @@ if print_EV_influence:
      #   print(irradiance_pd_S_30.get_columns(['NettoProduction','GridFlow','EVFlow','EVCharge']))
     #print(irradiance_pd_S_30.get_columns(['Load_EV_kW_with_SC','Load_EV_kW_no_SC']))
     plot_series([EV_flow],title='Influence of the EV load on the grid flow',xlabel='Time',ylabel='Power [kW]',display_time='yearly',secondary_series=[EV_charge],ylabel2='EV charge [kW]')
+
+# Plot the hourly average load and PV production for a summer day
+plot_hourly_load_PV=False
+if plot_hourly_load_PV:
+    irradiance_pd_S_30.filter_data_by_date_interval('2018-06-05 0:00','2018-06-11 23:00',interval_str='1min')
+    irradiance_pd_S_30.PV_generated_power(panel_count=8, cell_area=1.998, efficiency_max= 0.2253, Temp_coeff=-0.0026)
+    irradiance_pd_S_30.power_flow(max_charge=0, max_AC_power_output=max_AC_power_output, max_DC_batterypower=2,EV_type='no_SC') # other EV types: 'no_EV', 'with_SC', 'no_SC', 'B2G
+    load = irradiance_pd_S_30.get_columns(["Load_kW"]).squeeze().rename("Load")
+    load.rename("Load")
+    PV_generated_power = irradiance_pd_S_30.get_columns(["PV_generated_power"]).squeeze().rename("PV power")
+    PV_generated_power.rename("PV power")
+    series_flows = [load, PV_generated_power]
+    plot_series(series=series_flows, title='Hourly average load and PV production for a summer day', xlabel='Time', ylabel='Power flow [kW]')
+
 
 # Return key figures
 print_key_figures=False
