@@ -42,7 +42,6 @@ def add_EV_load_type(self,type:str='Load_EV_kW_with_SC'):
 
     # Create a DataFrame with the weekly correction factors
     correction_factors = df1['Correction_factor'].head(53).tolist()
-    #print(correction_factors)
 
     # Create a new column in the DataFrame for the EV load
     date_range_year = pd.date_range(start=self.pd.index[0], end=self.pd.index[-1], freq='W-MON')  # Weekly frequency
@@ -59,7 +58,6 @@ def add_EV_load_type(self,type:str='Load_EV_kW_with_SC'):
 
         values=values.head(int((end_date-week_start_date).total_seconds()/60+1)).set_index(self.pd.loc[week_start_date:end_date, type].index)
 
-        #self.pd.loc[week_start_date:end_date].update(values)
         self.pd.update(values, overwrite=True)
 
         #print(self.pd.loc[week_start_date:end_date, type])
