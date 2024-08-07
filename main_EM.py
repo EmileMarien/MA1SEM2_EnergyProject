@@ -38,9 +38,9 @@ print('start calculations')
 irradiance_pd_S_30.PV_generated_power(panel_count=panel_count)
 financials=GridCost(irradiance_pd_S_30.get_grid_power()[0],file_path_BelpexFilter="data/BelpexFilter.xlsx")
 # calculate the power flow
-max_charge= 8 #kWh
-max_AC_power_output= 5
-max_DC_batterypower_output= 5
+max_charge= 0 #kWh
+max_AC_power_output= 2.5
+max_DC_batterypower_output= 0
 #irradiance_pd_S_30.power_flow(max_charge, max_AC_power_output, max_DC_batterypower_output)
 irradiance_pd_S_30.nettoProduction()
 financials=GridCost(irradiance_pd_S_30.get_grid_power()[0],file_path_BelpexFilter="data/BelpexFilter.xlsx")
@@ -96,9 +96,9 @@ if calculate_others:
     #irradiance_pd_S_opt.PV_generated_power(cell_area, panel_count, T_STC, Temp_coeff, efficiency_max)
 
     # calculate the power flow
-    max_charge= 8
-    max_AC_power_output= 5
-    max_DC_batterypower_output= 5
+    max_charge= 0
+    max_AC_power_output= 2.5
+    max_DC_batterypower_output= 0
     #irradiance_pd_EW_30.power_flow(max_charge, max_AC_power_output, max_DC_batterypower_output)
     irradiance_pd_S_30.power_flow(max_charge, max_AC_power_output, max_DC_batterypower_output)
     #irradiance_pd_EW_opt.power_flow(max_charge, max_AC_power_output, max_DC_batterypower_output)
@@ -193,20 +193,30 @@ if plot_hourly_direct_irradiance:
 # Print average net load consumption for the different orientations and tilt angles
 plot_PVproduction_all_scenarios = True
 if plot_PVproduction_all_scenarios:
-    hourly_PV_pd_EW_opt=irradiance_pd_EW_opt.get_average_per_minute_day('PV_generated_power') 
-    hourly_PV_pd_EW_opt.name='EW optimal'
+    #irradiance_pd_EW_opt.PV_generated_power()
+    #hourly_PV_pd_EW_opt=irradiance_pd_EW_opt.get_average_per_minute_day('PV_generated_power') 
+    #hourly_PV_pd_EW_opt.name='EW optimal'
+    start_date = '2018-08-01 0:00'
+    end_date = '2018-09-01 0:00'
+    interval_str = '1min'
+    irradiance_pd_S_30.filter_data_by_date_interval(start_date,end_date,interval_str)
+    # irradiance_pd_EW_30.filter_data_by_date_interval(start_date,end_date,interval_str)
 
-    hourly_PV_pd_EW_30=irradiance_pd_EW_30.get_average_per_minute_day('PV_generated_power') 
-    hourly_PV_pd_EW_30.name='EW 30'
+    #irradiance_pd_EW_30.PV_generated_power()
+    #hourly_PV_pd_EW_30=irradiance_pd_EW_30.get_average_per_minute_day('PV_generated_power') 
+    #hourly_PV_pd_EW_30.name='EW 30'
 
     hourly_PV_pd_S_30=irradiance_pd_S_30.get_average_per_minute_day('PV_generated_power') 
     hourly_PV_pd_S_30.name='S 30'
+    
+    hourly_load = irradiance_pd_S_30.get_average_per_minute_day('Load_kW')
 
-    hourly_PV_pd_S_opt=irradiance_pd_S_opt.get_average_per_minute_day('PV_generated_power') #30 degrees tilt angle
-    hourly_PV_pd_S_opt.name='S optimal'
-    hourly_series_opt=[hourly_PV_pd_EW_opt, hourly_PV_pd_EW_30, hourly_PV_pd_S_30, hourly_PV_pd_S_opt]
+    #irradiance_pd_S_opt.PV_generated_power()
+    #hourly_PV_pd_S_opt=irradiance_pd_S_opt.get_average_per_minute_day('PV_generated_power') #30 degrees tilt angle
+    #hourly_PV_pd_S_opt.name='S optimal'
+    hourly_series_opt=[hourly_PV_pd_S_30, hourly_load]
 
-    plot_series(hourly_series_opt,title='Hourly average PV power production for different scenarios',xlabel="Time",ylabel='Power',display_time='hour')
+    plot_series(hourly_series_opt,title='Hourly average PV power production and load in August',xlabel="Time",ylabel='Power',display_time='hour')
 
 # Plot comparison of direct, global and diffuse irradiance for S 30 scenario, winter 
 ## Mean irradiance during summer and winter (GHI, DHI, DNI)
@@ -411,24 +421,28 @@ if plot_total_irradiance:
 # Print the influence of the EV load on the grid flow
 print_EV_influence=False
 if print_EV_influence:
-    irradiance_pd_S_30.filter_data_by_date_interval('2018-06-05 0:00','2018-06-11 23:00',interval_str='1min')
-    irradiance_pd_S_30.power_flow(max_charge=5, max_AC_power_output=max_AC_power_output, max_DC_batterypower=5,EV_type='BSG') # other EV types: 'no_EV', 'with_SC', 'no_SC', 'B2G'
-    irradiances_S_30_EV=irradiance_pd_S_30.get_columns(['GridFlow']).squeeze()
-    irradiances_S_30_EV.name='GridFlow'
+    irradiance_pd_S_30.filter_data_by_date_interval('2018-06-05 0:00','2018-06-12 0:00',interval_str='1min')
+    irradiance_pd_S_30.power_flow(max_charge=0, max_AC_power_output=2.5, max_DC_batterypower=0,EV_type='B2G') # other EV types: 'no_EV', 'with_SC', 'no_SC', 'B2G'
+    PV_power = irradiance_pd_S_30.get_columns(['PV_generated_power']).squeeze()
+    PV_power.name = 'PV power'
+    grid_flow=irradiance_pd_S_30.get_columns(['GridFlow']).squeeze()
+    grid_flow.name='Grid flow'
     irradiance_pd_S_30.nettoProduction()
     net_production=irradiance_pd_S_30.get_columns(['NettoProduction']).squeeze()
     net_production.name='NettoProduction'
 
     EV_flow=irradiance_pd_S_30.get_columns(['EVFlow']).squeeze()
+    EV_flow.name='EV flow'
     #print(irradiance_pd_S_30.get_columns(['Load_EV_kW_with_SC']))
     EV_charge=irradiance_pd_S_30.get_columns(['EVCharge']).squeeze()
-    battery_charge=irradiance_pd_S_30.get_columns(['BatteryCharge']).squeeze()
-    battery_flow = irradiance_pd_S_30.get_columns(['BatteryFlow']).squeeze()
+    EV_charge.name = 'EV charge'
+    #battery_charge=irradiance_pd_S_30.get_columns(['BatteryCharge']).squeeze()
+    #battery_flow = irradiance_pd_S_30.get_columns(['BatteryFlow']).squeeze()
     # formatter = pd.option_context('display.max_rows', None, 'display.max_columns', None)
     #with formatter:
      #   print(irradiance_pd_S_30.get_columns(['NettoProduction','GridFlow','EVFlow','EVCharge']))
     #print(irradiance_pd_S_30.get_columns(['Load_EV_kW_with_SC','Load_EV_kW_no_SC']))
-    plot_series([EV_flow],title='Influence of the EV load on the grid flow',xlabel='Time',ylabel='Power [kW]',display_time='yearly')#,secondary_series=[EV_charge],ylabel2='EV charge [kW]')
+    plot_series([PV_power, EV_flow, grid_flow],title='Influence of the EV load on the grid flow',xlabel='Time',ylabel='Power [kW]',display_time='yearly',secondary_series=[EV_charge],ylabel2='EV charge [kW]')
 
 # Return key figures
 print_key_figures=False
