@@ -1,35 +1,33 @@
+def dual_tariff(self) -> None:
+        """Calculates and fills the `DualTariff` column using `electricity_contract`."""
+        if self.electricity_contract is None:
+            raise ValueError("ElectricityContract is required for dual_tariff calculation.")
 
-def dual_tariff(self, peak_tariff:int=0.1701, offpeak_tariff:int=0.1463,fixed_tariff:int=0.01554,injection_tariff:int=0.03):
-    
-    #Calculates the dual tariff for a specific time, day and colation
-    
-    assert self.pd['GridFlow'].dtype == 'float64', "GridPower should be a float64"
+        c = self.electricity_contract
 
-    # Define a function to calculate the dual tariff for a single row
-    def calculate_tariff_row(row, peak_tariff, offpeak_tariff, fixed_tariff=0):
-        
-        #Calculates the dual tariff for a single row
-        grid_flow = row['GridFlow']
-        if grid_flow < 0: # Energy is being consumed
-                
-            if row.name.weekday() < 5:  # Weekdays (Monday=0, Sunday=6)
-                if 7 <= row.name.hour < 22:  # Peak hours from 7:00 to 22:00
-                    variable_tariff = peak_tariff
+        # Ensure GridFlow dtype
+        self.pd["GridFlow"] = self.pd["GridFlow"].astype(float)
+
+        def calculate_tariff_row(row):
+            grid_flow = row["GridFlow"]
+
+            if grid_flow < 0:  # consumption
+                dt = row.name
+                if dt.weekday() < 5 and 7 <= dt.hour < 22:
+                    variable_tariff = c.dual_peak_tariff
                 else:
-                    variable_tariff = offpeak_tariff
-            else:  # Weekends
-                variable_tariff = offpeak_tariff
+                    variable_tariff = c.dual_offpeak_tariff
 
-            cost = (variable_tariff+fixed_tariff) * (-grid_flow)
-        else:  # Energy is being produced
-            cost = injection_tariff * (-grid_flow)
-        return cost
-    
-    # Apply the calculation function to each row with vectorized operations
-    self.pd['DualTariff'] = self.pd.apply(
-        lambda row: calculate_tariff_row(row=row, peak_tariff=peak_tariff,offpeak_tariff=offpeak_tariff, fixed_tariff=fixed_tariff), axis=1
-        )
-    
-    return None
+                cost_per_kwh = variable_tariff + c.dual_fixed_tariff
+                cost = cost_per_kwh * (-grid_flow)
+            else:  # production / injection
+                # Revenue (likely negative cost)
+                cost = c.dual_injection_tariff * grid_flow
+
+            return cost
+
+        self.pd["DualTariff"] = self.pd.apply(calculate_tariff_row, axis=1)
+
+
 
 

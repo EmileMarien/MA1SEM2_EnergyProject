@@ -99,3 +99,4 @@ inverter_types = {
     ),
     # Define more types as needed
 }
+

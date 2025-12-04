@@ -1,4 +1,4 @@
-from electricitycost import electricity_cost
+from deprecated._electricitycost import electricity_cost
 from components import SolarPanel, Battery, Inverter, solar_panel_types, battery_types, inverter_types
 
 def calculate_npv(battery_cost, total_solar_panel_cost, inverter_cost, discount_rate, initial_cash_flow, annual_degradation):

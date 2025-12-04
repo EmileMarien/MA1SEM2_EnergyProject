@@ -1,4 +1,8 @@
 import pandas as pd
+import logging
+
+logger = logging.getLogger(__name__)
+import pandas as pd
 
 
 
@@ -12,4 +16,4 @@ def export_dataframe_to_excel(self, file_path: str):
 
     self.pd.to_excel(file_path)
 
-    print(f"DataFrame exported successfully to: {file_path}")
+    logger.info("DataFrame exported successfully to: %s", file_path)
