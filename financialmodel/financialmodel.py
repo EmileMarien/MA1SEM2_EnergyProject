@@ -10,7 +10,7 @@ import os
 import pickle
 
 import pandas as pd
-import powercalculations.powercalculations as pc  # type: ignore
+from powercalculations.powercalculations import PowerCalculations as pc  # type: ignore
 
 from financialmodel.models import SolarSpec, BatterySpec, InverterSpec, ElectricityContract
 from gridcost.gridcost import GridCost
@@ -96,18 +96,6 @@ class FinancialModel:
             raise TypeError("Pickled object is not a powercalculations.PowerCalculations instance")
 
         return irradiance
-
-    @staticmethod
-    def _contract_to_obj(c: Union[ElectricityContract, Dict[str, Any]]) -> ElectricityContract:
-        """Normalize various 'contract' inputs to an ElectricityContract."""
-        if isinstance(c, ElectricityContract):
-            return c
-        if is_dataclass(c):
-            # some other dataclass with same fields
-            return ElectricityContract(**asdict(c))
-        if isinstance(c, dict):
-            return ElectricityContract(**c)
-        raise TypeError(f"Unsupported contract type: {type(c)!r}")
 
     @staticmethod
     def _build_grid_cache_key(
@@ -236,7 +224,7 @@ class FinancialModel:
                     horizon = self._lifetime_horizon(solar, battery, inverter)
 
                     for c in contract_options:
-                        contract_obj = self._contract_to_obj(c)
+                        contract_obj = c
 
                         # 2) annual cost using GridCost + ElectricityContract
                         gc = GridCost(
@@ -333,7 +321,7 @@ class FinancialModel:
         results: List[Dict[str, Any]] = []
 
         for c in contracts:
-            contract_obj = self._contract_to_obj(c)
+            contract_obj = c
             tariff_label = tariff or contract_obj.contract_type or self.default_tariff
 
             gc = GridCost(
@@ -371,3 +359,8 @@ class FinancialModel:
         if top_k is not None:
             results = results[:top_k]
         return results
+
+    from financialmodel._getters import (
+        get_optimisation_cost_curve_data,
+    )
+    from financialmodel._visuals import plot_optimisation_cost_vs_solar_panels

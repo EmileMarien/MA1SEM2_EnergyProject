@@ -9,9 +9,7 @@ import gridcost._dualtariff
 import gridcost._capacitytariff
 import gridcost._dynamictariff 
 
-
 logger = logging.getLogger(__name__)
-
 
 class GridCost:
     """
@@ -27,7 +25,7 @@ class GridCost:
         *,
         consumption_data_df: Optional[pd.DataFrame] = None,
         consumption_data_csv: str = "",
-        file_path_BelpexFilter: str = "",
+        file_path_BelpexFilter: str = r"C:\Users\67583\OneDrive - Bain\Documents\Personal projects\MA1SEM2_EnergyProject\data\belpex_quarter_hourly.csv",
         resample_freq: str = "1h",
         belpex_scale: float = 1.1261,
         electricity_contract: Optional[ElectricityContract] = None,
@@ -80,6 +78,8 @@ class GridCost:
         consumption_data_csv: str,
     ) -> pd.DataFrame:
         """Load and normalize the base consumption data."""
+        logger.debug(consumption_data_df.head())
+        logger.debug(consumption_data_csv)
         if consumption_data_df is not None and not consumption_data_df.empty:
             df = consumption_data_df.copy()
             logger.debug("Using provided consumption_data_df with shape %s", df.shape)
@@ -212,15 +212,20 @@ class GridCost:
 
         path = Path(file_path_BelpexFilter)
         if not path.is_file():
-            raise FileNotFoundError(f"BelpexFilter Excel file not found: {path}")
-        if path.suffix.lower() != ".xlsx":
-            raise ValueError("BelpexFilter file must be an .xlsx Excel file.")
+            raise FileNotFoundError(f"BelpexFilter file not found: {path}")
 
-        logger.debug("Reading BelpexFilter data from Excel: %s", path)
-        belpex_df = pd.read_excel(path)
+        logger.debug("Reading BelpexFilter data from: %s", path)
+
+        suffix = path.suffix.lower()
+        if suffix == ".xlsx":
+            belpex_df = pd.read_excel(path)
+        elif suffix == ".csv":
+            belpex_df = pd.read_csv(path)
+        else:
+            raise ValueError("BelpexFilter file must be an .xlsx or .csv file.")
 
         if "DateTime" not in belpex_df.columns:
-            raise ValueError("'DateTime' column not found in the Belpex Excel file.")
+            raise ValueError("'DateTime' column not found in the Belpex file.")
         belpex_df["DateTime"] = pd.to_datetime(belpex_df["DateTime"])
 
         belpex_df = belpex_df.infer_objects()
@@ -233,9 +238,10 @@ class GridCost:
             logger.debug("BelpexFilter column scaled by factor %s", self.belpex_scale)
         else:
             merged_df["BelpexFilter"] = None
-            logger.debug("BelpexFilter column not in Excel; created as None.")
+            logger.debug("BelpexFilter column not present; created as None.")
 
         return merged_df
+
 
     @staticmethod
     def _validate_required_columns(df: pd.DataFrame, required_columns: list[str]) -> None:
@@ -450,4 +456,10 @@ class GridCost:
     from gridcost._capacitytariff import capacity_tariff
     from gridcost._dualtariff import dual_tariff
     from gridcost._dynamictariff import dynamic_tariff
+    from gridcost._belpex import update_belpex_quarter_hourly
+    from gridcost._belpex import BELPEX_QUARTER_HOURLY_URL
+    from gridcost._belpex import _scrape_belpex_page
+    from gridcost._visual import get_consumption_and_cost_timeseries
+    from gridcost._visual import _prepare_tariff_columns
+    from gridcost._visual import plot_consumption_and_cost
     
