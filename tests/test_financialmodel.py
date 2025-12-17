@@ -142,3 +142,11 @@ class TestFinancialModelOptimiseContractsFromConsumption(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+# Expected electricitycontract output for Mega-FR-EL-B2C-BX-102025-TA0525-Var_(1).pdf
+
+# contract_type: DynamicTariff
+# dynamic_fixed_tariff_injection: -2.75
+# dynamic_variable_tariff_injection: 0.9
+

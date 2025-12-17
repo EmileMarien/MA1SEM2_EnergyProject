@@ -30,5 +30,5 @@ def capacity_tariff(self) -> float:
         average_highest_kw = sum(highest_periods) / len(highest_periods)
         billing_kw = max(average_highest_kw, 2.5)
 
-        capacity_cost = billing_kw * self.electricity_contract.capacity_tariff_rate
+        capacity_cost = billing_kw * self.electricity_contract.capacity_tariff
         return float(capacity_cost)

@@ -29,7 +29,7 @@ gc = GridCost(
 )
 
 # 3. Compute total cost for the chosen tariff
-total_cost = gc.calculate_total_cost(tariff="DynamicTariff")
+total_cost = gc.calculate_total_cost()
 print(f"Total cost (DynamicTariff): {total_cost:.2f} €")
 
 # 4. Visualise: consumption vs cost on one graph

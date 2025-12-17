@@ -10,23 +10,28 @@ def dual_tariff(self) -> None:
 
         def calculate_tariff_row(row):
             grid_flow = row["GridFlow"]
+            dt = row.name
 
             if grid_flow < 0:  # consumption
-                dt = row.name
                 if dt.weekday() < 5 and 7 <= dt.hour < 22:
-                    variable_tariff = c.dual_peak_tariff
+                    variable_tariff = c.dual_cons_peak
                 else:
-                    variable_tariff = c.dual_offpeak_tariff
-
-                cost_per_kwh = variable_tariff + c.dual_fixed_tariff
-                cost = cost_per_kwh * (-grid_flow)
+                    variable_tariff = c.dual_cons_offpeak
+                cost = variable_tariff * (-grid_flow)
             else:  # production / injection
                 # Revenue (likely negative cost)
-                cost = c.dual_injection_tariff * grid_flow
+                if dt.weekday() < 5 and 7 <= dt.hour < 22:
+                    cost = c.dual_inj_peak * grid_flow
+                else:
+                    cost = c.dual_inj_offpeak * grid_flow
 
-            return cost
+            return cost/100
 
         self.pd["DualTariff"] = self.pd.apply(calculate_tariff_row, axis=1)
+
+
+
+        
 
 
 

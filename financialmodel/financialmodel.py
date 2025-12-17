@@ -50,7 +50,7 @@ class FinancialModel:
         discount_rate: float = 0.05,
         default_tariff: str = "DynamicTariff",
         pkl_path: Optional[str] = None,
-        belpex_filter_path: str = "",
+        belpex_filter_path: str = r"C:\Users\67583\OneDrive - Bain\Documents\Personal projects\MA1SEM2_EnergyProject\data\belpex_quarter_hourly.csv",
     ) -> None:
         self.orientation = orientation
         self.tilt_angle = tilt_angle
@@ -332,7 +332,7 @@ class FinancialModel:
             )
 
             # Year-1 annual cost
-            annual_cost = gc.calculate_total_cost(tariff=tariff_label)
+            annual_cost = gc.calculate_total_cost()
 
             # NPV of repeated annual cost (no extra capex in this mode)
             npv_cost = 0.0
@@ -349,8 +349,7 @@ class FinancialModel:
 
             if return_breakdown:
                 entry["breakdown"] = gc.calculate_total_cost(
-                    tariff=tariff_label,
-                    return_breakdown=True,
+                    return_breakdown=True
                 )
 
             results.append(entry)
@@ -364,3 +363,4 @@ class FinancialModel:
         get_optimisation_cost_curve_data,
     )
     from financialmodel._visuals import plot_optimisation_cost_vs_solar_panels
+    from financialmodel._visuals import plot_contract_comparison_cost_and_consumption
